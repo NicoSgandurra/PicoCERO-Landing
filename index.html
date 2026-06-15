@@ -12,15 +12,12 @@
   <meta property="og:title" content="PicoCERO | Ahorro energetico industrial verificable">
   <meta property="og:description" content="Landing para inversores de PicoCERO: problema, solucion, piloto UTN-FRSR, mercado, modelo comercial e inversion solicitada.">
   <meta property="og:site_name" content="PicoCERO">
-  <meta property="og:image" content="../graficas/isologotipo-alter.svg">
+  <meta property="og:image" content="./isologotipo.svg">
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="PicoCERO | Ahorro energetico industrial verificable">
   <meta name="twitter:description" content="Medicion, analitica y ahorro verificable para industrias argentinas.">
-  <meta name="twitter:image" content="../graficas/isologotipo-alter.svg">
-  <link rel="icon" href="../graficas/favicon.svg" type="image/svg+xml">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <meta name="twitter:image" content="./isologotipo.svg">
+  <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
@@ -68,8 +65,8 @@
       --green: #34d399;
       --yellow: #fbbf24;
       --red: #f87171;
-      --mono: "Space Mono", monospace;
-      --sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "Cascadia Code", "SF Mono", Consolas, "Liberation Mono", monospace;
+      --sans: "Segoe UI", system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
       --container: 1180px;
       --nav-h: 76px;
     }
@@ -1427,8 +1424,22 @@
     }
 
     .team-card span {
+      display: block;
       color: var(--text-2);
       font-size: 14px;
+    }
+
+    .team-card .team-role-primary {
+      margin-bottom: 10px;
+      color: var(--text);
+      font-weight: 600;
+      line-height: 1.45;
+    }
+
+    .team-card .team-role-extra {
+      color: var(--text-3);
+      font-size: 13px;
+      line-height: 1.5;
     }
 
     .final-cta {
@@ -1858,7 +1869,7 @@
   <nav class="site-nav" aria-label="Navegacion principal">
     <div class="container nav-inner">
       <a class="brand" href="#inicio" aria-label="Ir al inicio de PicoCERO">
-        <img src="../graficas/favicon.svg" alt="Isotipo de PicoCERO">
+        <img src="./assets/favicon.svg" alt="Isotipo de PicoCERO">
         <span>Pico<em>CERO</em></span>
       </a>
       <div class="nav-links" aria-label="Secciones">
@@ -2012,31 +2023,31 @@
         </div>
         <div class="modules-grid">
           <article class="module-card reveal">
-            <div class="module-icon"><img src="../graficas/modulos/dashboard.svg" alt="Icono de dashboard energetico"></div>
+            <div class="module-icon"><img src="./assets/dashboard.svg" alt="Icono de dashboard energetico"></div>
             <div><h3>Dashboard energetico</h3><p>Vista clara del consumo, picos, comportamiento diario y variables clave para operar mejor.</p></div>
           </article>
           <article class="module-card reveal delay-1">
-            <div class="module-icon"><img src="../graficas/modulos/revision-energetica.svg" alt="Icono de revision energetica"></div>
+            <div class="module-icon"><img src="./assets/revision-energetica.svg" alt="Icono de revision energetica"></div>
             <div><h3>Revision energetica</h3><p>Identificacion de areas y equipos donde conviene mirar primero por impacto economico.</p></div>
           </article>
           <article class="module-card reveal delay-2">
-            <div class="module-icon"><img src="../graficas/modulos/enpi.svg" alt="Icono de indicadores energeticos"></div>
+            <div class="module-icon"><img src="./assets/enpi.svg" alt="Icono de indicadores energeticos"></div>
             <div><h3>Linea de base</h3><p>Referencia para saber que consumo era esperable y poder comparar contra la realidad.</p></div>
           </article>
           <article class="module-card reveal">
-            <div class="module-icon"><img src="../graficas/modulos/cusum.svg" alt="Icono de CUSUM"></div>
+            <div class="module-icon"><img src="./assets/cusum.svg" alt="Icono de CUSUM"></div>
             <div><h3>Tendencias CUSUM</h3><p>Lectura visual de mejora o deterioro para detectar cambios antes de que sean costo repetido.</p></div>
           </article>
           <article class="module-card reveal delay-1">
-            <div class="module-icon"><img src="../graficas/modulos/mv-ahorros.svg" alt="Icono de medicion y verificacion de ahorros"></div>
+            <div class="module-icon"><img src="./assets/mv-ahorros.svg" alt="Icono de medicion y verificacion de ahorros"></div>
             <div><h3>M&amp;V de ahorros</h3><p>Metodo para sostener tecnicamente si una accion realmente produjo ahorro.</p></div>
           </article>
           <article class="module-card reveal delay-2">
-            <div class="module-icon"><img src="../graficas/modulos/gestion-iso.svg" alt="Icono de gestion ISO"></div>
+            <div class="module-icon"><img src="./assets/gestion-iso.svg" alt="Icono de gestion ISO"></div>
             <div><h3>Escalado ISO 50001</h3><p>Cuando el cliente esta listo, el ahorro inicial se ordena dentro de un sistema de gestion energetica.</p></div>
           </article>
           <article class="module-card reveal">
-            <div class="module-icon"><img src="../graficas/modulos/pwa.svg" alt="Icono de acceso movil PWA"></div>
+            <div class="module-icon"><img src="./assets/pwa.svg" alt="Icono de acceso movil PWA"></div>
             <div><h3>Acceso movil</h3><p>Consulta rapida desde celular para direccion, planta o seguimiento comercial del piloto.</p></div>
           </article>
         </div>
@@ -2181,12 +2192,12 @@
           <p class="section-intro">La propuesta combina perfiles de ingenieria, analitica, producto, integracion, normativa y apertura comercial.</p>
         </div>
         <div class="team-grid">
-          <article class="team-card reveal"><strong>Cruzate Loana</strong><span>Estrategia comercial, apertura de cuentas y validacion del negocio.</span></article>
-          <article class="team-card reveal delay-1"><strong>Falcone Franco</strong><span>Integracion de hardware, medidores, PLC y sensores.</span></article>
-          <article class="team-card reveal delay-2"><strong>Fendyk Daniel</strong><span>Operacion, ingenieria y ejecucion de pilotos.</span></article>
-          <article class="team-card reveal"><strong>Holgado Lucas</strong><span>Analitica energetica, linea de base, indicadores y CUSUM.</span></article>
-          <article class="team-card reveal delay-1"><strong>Nunez Pablo</strong><span>Normativa, protocolos de medicion y escalado ISO 50001.</span></article>
-          <article class="team-card reveal delay-2"><strong>Sgandurra Nicolas</strong><span>Desarrollo de MVP, producto y plataforma.</span></article>
+          <article class="team-card reveal"><strong>Cruzate, Loana</strong><span class="team-role-primary">Ing. Industrial · CEO. Estrategia comercial, apertura de cuentas y validación</span><span class="team-role-extra">Foco adicional: narrativa inversora, validación con clientes y coordinación comercial.</span></article>
+          <article class="team-card reveal delay-1"><strong>Falcone, Franco</strong><span class="team-role-primary">Ing. Electromecánico · Integración. Hardware, medidores, PLC y sensores.</span><span class="team-role-extra">Foco adicional: factibilidad de medición, compatibilidad de equipos y despliegue en campo.</span></article>
+          <article class="team-card reveal delay-2"><strong>Fendyk, Daniel</strong><span class="team-role-primary">Ing. Electromecánico · COO. Lider Ingeniería. Setup físico, ejecución pilotos.</span><span class="team-role-extra">Foco adicional: operación del piloto, planificación técnica y seguimiento de entregables.</span></article>
+          <article class="team-card reveal"><strong>Holgado, Lucas</strong><span class="team-role-primary">Ing. Electromecánico · Analítica. Línea de base, métricas EnPI y CUSUM.</span><span class="team-role-extra">Foco adicional: lectura de datos energéticos, tendencias y oportunidades de ahorro.</span></article>
+          <article class="team-card reveal delay-1"><strong>Núñez, Pablo</strong><span class="team-role-primary">Ing. Electromecánico · CCO. Normativa. Escalado ISO 50001 y protocolos M&amp;V.</span><span class="team-role-extra">Foco adicional: enfoque normativo, medición y verificación, documentación para auditoría.</span></article>
+          <article class="team-card reveal delay-2"><strong>Sgandurra, Nicolás</strong><span class="team-role-primary">Ing. Electromecánico/Dev · CTO. Desarrollo de MVP.</span><span class="team-role-extra">Foco adicional: producto digital, arquitectura del prototipo y evolución de la plataforma.</span></article>
         </div>
       </div>
     </section>
