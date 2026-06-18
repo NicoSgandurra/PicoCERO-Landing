@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -23,8 +24,13 @@
       --mono: "SF Mono", "Cascadia Code", Consolas, monospace;
     }
 
-    * { box-sizing: border-box; }
-    html { scroll-behavior: smooth; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
@@ -123,13 +129,34 @@
       color: var(--muted);
     }
 
-    .legend-chip { font-weight: 700; }
-    .legend-chip.dani { border-color: rgba(6, 182, 212, 0.35); background: var(--dani-soft); color: #c7f5ff; }
-    .legend-chip.nico { border-color: rgba(245, 158, 11, 0.35); background: var(--nico-soft); color: #ffe4ad; }
+    .legend-chip {
+      font-weight: 700;
+    }
 
-    .nav-link { text-decoration: none; transition: border-color 180ms ease, color 180ms ease, transform 180ms ease; }
+    .legend-chip.dani {
+      border-color: rgba(6, 182, 212, 0.35);
+      background: var(--dani-soft);
+      color: #c7f5ff;
+    }
+
+    .legend-chip.nico {
+      border-color: rgba(245, 158, 11, 0.35);
+      background: var(--nico-soft);
+      color: #ffe4ad;
+    }
+
+    .nav-link {
+      text-decoration: none;
+      transition: border-color 180ms ease, color 180ms ease, transform 180ms ease;
+    }
+
     .nav-link:hover,
-    .nav-link:focus-visible { color: var(--text); border-color: rgba(255,255,255,0.24); transform: translateY(-1px); outline: none; }
+    .nav-link:focus-visible {
+      color: var(--text);
+      border-color: rgba(255, 255, 255, 0.24);
+      transform: translateY(-1px);
+      outline: none;
+    }
 
     .content {
       display: grid;
@@ -158,8 +185,15 @@
       font-size: 0.92rem;
     }
 
-    .slide-kicker { color: var(--brand); letter-spacing: 0.08em; text-transform: uppercase; }
-    .slide-time { color: var(--muted); }
+    .slide-kicker {
+      color: var(--brand);
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .slide-time {
+      color: var(--muted);
+    }
 
     .slide-title {
       margin: 0;
@@ -208,8 +242,13 @@
       background: currentColor;
     }
 
-    .speaker-block.dani .speaker-name { color: #8be9ff; }
-    .speaker-block.nico .speaker-name { color: #ffd489; }
+    .speaker-block.dani .speaker-name {
+      color: #8be9ff;
+    }
+
+    .speaker-block.nico .speaker-name {
+      color: #ffd489;
+    }
 
     .speaker-copy {
       margin: 0;
@@ -257,21 +296,35 @@
     }
 
     @media (max-width: 760px) {
-      .page { width: min(100%, calc(100% - 20px)); padding: 12px 0 28px; }
+      .page {
+        width: min(100%, calc(100% - 20px));
+        padding: 12px 0 28px;
+      }
+
       .hero,
       .slide-card,
-      .note-card { padding: 18px; }
-      .support-grid { grid-template-columns: 1fr; }
-      .speaker-copy { font-size: 1rem; }
+      .note-card {
+        padding: 18px;
+      }
+
+      .support-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .speaker-copy {
+        font-size: 1rem;
+      }
     }
   </style>
 </head>
+
 <body>
   <main class="page">
     <header class="hero">
       <div class="eyebrow">PicoCERO · Rev2.0</div>
       <h1>Guion alineado a la presentación final y con foco fuerte en el gráfico.</h1>
-      <p>Dani abre la presentación y Nico toma la palabra cuando aparece la curva. La explicación del gráfico está pensada para sostener el fundamento completo del proyecto, no solo describir una animación.</p>
+      <p>Dani abre la presentación y Nico toma la palabra cuando aparece la curva. La explicación del gráfico está
+        pensada para sostener el fundamento completo del proyecto, no solo describir una animación.</p>
 
       <div class="chips">
         <div class="chip">Presentación final: `PicoCERO-PresSandAlone.html`</div>
@@ -300,21 +353,66 @@
 
     <section class="content" aria-label="Guion por slide">
       <article class="slide-card" id="slide-1">
-        <div class="slide-head"><div class="slide-kicker">Slide 1</div><div class="slide-time">0:00 a 0:12</div></div>
+        <div class="slide-head">
+          <div class="slide-kicker">Slide 1</div>
+          <div class="slide-time">0:00 a 0:12</div>
+        </div>
         <h2 class="slide-title">Portada</h2>
-        <div class="speaker-blocks"><div class="speaker-block dani"><div class="speaker-name">Dani</div><p class="speaker-copy">Somos PicoCERO. Buscamos transformar consumo invisible en decisiones con impacto económico real para la industria.</p></div></div>
+        <div class="speaker-blocks">
+          <div class="speaker-block dani">
+            <div class="speaker-name">Dani</div>
+            <p class="speaker-copy">Somos PicoCERO. Buscamos transformar consumo invisible en decisiones con impacto
+              económico real para la industria.</p>
+          </div>
+        </div>
       </article>
 
       <article class="slide-card" id="slide-2">
-        <div class="slide-head"><div class="slide-kicker">Slide 2</div><div class="slide-time">0:12 a 0:37</div></div>
+        <div class="slide-head">
+          <div class="slide-kicker">Slide 2</div>
+          <div class="slide-time">0:12 a 0:37</div>
+        </div>
         <h2 class="slide-title">Problema</h2>
-        <div class="speaker-blocks"><div class="speaker-block dani"><div class="speaker-name">Dani</div><p class="speaker-copy">El problema es simple: la energía se paga, pero el desvío no se ve. En muchas plantas la factura llega todos los meses, pero nadie puede explicar con claridad qué parte del consumo era normal, qué parte fue exceso y qué decisión convendría tomar primero. Por eso el dolor principal no es técnico. Es financiero.</p></div></div>
+        <div class="speaker-blocks">
+          <div class="speaker-block dani">
+            <div class="speaker-name">Dani</div>
+            <p class="speaker-copy">El problema es simple: la energía se paga, pero el desvío no se ve. En muchas
+              plantas la factura llega todos los meses, pero nadie puede explicar con claridad qué parte del consumo era
+              normal, qué parte fue exceso y qué decisión convendría tomar primero. Por eso el dolor principal no es
+              técnico. Es financiero.</p>
+          </div>
+        </div>
       </article>
 
       <article class="slide-card" id="slide-3">
-        <div class="slide-head"><div class="slide-kicker">Slide 3</div><div class="slide-time">0:37 a 1:37</div></div>
+        <div class="slide-head">
+          <div class="slide-kicker">Slide 3</div>
+          <div class="slide-time">0:37 a 1:37</div>
+        </div>
         <h2 class="slide-title">Propuesta PicoCERO / gráfico</h2>
-        <div class="speaker-blocks"><div class="speaker-block nico"><div class="speaker-name">Nico</div><p class="speaker-copy">Acá está el fundamento del proyecto. Lo que vemos es una curva de demanda diaria típica. Abajo está el ciclo operativo de 24 horas y en el eje vertical la potencia activa. En blanco aparece el perfil original. La planta arranca en una zona baja, después la carga empieza a subir y se concentra en una franja crítica hasta formar este pico central. La línea punteada naranja marca el límite contratado. Cuando la operación se acerca o supera esa zona, el problema no es solo que se consume más energía, sino que se concentra mal la demanda. Y ahí aparece el costo que muchas veces nadie ve a tiempo. No porque la planta esté parada o porque todo funcione mal, sino porque varias cargas coinciden, porque ciertos arranques ocurren al mismo tiempo o porque la operación no tiene una lectura clara de su comportamiento real. Lo importante para nosotros es que la curva deja de ser una imagen y pasa a ser una herramienta de decisión. Nos dice en qué horario aparece el exceso, qué tan agresivo es el pico y dónde conviene intervenir primero. Después aparece en cyan el perfil optimizado. No necesariamente implica producir menos. Implica distribuir mejor la demanda, aplanar la curva y sacar a la operación de esa zona crítica. Por eso hablamos de convertir exceso en control. Porque muchas veces el ahorro no viene solo de consumir menos kWh, sino de consumir mejor, con más criterio y menos simultaneidad innecesaria. La hipótesis actual es que, según el tipo de empresa y su perfil de carga, puede haber oportunidades de mejora entre el 10 y el 35 por ciento, siempre sujetas a validación con medición real. Y una vez que esta lectura base está ordenada, se pueden abrir otras capas como factor de potencia, calidad de energía o análisis de armónicos.</p></div></div>
+        <div class="speaker-blocks">
+          <div class="speaker-block nico">
+            <div class="speaker-name">Nico</div>
+            <p class="speaker-copy">Acá está el fundamento del proyecto. Lo que vemos es una curva de demanda diaria
+              típica. Abajo está el ciclo operativo de 24 horas y en el eje vertical la potencia activa. En blanco
+              aparece el perfil original. La planta arranca en una zona baja, después la carga empieza a subir y se
+              concentra en una franja crítica hasta formar este pico central. La línea punteada naranja marca el límite
+              contratado. Cuando la operación se acerca o supera esa zona, el problema no es solo que se consume más
+              energía, sino que se concentra mal la demanda. Y ahí aparece el costo que muchas veces nadie ve a tiempo.
+              No porque la planta esté parada o porque todo funcione mal, sino porque varias cargas coinciden, porque
+              ciertos arranques ocurren al mismo tiempo o porque la operación no tiene una lectura clara de su
+              comportamiento real. Lo importante para nosotros es que la curva deja de ser una imagen y pasa a ser una
+              herramienta de decisión. Nos dice en qué horario aparece el exceso, qué tan agresivo es el pico y dónde
+              conviene intervenir primero. Después aparece en cyan el perfil optimizado. No necesariamente implica
+              producir menos. Implica distribuir mejor la demanda, aplanar la curva y sacar a la operación de esa zona
+              crítica. Por eso hablamos de convertir exceso en control. Porque muchas veces el ahorro no viene solo de
+              consumir menos kWh, sino de consumir mejor, con más criterio y menos simultaneidad innecesaria. La
+              hipótesis actual es que, según el tipo de empresa y su perfil de carga, puede haber oportunidades de
+              mejora entre el 10 y el 35 por ciento, siempre sujetas a validación con medición real. Y una vez que esta
+              lectura base está ordenada, se pueden abrir otras capas como factor de potencia, calidad de energía o
+              análisis de armónicos.</p>
+          </div>
+        </div>
         <div class="cue-box">
           <p class="cue-title">Cue de animación</p>
           <ul class="cue-list">
@@ -328,62 +426,138 @@
       </article>
 
       <article class="slide-card" id="slide-4">
-        <div class="slide-head"><div class="slide-kicker">Slide 4</div><div class="slide-time">1:37 a 2:10</div></div>
+        <div class="slide-head">
+          <div class="slide-kicker">Slide 4</div>
+          <div class="slide-time">1:37 a 2:10</div>
+        </div>
         <h2 class="slide-title">Solución</h2>
-        <div class="speaker-blocks"><div class="speaker-block nico"><div class="speaker-name">Nico</div><p class="speaker-copy">Nuestro abordaje sigue exactamente esa lógica. Primero medimos. Después comparamos contra una referencia útil. Luego detectamos desvíos antes de que se vuelvan costo repetido. Y finalmente demostramos, con una lectura ejecutiva, si hay ahorro y dónde conviene actuar. La propuesta no entra por complejidad. Entra por visibilidad operativa y ahorro verificable.</p></div></div>
+        <div class="speaker-blocks">
+          <div class="speaker-block nico">
+            <div class="speaker-name">Nico</div>
+            <p class="speaker-copy">Nuestro abordaje sigue exactamente esa lógica. Primero medimos. Después comparamos
+              contra una referencia útil. Luego detectamos desvíos antes de que se vuelvan costo repetido. Y finalmente
+              demostramos, con una lectura ejecutiva, si hay ahorro y dónde conviene actuar. La propuesta no entra por
+              complejidad. Entra por visibilidad operativa y ahorro verificable.</p>
+          </div>
+        </div>
       </article>
 
       <article class="slide-card" id="slide-5">
-        <div class="slide-head"><div class="slide-kicker">Slide 5</div><div class="slide-time">2:10 a 2:28</div></div>
+        <div class="slide-head">
+          <div class="slide-kicker">Slide 5</div>
+          <div class="slide-time">2:10 a 2:28</div>
+        </div>
         <h2 class="slide-title">Equipo</h2>
-        <div class="speaker-blocks"><div class="speaker-block nico"><div class="speaker-name">Nico</div><p class="speaker-copy">Para ejecutar esto reunimos tres capacidades. Comercial y validación para abrir casos. Integración industrial para pasar de planta a piloto. Y producto con analítica para transformar datos en una propuesta vendible. Eso nos permite pensar, instalar, leer y convertir hallazgos en servicio.</p></div></div>
+        <div class="speaker-blocks">
+          <div class="speaker-block nico">
+            <div class="speaker-name">Nico</div>
+            <p class="speaker-copy">Para ejecutar esto reunimos tres capacidades. Comercial y validación para abrir
+              casos. Integración industrial para pasar de planta a piloto. Y producto con analítica para transformar
+              datos en una propuesta vendible. Eso nos permite pensar, instalar, leer y convertir hallazgos en servicio.
+            </p>
+          </div>
+        </div>
       </article>
 
       <article class="slide-card" id="slide-6">
-        <div class="slide-head"><div class="slide-kicker">Slide 6</div><div class="slide-time">2:28 a 2:55</div></div>
+        <div class="slide-head">
+          <div class="slide-kicker">Slide 6</div>
+          <div class="slide-time">2:28 a 2:55</div>
+        </div>
         <h2 class="slide-title">Caso UTN-FRSR</h2>
-        <div class="speaker-blocks"><div class="speaker-block dani"><div class="speaker-name">Dani</div><p class="speaker-copy">Nuestro primer punto de partida real hoy es UTN-FRSR. No es importante solo por el nombre del caso, sino porque ya muestra variabilidad relevante. Tenemos meses en el rango de 4 a 6 millones de pesos y un último cierre cercano a 8 millones. Eso nos da una base concreta para validar si esta lectura de la curva realmente se traduce en mejora económica.</p></div></div>
+        <div class="speaker-blocks">
+          <div class="speaker-block nico">
+            <div class="speaker-name">Nico</div>
+            <p class="speaker-copy">Nuestro primer punto de partida real hoy es UTN-FRSR. No es importante solo por el
+              nombre del caso, sino porque ya muestra variabilidad relevante. Tenemos meses en el rango de 4 a 6
+              millones de pesos y un último cierre cercano a 8 millones. Eso nos da una base concreta para validar si
+              esta lectura de la curva realmente se traduce en mejora económica.</p>
+          </div>
+        </div>
       </article>
 
       <article class="slide-card" id="slide-7">
-        <div class="slide-head"><div class="slide-kicker">Slide 7</div><div class="slide-time">2:55 a 3:25</div></div>
+        <div class="slide-head">
+          <div class="slide-kicker">Slide 7</div>
+          <div class="slide-time">2:55 a 3:25</div>
+        </div>
         <h2 class="slide-title">Modelo de negocio</h2>
-        <div class="speaker-blocks"><div class="speaker-block dani"><div class="speaker-name">Dani</div><p class="speaker-copy">Nuestro modelo es simple. Entramos con un piloto para medir y leer el caso. Después implementamos la configuración base del sitio. Y finalmente construimos analítica recurrente por planta con alertas, reportes y seguimiento continuo. Eso baja la barrera de entrada y al mismo tiempo crea recurrencia sin depender de vender todo desde el primer día.</p></div></div>
+        <div class="speaker-blocks">
+          <div class="speaker-block nico">
+            <div class="speaker-name">Nico</div>
+            <p class="speaker-copy">Nuestro modelo es simple. Entramos con un piloto para medir y leer el caso. Después
+              implementamos la configuración base del sitio. Y finalmente construimos analítica recurrente por planta
+              con alertas, reportes y seguimiento continuo. Eso baja la barrera de entrada y al mismo tiempo crea
+              recurrencia sin depender de vender todo desde el primer día.</p>
+          </div>
+        </div>
       </article>
 
       <article class="slide-card" id="slide-8">
-        <div class="slide-head"><div class="slide-kicker">Slide 8</div><div class="slide-time">3:25 a 3:45</div></div>
+        <div class="slide-head">
+          <div class="slide-kicker">Slide 8</div>
+          <div class="slide-time">3:25 a 3:45</div>
+        </div>
         <h2 class="slide-title">Mercado</h2>
-        <div class="speaker-blocks"><div class="speaker-block dani"><div class="speaker-name">Dani</div><p class="speaker-copy">No queremos entrar por todo el mercado al mismo tiempo. La entrada más inteligente para nosotros es Cuyo, por cercanía comercial, acceso local y sectores donde el dolor económico es visible: bodegas, frigoríficos, química, metalmecánica, renovables y manufactura. Eso nos permite validar más rápido y después escalar a Argentina.</p></div></div>
+        <div class="speaker-blocks">
+          <div class="speaker-block nico">
+            <div class="speaker-name">Nico</div>
+            <p class="speaker-copy">No queremos entrar por todo el mercado al mismo tiempo. La entrada más inteligente
+              para nosotros es Cuyo, por cercanía comercial, acceso local y sectores donde el dolor económico es
+              visible: bodegas, frigoríficos, química, metalmecánica, renovables y manufactura. Eso nos permite validar
+              más rápido y después escalar a Argentina.</p>
+          </div>
+        </div>
       </article>
 
       <article class="slide-card" id="slide-9">
-        <div class="slide-head"><div class="slide-kicker">Slide 9</div><div class="slide-time">3:45 a 4:30</div></div>
+        <div class="slide-head">
+          <div class="slide-kicker">Slide 9</div>
+          <div class="slide-time">3:45 a 4:30</div>
+        </div>
         <h2 class="slide-title">Ronda</h2>
         <div class="speaker-blocks">
-          <div class="speaker-block dani"><div class="speaker-name">Dani</div><p class="speaker-copy">Para convertir esta validación en tracción buscamos una ronda pre-seed de 98.700 dólares. La propuesta inicial es hasta 3 por ciento de participación, con foco en producto, evidencia y ventas.</p></div>
-          <div class="speaker-block nico"><div class="speaker-name">Nico</div><p class="speaker-copy">La ronda está dividida en tres etapas. Primero, producto base y piloto UTN. Segundo, MVP completo con analítica. Y tercero, validación comercial. La lógica es reducir riesgo, sumar evidencia y llegar a una propuesta mucho más fuerte para abrir nuevos pilotos y primeras ventas recurrentes.</p></div>
+
+          <div class="speaker-block nico">
+            <div class="speaker-name">Nico</div>
+            <p class="speaker-copy">Para convertir esta validación en tracción buscamos una ronda pre-seed de 98.700
+              dólares. La propuesta inicial es hasta 3 por ciento de participación, con foco en producto, evidencia y
+              ventas.</p>
+          </div>
+          <div class="speaker-block nico">
+            <div class="speaker-name">Nico</div>
+            <p class="speaker-copy">La ronda está dividida en tres etapas. Primero, producto base y piloto UTN. Segundo,
+              MVP completo con analítica. Y tercero, validación comercial. La lógica es reducir riesgo, sumar evidencia
+              y llegar a una propuesta mucho más fuerte para abrir nuevos pilotos y primeras ventas recurrentes.</p>
+          </div>
+
         </div>
       </article>
 
       <article class="slide-card" id="slide-10">
-        <div class="slide-head"><div class="slide-kicker">Slide 10</div><div class="slide-time">4:30 a 5:00</div></div>
+        <div class="slide-head">
+          <div class="slide-kicker">Slide 10</div>
+          <div class="slide-time">4:30 a 5:00</div>
+        </div>
         <h2 class="slide-title">Cierre</h2>
         <div class="speaker-blocks">
-          <div class="speaker-block dani"><div class="speaker-name">Dani</div><p class="speaker-copy">Hoy queremos hablar con tres tipos de actores: inversores, clientes piloto y aliados estratégicos. Si hay una organización que quiera medir mejor su operación o una red que pueda acelerar esta validación, nos interesa conversar.</p></div>
-          <div class="speaker-block nico"><div class="speaker-name">Nico</div><p class="speaker-copy">Y si además hay interés en acompañar esta etapa desde la ronda, también estamos abiertos a seguir esa conversación. Muchas gracias.</p></div>
+          <div class="speaker-block nico">
+            <div class="speaker-name">Nico</div>
+            <p class="speaker-copy">Hoy queremos hablar con tres tipos de actores: inversores, clientes piloto y aliados
+              estratégicos. Si hay una organización que quiera medir mejor su operación o una red que pueda acelerar
+              esta validación, nos interesa conversar.</p>
+          </div>
+          <div class="speaker-block nico">
+            <div class="speaker-name">Nico</div>
+            <p class="speaker-copy">Y si además hay interés en acompañar esta etapa desde la ronda, también estamos
+              abiertos a seguir esa conversación. Muchas gracias.</p>
+          </div>
         </div>
       </article>
     </section>
 
     <section class="support-grid" aria-label="Notas adicionales">
-      <article class="note-card">
-        <h2 class="note-title">Reparto sugerido</h2>
-        <ul class="note-list">
-          <li><strong>Dani:</strong> slides 1 y 2, luego 6, 7, 8, apertura de 9 y apertura de 10.</li>
-          <li><strong>Nico:</strong> slides 3, 4 y 5, parte técnica de 9 y remate final.</li>
-        </ul>
-      </article>
+
       <article class="note-card">
         <h2 class="note-title">Ensayo</h2>
         <ul class="note-list">
@@ -396,4 +570,5 @@
     </section>
   </main>
 </body>
+
 </html>
