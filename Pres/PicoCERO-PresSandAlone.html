@@ -1,0 +1,3557 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#000000">
+  <title>PicoCERO | Pitch Standalone</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      color-scheme: dark;
+      --bg: #000000;
+      --bg-2: #050505;
+      --panel: rgba(13, 13, 13, 0.9);
+      --panel-strong: rgba(10, 10, 10, 0.96);
+      --panel-soft: rgba(255, 255, 255, 0.03);
+      --border: rgba(255, 255, 255, 0.14);
+      --border-strong: rgba(255, 255, 255, 0.22);
+      --text: #f4f7fa;
+      --text-2: #c7d2da;
+      --text-3: #8896a3;
+      --accent: #06b6d4;
+      --accent-2: #22d3ee;
+      --accent-glow: rgba(6, 182, 212, 0.32);
+      --warn: #fb923c;
+      --warn-soft: rgba(251, 146, 60, 0.18);
+      --success: #34d399;
+      --danger: #f87171;
+      --shadow: 0 28px 70px rgba(0, 0, 0, 0.34);
+      --sans: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --mono: "Space Mono", "Cascadia Code", Consolas, monospace;
+      --ease-smooth: cubic-bezier(0.16, 1, 0.3, 1);
+      --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);
+      --frame-x: clamp(1.6rem, 3.8vw, 3.4rem);
+      --frame-y: clamp(1.4rem, 4.2vh, 2.8rem);
+      --safe-right: clamp(3.2rem, 6.4vw, 5rem);
+      --content-width: min(100%, 1180px);
+      --body-size: clamp(1rem, 1.5vw, 1.22rem);
+      --title-size: clamp(3.2rem, 6.5vw, 5.8rem);
+      --title-wide: clamp(2.8rem, 5.6vw, 5rem);
+      --kicker-size: clamp(0.78rem, 1.1vw, 0.92rem);
+      --subtitle-size: clamp(1.1rem, 1.6vw, 1.32rem);
+      --card-title-size: clamp(1.15rem, 1.7vw, 1.42rem);
+      --card-body-size: clamp(0.92rem, 1.3vw, 1.08rem);
+      --metric-big: clamp(1.9rem, 3.4vw, 3rem);
+      --pill-text: clamp(0.82rem, 1.15vw, 1rem);
+    }
+
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+    }
+
+    html {
+      height: 100%;
+      font-size: 18px;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100%;
+      overflow: hidden;
+      font-family: var(--sans);
+      color: var(--text);
+      background:
+        radial-gradient(circle at 16% 18%, rgba(6, 182, 212, 0.14), transparent 28rem),
+        radial-gradient(circle at 86% 12%, rgba(34, 211, 238, 0.07), transparent 24rem),
+        linear-gradient(180deg, var(--bg) 0%, var(--bg-2) 50%, var(--bg) 100%);
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+    }
+
+    /* Dot grid — subtle but visible */
+    body::before {
+      background-image:
+        radial-gradient(circle, rgba(255, 255, 255, 0.12) 1.2px, transparent 1.2px);
+      background-size: 28px 28px;
+      opacity: 0.18;
+      mask-image:
+        radial-gradient(ellipse 80% 70% at 50% 40%, black 30%, transparent 100%);
+    }
+
+    /* Fine line grid — adds depth without clutter */
+    body::after {
+      background:
+        linear-gradient(90deg, rgba(6, 182, 212, 0.04) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(6, 182, 212, 0.03) 1px, transparent 1px);
+      background-size: 120px 120px;
+      opacity: 0.55;
+      mask-image:
+        radial-gradient(ellipse 70% 60% at 50% 45%, black 20%, transparent 100%);
+    }
+
+    img {
+      display: block;
+      max-width: 100%;
+    }
+
+    button {
+      font: inherit;
+    }
+
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    /* ===== PRESENTATION SHELL ===== */
+    .presentation-shell {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+    }
+
+    /* ===== SECTION BADGE (fixed top-left) ===== */
+    .section-badge {
+      position: fixed;
+      top: var(--frame-y);
+      right: var(--frame-x);
+      z-index: 70;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.55rem 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      background: rgba(0, 0, 0, 0.55);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      font-family: var(--mono);
+      font-size: var(--kicker-size);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-3);
+      opacity: 0;
+      transition: opacity 360ms var(--ease-soft), color 360ms var(--ease-soft);
+      pointer-events: none;
+    }
+
+    .section-badge.visible {
+      opacity: 1;
+    }
+
+    .section-badge .badge-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px rgba(6, 182, 212, 0.5);
+    }
+
+    /* ===== CONTROL DOCK ===== */
+    .control-dock {
+      position: fixed;
+      top: var(--frame-y);
+      right: var(--frame-x);
+      z-index: 70;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      transition: opacity 360ms var(--ease-soft), transform 360ms var(--ease-soft);
+    }
+
+    .control-dock.hidden {
+      opacity: 0;
+      transform: translateY(-10px);
+      pointer-events: none;
+    }
+
+    .control-button {
+      border: 1px solid var(--border);
+      background: rgba(0, 0, 0, 0.64);
+      color: var(--text);
+      padding: 0.72rem 1rem;
+      border-radius: 999px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      line-height: 1;
+      cursor: pointer;
+      opacity: 0.3;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      transition: opacity 220ms ease, border-color 220ms ease, background 220ms ease, transform 220ms ease, box-shadow 220ms ease;
+    }
+
+    .control-button:hover,
+    .control-button:focus-visible {
+      opacity: 0.96;
+      border-color: rgba(255, 255, 255, 0.22);
+      background: rgba(16, 16, 16, 0.94);
+      transform: translateY(-1px);
+      box-shadow: 0 14px 34px rgba(0, 0, 0, 0.32);
+    }
+
+    .control-button:focus-visible {
+      outline: 2px solid rgba(34, 211, 238, 0.7);
+      outline-offset: 2px;
+    }
+
+    .control-button.primary {
+      border-color: rgba(6, 182, 212, 0.36);
+    }
+
+    .control-button.primary:hover,
+    .control-button.primary:focus-visible {
+      border-color: rgba(6, 182, 212, 0.7);
+      box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.22), 0 18px 40px rgba(0, 0, 0, 0.36);
+    }
+
+    /* ===== NAV DOTS ===== */
+    .nav-dots {
+      position: fixed;
+      top: 50%;
+      right: max(1.2rem, calc(var(--frame-x) - 0.1rem));
+      z-index: 60;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      transform: translateY(-50%);
+    }
+
+    .nav-dot {
+      width: 10px;
+      height: 10px;
+      border: 0;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.16);
+      cursor: pointer;
+      transition: transform 220ms ease, background 220ms ease, box-shadow 220ms ease, opacity 220ms ease;
+    }
+
+    .nav-dot:hover,
+    .nav-dot:focus-visible {
+      opacity: 0.95;
+      outline: none;
+      transform: scale(1.15);
+    }
+
+    .nav-dot.active {
+      background: var(--accent);
+      transform: scale(1.55);
+      box-shadow: 0 0 18px rgba(6, 182, 212, 0.55);
+    }
+
+    /* ===== SLIDES ===== */
+    .slides {
+      position: relative;
+      width: 100%;
+      height: 100%;
+    }
+
+    .slide {
+      position: absolute;
+      inset: 0;
+      padding: var(--frame-y) var(--safe-right) var(--frame-y) var(--frame-x);
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      opacity: 0;
+      transform: translateY(24px);
+      pointer-events: none;
+      transition: opacity 520ms var(--ease-smooth), transform 520ms var(--ease-smooth);
+    }
+
+    .slide.active {
+      opacity: 1;
+      transform: translateY(0);
+      pointer-events: auto;
+    }
+
+    .slide-shell {
+      width: var(--content-width);
+      min-height: calc(100vh - (var(--frame-y) * 2));
+      display: grid;
+      align-content: center;
+      gap: clamp(1.1rem, 2.2vh, 1.6rem);
+      position: relative;
+    }
+
+    .center-shell {
+      justify-items: center;
+      text-align: center;
+    }
+
+    .split-shell {
+      grid-template-columns: minmax(0, 1fr) minmax(280px, 0.92fr);
+      align-items: center;
+      gap: clamp(1rem, 2vw, 2.4rem);
+    }
+
+    /* ===== SECTION KICKER (inside slide) ===== */
+    .section-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      width: fit-content;
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: var(--kicker-size);
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .section-kicker::before {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 14px rgba(6, 182, 212, 0.54);
+    }
+
+    /* ===== TITLES ===== */
+    .slide-title {
+      margin: 0;
+      max-width: 12ch;
+      font-family: var(--mono);
+      font-size: var(--title-size);
+      font-weight: 700;
+      letter-spacing: -0.06em;
+      line-height: 0.98;
+      text-transform: uppercase;
+    }
+
+    .slide-title.wide {
+      max-width: 15ch;
+      font-size: var(--title-wide);
+    }
+
+    .slide-title .accent,
+    .accent-text {
+      color: var(--accent);
+    }
+
+    .slide-title .verify {
+      color: var(--success);
+    }
+
+    .slide-subtitle {
+      margin: 0;
+      max-width: 50rem;
+      color: var(--text-2);
+      font-size: var(--subtitle-size);
+      line-height: 1.55;
+    }
+
+    .slide-subtitle.narrow {
+      max-width: 32rem;
+    }
+
+    .body-copy {
+      margin: 0;
+      max-width: 44rem;
+      color: var(--text-2);
+      font-size: var(--body-size);
+      line-height: 1.6;
+    }
+
+    .body-copy strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    /* ===== PILLS / BADGES ===== */
+    .headline-pill,
+    .micro-pill,
+    .legend-chip,
+    .sector-chip,
+    .timeline-label,
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid var(--border);
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-2);
+      font-family: var(--mono);
+      font-size: var(--pill-text);
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .headline-pill,
+    .micro-pill,
+    .legend-chip,
+    .status-badge {
+      border-radius: 999px;
+    }
+
+    .headline-pill {
+      padding: 0.75rem 1rem;
+    }
+
+    .micro-pill,
+    .legend-chip,
+    .status-badge {
+      padding: 0.58rem 0.82rem;
+    }
+
+    .status-badge {
+      border-color: rgba(6, 182, 212, 0.3);
+      color: var(--accent-2);
+      background: rgba(6, 182, 212, 0.08);
+    }
+
+    .accent-line {
+      width: min(100%, 6rem);
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.8), transparent);
+    }
+
+    /* ===== GRID LAYOUTS ===== */
+    .stack-row,
+    .support-pills,
+    .metric-row,
+    .solution-grid,
+    .team-grid,
+    .model-grid,
+    .sector-row,
+    .cta-row,
+    .legend-row {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .support-pills {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      width: min(100%, 54rem);
+      gap: 1.1rem;
+    }
+
+    /* ===== CARD BASE ===== */
+    .support-pill,
+    .metric-card,
+    .solution-card,
+    .team-card,
+    .model-card,
+    .market-card,
+    .round-hero-block,
+    .round-timeline,
+    .cta-card,
+    .hero-panel,
+    .proposal-graphic,
+    .case-chart-panel,
+    .case-stat-card,
+    .market-panel,
+    .round-panel {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(16, 16, 16, 0.92), rgba(8, 8, 8, 0.97));
+      box-shadow: var(--shadow);
+    }
+
+    .support-pill,
+    .metric-card,
+    .solution-card,
+    .team-card,
+    .model-card,
+    .market-card,
+    .cta-card {
+      padding: 1.2rem 1.25rem;
+    }
+
+    .support-pill::before,
+    .metric-card::before,
+    .solution-card::before,
+    .team-card::before,
+    .model-card::before,
+    .market-card::before,
+    .round-hero-block::before,
+    .cta-card::before,
+    .hero-panel::before,
+    .proposal-graphic::before,
+    .case-chart-panel::before,
+    .market-panel::before,
+    .round-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: linear-gradient(180deg, transparent, rgba(6, 182, 212, 0.9), transparent);
+      opacity: 0.9;
+    }
+
+    .support-pill {
+      display: grid;
+      justify-items: center;
+      align-content: center;
+      gap: 0.8rem;
+      min-height: 8.2rem;
+      text-align: center;
+      color: var(--text);
+      font-size: clamp(1.18rem, 1.75vw, 1.45rem);
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      padding: 1.45rem 1.35rem;
+      border-radius: 22px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.28), inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .support-pill::after {
+      content: "";
+      position: absolute;
+      inset: 1px 1px auto 1px;
+      height: 38%;
+      border-radius: 21px 21px 12px 12px;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.08), rgba(255, 255, 255, 0));
+      pointer-events: none;
+    }
+
+    .support-pill .pill-icon,
+    .support-pill .pill-copy {
+      position: relative;
+      z-index: 1;
+    }
+
+    .support-pill .pill-icon {
+      position: relative;
+      display: block;
+      width: 0.95rem;
+      height: 0.95rem;
+      border-radius: 50%;
+    }
+
+    .support-pill .pill-icon::after {
+      content: "";
+      position: absolute;
+      inset: -0.22rem;
+      border-radius: 50%;
+      border: 1px solid rgba(255, 255, 255, 0.14);
+    }
+
+    .support-pill .pill-copy {
+      display: block;
+      max-width: 12ch;
+      line-height: 1.15;
+    }
+
+    /* Per-pill accent colors */
+    .support-pill.warn {
+      border-color: rgba(251, 146, 60, 0.35);
+      background: linear-gradient(180deg, rgba(251, 146, 60, 0.10), rgba(8, 8, 8, 0.97));
+    }
+
+    .support-pill.warn::before {
+      background: linear-gradient(180deg, transparent, rgba(251, 146, 60, 0.9), transparent);
+    }
+
+    .support-pill.danger {
+      border-color: rgba(248, 113, 113, 0.42);
+      background:
+        radial-gradient(circle at 50% -12%, rgba(248, 113, 113, 0.28), transparent 48%),
+        linear-gradient(180deg, rgba(44, 14, 18, 0.94), rgba(18, 8, 10, 0.98));
+      color: #ffe4e6;
+    }
+
+    .support-pill.danger::before {
+      background: linear-gradient(180deg, transparent, rgba(248, 113, 113, 0.9), transparent);
+      width: 5px;
+    }
+
+    .support-pill.danger .pill-icon {
+      background: radial-gradient(circle, #fda4af 0%, #fb7185 45%, #ef4444 100%);
+      box-shadow: 0 0 0 6px rgba(248, 113, 113, 0.08), 0 0 24px rgba(248, 113, 113, 0.38);
+    }
+
+    .support-pill.muted-accent {
+      border-color: rgba(148, 163, 184, 0.35);
+      background: linear-gradient(180deg, rgba(148, 163, 184, 0.08), rgba(8, 8, 8, 0.97));
+    }
+
+    .support-pill.muted-accent::before {
+      background: linear-gradient(180deg, transparent, rgba(148, 163, 184, 0.9), transparent);
+    }
+
+    /* ===== COVER ===== */
+    .cover-shell {
+      justify-items: center;
+      text-align: center;
+      gap: clamp(1rem, 2.2vh, 1.8rem);
+    }
+
+    .cover-brand {
+      display: grid;
+      justify-items: center;
+      gap: 0.6rem;
+    }
+
+    .cover-mark-wrap {
+      position: relative;
+      display: inline-block;
+    }
+
+    .cover-mark {
+      width: clamp(6.8rem, 13vw, 9rem);
+      filter: drop-shadow(0 20px 48px rgba(0, 0, 0, 0.5));
+      position: relative;
+      z-index: 1;
+    }
+
+    .cover-glow {
+      position: absolute;
+      inset: -20%;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(6, 182, 212, 0.35), transparent 70%);
+      opacity: 0;
+      z-index: 0;
+      animation: glowPulse 1.2s ease 0.3s both;
+    }
+
+    @keyframes glowPulse {
+      0% {
+        opacity: 0;
+        transform: scale(0.8);
+      }
+
+      40% {
+        opacity: 1;
+        transform: scale(1.1);
+      }
+
+      100% {
+        opacity: 0;
+        transform: scale(1.3);
+      }
+    }
+
+    .cover-line {
+      width: 2px;
+      height: 0;
+      background: linear-gradient(180deg, var(--accent), transparent);
+      animation: lineGrow 0.5s var(--ease-smooth) 0.48s both;
+    }
+
+    @keyframes lineGrow {
+      from {
+        height: 0;
+        opacity: 0;
+      }
+
+      to {
+        height: 2rem;
+        opacity: 1;
+      }
+    }
+
+    .cover-wordmark {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 0.06em;
+      font-family: var(--mono);
+      font-size: clamp(3.8rem, 7.4vw, 7rem);
+      font-weight: 700;
+      letter-spacing: -0.08em;
+      line-height: 1.0;
+      text-transform: uppercase;
+    }
+
+    .cover-wordmark .word-pico {
+      color: var(--text);
+    }
+
+    .cover-wordmark .word-cero {
+      color: var(--accent);
+    }
+
+    .wordmark-char {
+      display: inline-block;
+    }
+
+    .cover-tagline {
+      max-width: 32rem;
+      color: var(--text-2);
+      font-size: clamp(1.1rem, 1.55vw, 1.32rem);
+      line-height: 1.55;
+    }
+
+    .cover-meta {
+      color: var(--text-3);
+      font-family: var(--mono);
+      font-size: var(--kicker-size);
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    /* ===== PROPOSAL GRAPHIC ===== */
+    .proposal-shell {
+      gap: 0.95rem;
+    }
+
+    .proposal-stage {
+      display: grid;
+      gap: clamp(0.95rem, 2vh, 1.35rem);
+      padding: 0;
+    }
+
+    .proposal-header {
+      display: grid;
+      gap: 0.7rem;
+      max-width: 43rem;
+    }
+
+    .proposal-title {
+      max-width: 19ch;
+    }
+
+    .title-line {
+      display: block;
+      white-space: nowrap;
+    }
+
+    .proposal-subtitle {
+      max-width: 45rem;
+      color: rgba(231, 236, 241, 0.86);
+    }
+
+    .proposal-graphic {
+      padding: clamp(1.1rem, 2.2vw, 1.5rem);
+      min-height: min(58vh, 30rem);
+      background:
+        radial-gradient(circle at 50% 20%, rgba(6, 182, 212, 0.07), transparent 15rem),
+        linear-gradient(180deg, rgba(13, 13, 13, 0.96), rgba(7, 7, 7, 0.98));
+    }
+
+    .problem-shell {
+      width: min(100%, 58rem);
+      margin-inline: auto;
+      gap: clamp(1rem, 2.4vh, 1.7rem);
+    }
+
+    .problem-shell::before {
+      content: "";
+      position: absolute;
+      top: 13%;
+      left: 50%;
+      width: min(40rem, 84%);
+      height: 16rem;
+      transform: translateX(-50%);
+      background:
+        radial-gradient(circle at 50% 45%, rgba(248, 113, 113, 0.16), transparent 58%),
+        radial-gradient(circle at 50% 15%, rgba(255, 255, 255, 0.05), transparent 46%);
+      filter: blur(24px);
+      opacity: 0.9;
+      pointer-events: none;
+    }
+
+    .problem-shell>* {
+      position: relative;
+      z-index: 1;
+    }
+
+    .problem-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.55rem;
+      padding: 0.68rem 1rem;
+      border: 1px solid rgba(248, 113, 113, 0.22);
+      border-radius: 999px;
+      background: linear-gradient(180deg, rgba(248, 113, 113, 0.12), rgba(248, 113, 113, 0.04));
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.06), 0 14px 28px rgba(0, 0, 0, 0.22);
+      color: #fdba74;
+      font-family: var(--mono);
+      font-size: 0.74rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+    }
+
+    .problem-kicker::before {
+      content: "";
+      width: 0.55rem;
+      height: 0.55rem;
+      border-radius: 50%;
+      background: radial-gradient(circle, #fdba74 0%, #fb923c 58%, #f87171 100%);
+      box-shadow: 0 0 14px rgba(251, 146, 60, 0.45);
+    }
+
+    .problem-title {
+      max-width: 24ch;
+      text-wrap: balance;
+    }
+
+    .problem-subtitle {
+      max-width: 39rem;
+      color: rgba(231, 236, 241, 0.88);
+    }
+
+    /* ===== GLITCH ===== */
+    .glitch-danger {
+      position: relative;
+      display: inline-block;
+      color: inherit;
+      font: inherit;
+      letter-spacing: inherit;
+      text-shadow: 0 0 10px rgba(255, 255, 255, 0.06);
+    }
+
+    .glitch-danger::before,
+    .glitch-danger::after {
+      content: attr(data-text);
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      mix-blend-mode: screen;
+    }
+
+    .glitch-danger::before {
+      color: rgba(34, 211, 238, 0.55);
+      transform: translateX(-0.028em);
+      opacity: 0.95;
+    }
+
+    .glitch-danger::after {
+      color: rgba(248, 113, 113, 0.6);
+      transform: translateX(0.028em);
+      opacity: 0.9;
+    }
+
+    .proposal-graphic::after {
+      content: "";
+      position: absolute;
+      inset: auto 1rem 1rem 1rem;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.06), transparent);
+    }
+
+    .proposal-surface {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: min(50vh, 24rem);
+    }
+
+    .proposal-svg {
+      width: 100%;
+      height: 100%;
+    }
+
+    .proposal-svg .grid-line {
+      stroke: rgba(255, 255, 255, 0.07);
+      stroke-width: 1;
+    }
+
+    .proposal-svg .grid-line.soft {
+      opacity: 0.5;
+    }
+
+    .proposal-svg .excess-line {
+      stroke: var(--warn);
+      stroke-width: 2;
+      stroke-dasharray: 4 8;
+      filter: drop-shadow(0 0 8px rgba(251, 146, 60, 0.18));
+    }
+
+    .proposal-svg .legacy-line {
+      fill: none;
+      stroke: rgba(255, 245, 240, 0.92);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .proposal-svg .legacy-line.warm {
+      stroke: rgba(255, 242, 235, 0.92);
+    }
+
+    .proposal-svg .legacy-line.muted {
+      stroke: rgba(255, 255, 255, 0.18);
+      stroke-dasharray: 8 6;
+    }
+
+    .proposal-svg .optimized-line {
+      fill: none;
+      stroke: var(--accent-2);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 0 10px rgba(34, 211, 238, 0.2));
+    }
+
+    .proposal-svg .optimized-area {
+      display: none;
+    }
+
+    .proposal-svg .peak-marker {
+      display: none;
+    }
+
+    .proposal-label,
+    .proposal-status,
+    .proposal-callout,
+    .proposal-note {
+      position: absolute;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.45rem;
+      font-family: var(--mono);
+      font-size: var(--pill-text);
+      font-weight: 700;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      opacity: 0;
+    }
+
+    .proposal-label {
+      color: rgba(255, 183, 128, 0.98);
+    }
+
+    .proposal-status {
+      top: 0.9rem;
+      left: 0.9rem;
+      padding: 0.6rem 0.8rem;
+      border-radius: 999px;
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      color: var(--accent-2);
+      background: rgba(6, 182, 212, 0.08);
+    }
+
+    .proposal-callout {
+      display: none;
+    }
+
+    .proposal-note {
+      color: var(--text-3);
+    }
+
+    .proposal-label .dot,
+    .proposal-status .dot,
+    .proposal-callout .dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: currentColor;
+    }
+
+    .proposal-label.excess {
+      top: 2.2rem;
+      right: 1.5rem;
+    }
+
+    .proposal-label.legacy {
+      left: 6%;
+      bottom: 16%;
+    }
+
+    .proposal-label.optimized {
+      left: 44%;
+      bottom: 8%;
+    }
+
+    .legend-row {
+      grid-template-columns: repeat(2, minmax(0, max-content));
+      justify-content: start;
+      opacity: 0;
+    }
+
+    .legend-chip {
+      gap: 0.5rem;
+    }
+
+    .legend-swatch {
+      width: 20px;
+      height: 2.5px;
+      border-radius: 999px;
+      background: currentColor;
+    }
+
+    .legend-chip.legacy {
+      color: rgba(255, 236, 229, 0.92);
+    }
+
+    .legend-chip.optimized {
+      color: var(--accent-2);
+    }
+
+    .legend-chip.excess {
+      color: var(--warn);
+    }
+
+    /* ===== PREMIUM 4K GRAPH ANIMATION ===== */
+    .premium-graph {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      min-height: min(58vh, 31rem);
+      border-radius: 0;
+      overflow: visible;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+
+    .premium-graph .pg-grid {
+      display: none;
+    }
+
+    .premium-graph .pg-glow {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 74%;
+      height: 68%;
+      transform: translate(-50%, -50%);
+      background: rgba(6, 182, 212, 0.06);
+      filter: blur(118px);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .premium-graph .pg-title {
+      position: absolute;
+      top: 2rem;
+      left: 2.5rem;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .premium-graph .pg-title-sub {
+      color: var(--text-3);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      margin: 0 0 0.25rem;
+    }
+
+    .premium-graph .pg-title-main {
+      color: var(--text);
+      font-size: clamp(1.3rem, 2.2vw, 1.8rem);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+
+    .premium-graph .pg-axis-label {
+      position: absolute;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(199, 210, 218, 0.72);
+      pointer-events: none;
+      z-index: 10;
+    }
+
+    .premium-graph .pg-axis-x {
+      bottom: 1.8rem;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
+    .premium-graph .pg-axis-y {
+      top: 50%;
+      left: 0.8rem;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center;
+    }
+
+    .premium-graph .pg-badge {
+      position: absolute;
+      top: 1.2rem;
+      right: 1.2rem;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.62rem 1rem;
+      border-radius: 999px;
+      background: linear-gradient(145deg, rgba(20, 24, 30, 0.58), rgba(10, 12, 17, 0.76));
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.22);
+    }
+
+    .premium-graph .pg-badge-dot {
+      position: relative;
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .premium-graph .pg-badge-dot::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      animation: pgPulseRing 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+
+    @keyframes pgPulseRing {
+      0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: scale(2.5);
+        opacity: 0;
+      }
+    }
+
+    .premium-graph .pg-badge-text {
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 0.8rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+    }
+
+    .premium-graph .pg-legend {
+      position: absolute;
+      bottom: 1.15rem;
+      right: 1.15rem;
+      z-index: 20;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      padding: 0.95rem 1.15rem;
+      border-radius: 14px;
+      background: linear-gradient(145deg, rgba(20, 24, 30, 0.58), rgba(10, 12, 17, 0.76));
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .premium-graph .pg-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 0.9rem;
+    }
+
+    .premium-graph .pg-legend-line {
+      width: 2rem;
+      height: 0;
+      border-bottom: 2px dashed rgba(255, 255, 255, 0.35);
+    }
+
+    .premium-graph .pg-legend-line.optimized {
+      height: 4px;
+      border-bottom: none;
+      background: var(--accent);
+      border-radius: 999px;
+      box-shadow: 0 0 8px rgba(6, 182, 212, 0.8);
+    }
+
+    .premium-graph .pg-legend-line.warning {
+      width: 2rem;
+      border-bottom: 2px dashed var(--warn);
+    }
+
+    .premium-graph .pg-legend-text {
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(199, 210, 218, 0.74);
+    }
+
+    .premium-graph .pg-legend-item:last-child .pg-legend-text {
+      color: var(--text);
+    }
+
+    /* Premium sequential animations — gated on .pg-ready */
+    .premium-graph .pg-anim {
+      opacity: 0;
+    }
+
+    @keyframes pgFadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes pgSlideUp {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pgDrawPath {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes pgFadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    /* Animations only run when pg-ready is present */
+    .premium-graph.pg-ready .pg-seq-1 {
+      animation: pgFadeIn 1.2s ease forwards 0s;
+    }
+
+    .premium-graph.pg-ready .pg-seq-2 {
+      animation: pgFadeIn 1.1s ease forwards 1s;
+    }
+
+    .premium-graph.pg-ready .pg-seq-danger {
+      animation: pgFadeIn 1.6s ease forwards 3.1s;
+    }
+
+    .premium-graph.pg-ready .pg-seq-3-path {
+      stroke-dasharray: 1500;
+      stroke-dashoffset: 1500;
+      animation:
+        pgDrawPath 3s cubic-bezier(0.4, 0, 0.2, 1) forwards 2.3s,
+        pgFadeOut 0.9s ease forwards 6.4s;
+    }
+
+    .premium-graph.pg-ready .pg-seq-4 {
+      animation: pgSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 5.1s;
+    }
+
+    .premium-graph.pg-ready .pg-seq-5 {
+      animation: pgFadeIn 1s ease forwards 6.5s;
+    }
+
+    .premium-graph.pg-ready .pg-seq-6-path {
+      stroke-dasharray: 1500;
+      stroke-dashoffset: 1500;
+      animation: pgDrawPath 3s cubic-bezier(0.4, 0, 0.2, 1) forwards 6.7s;
+    }
+
+    .premium-graph.pg-ready .pg-seq-6-area {
+      animation: pgFadeIn 2.2s ease forwards 8.2s;
+    }
+
+    .premium-graph.pg-ready .pg-seq-7 {
+      animation: pgFadeIn 0.9s ease forwards 10.4s;
+    }
+
+    .premium-graph.pg-ready .pg-seq-8 {
+      animation: pgFadeIn 0.8s ease forwards 11s;
+    }
+
+    /* Premium SVG container */
+    .premium-graph>svg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+    }
+
+    /* vA animations (legacy - kept for backward compat) */
+    .proposal-graphic.v-a .proposal-status,
+    .proposal-graphic.v-a .proposal-label.optimized,
+    .proposal-graphic.v-a .legacy-line.muted {
+      opacity: 0;
+    }
+
+    .proposal-graphic.v-a .excess-line,
+    .proposal-graphic.v-a .legacy-line.warm,
+    .proposal-graphic.v-a .optimized-line {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+    }
+
+    .slide.active .proposal-graphic.v-a .excess-line {
+      animation: drawPath 0.8s var(--ease-smooth) 0.3s both;
+    }
+
+    .slide.active .proposal-graphic.v-a .legacy-line.warm {
+      animation: drawPath 1s var(--ease-smooth) 0.8s both, fadeOut 0.4s ease 2.8s both;
+    }
+
+    .slide.active .proposal-graphic.v-a .legacy-line.muted {
+      animation: fadeIn 0.4s ease 2.8s both;
+    }
+
+    .slide.active .proposal-graphic.v-a .proposal-status {
+      animation: fadeUp 0.5s var(--ease-smooth) 1.8s both;
+    }
+
+    .slide.active .proposal-graphic.v-a .optimized-line {
+      animation: drawPath 1s var(--ease-smooth) 3.2s both;
+    }
+
+    .slide.active .proposal-graphic.v-a .proposal-label.excess,
+    .slide.active .proposal-graphic.v-a .proposal-label.legacy {
+      animation: fadeIn 0.5s ease 0.9s both;
+    }
+
+    .slide.active .proposal-graphic.v-a .proposal-label.optimized,
+    .slide.active .proposal-graphic.v-a .legend-row {
+      animation: fadeUp 0.5s var(--ease-smooth) 3.8s both;
+    }
+
+    /* vB animations */
+    .proposal-graphic.v-b .excess-line,
+    .proposal-graphic.v-b .legacy-line.warm,
+    .proposal-graphic.v-b .optimized-line {
+      stroke-dasharray: 100;
+      stroke-dashoffset: 100;
+    }
+
+    .slide.active .proposal-graphic.v-b .excess-line {
+      animation: drawPath 0.8s var(--ease-smooth) 0.3s both;
+    }
+
+    .slide.active .proposal-graphic.v-b .legacy-line.warm {
+      animation: drawPath 0.9s var(--ease-smooth) 0.8s both;
+    }
+
+    .slide.active .proposal-graphic.v-b .optimized-line {
+      animation: drawPath 0.9s var(--ease-smooth) 1.5s both;
+    }
+
+    .slide.active .proposal-graphic.v-b .proposal-label,
+    .slide.active .proposal-graphic.v-b .proposal-status,
+    .slide.active .proposal-graphic.v-b .legend-row {
+      animation: fadeUp 0.5s var(--ease-smooth) 2s both;
+    }
+
+    /* ===== SOLUTION ===== */
+    .solution-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1.2rem;
+    }
+
+    .solution-card {
+      position: relative;
+      min-height: 11rem;
+      overflow: visible;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 0.6rem;
+      text-align: center;
+      padding: 1.3rem 0.9rem;
+      transition: border-color 280ms ease, box-shadow 280ms ease;
+    }
+
+    .solution-card:not(:last-child)::after {
+      content: "→";
+      position: absolute;
+      right: -1rem;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 1rem;
+      color: rgba(255, 255, 255, 0.08);
+      pointer-events: none;
+      line-height: 1;
+    }
+
+    .solution-card .sol-step {
+      font-family: var(--mono);
+      font-size: clamp(0.8rem, 1.05vw, 0.9rem);
+      font-weight: 700;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      opacity: 0.7;
+      margin-bottom: 0.1rem;
+    }
+
+    .solution-card .solution-icon {
+      width: 4.2rem;
+      height: 4.2rem;
+    }
+
+    .solution-card .solution-name {
+      font-size: clamp(1.3rem, 1.9vw, 1.6rem);
+      margin-top: 0.1rem;
+    }
+
+    /* Per-card accent tints */
+    .solution-card.cyan-accent {
+      border-color: rgba(6, 182, 212, 0.28);
+    }
+
+    .solution-card.cyan-accent::before {
+      background: linear-gradient(180deg, transparent, rgba(6, 182, 212, 0.9), transparent);
+    }
+
+    .solution-card.cyan-accent .solution-icon {
+      color: var(--accent);
+    }
+
+    .solution-card.cyan-accent .sol-step {
+      color: var(--accent);
+    }
+
+    .solution-card.cyan-accent:hover {
+      border-color: rgba(6, 182, 212, 0.5);
+      box-shadow: 0 0 30px rgba(6, 182, 212, 0.08);
+    }
+
+    .solution-card.amber-accent {
+      border-color: rgba(251, 146, 60, 0.28);
+    }
+
+    .solution-card.amber-accent::before {
+      background: linear-gradient(180deg, transparent, rgba(251, 146, 60, 0.9), transparent);
+    }
+
+    .solution-card.amber-accent .solution-icon {
+      color: var(--warn);
+    }
+
+    .solution-card.amber-accent .sol-step {
+      color: var(--warn);
+    }
+
+    .solution-card.amber-accent:hover {
+      border-color: rgba(251, 146, 60, 0.5);
+      box-shadow: 0 0 30px rgba(251, 146, 60, 0.08);
+    }
+
+    .solution-card.emerald-accent {
+      border-color: rgba(52, 211, 153, 0.28);
+    }
+
+    .solution-card.emerald-accent::before {
+      background: linear-gradient(180deg, transparent, rgba(52, 211, 153, 0.9), transparent);
+    }
+
+    .solution-card.emerald-accent .solution-icon {
+      color: var(--success);
+    }
+
+    .solution-card.emerald-accent .sol-step {
+      color: var(--success);
+    }
+
+    .solution-card.emerald-accent:hover {
+      border-color: rgba(52, 211, 153, 0.5);
+      box-shadow: 0 0 30px rgba(52, 211, 153, 0.08);
+    }
+
+    .solution-card.violet-accent {
+      border-color: rgba(167, 139, 250, 0.28);
+    }
+
+    .solution-card.violet-accent::before {
+      background: linear-gradient(180deg, transparent, rgba(167, 139, 250, 0.9), transparent);
+    }
+
+    .solution-card.violet-accent .solution-icon {
+      color: #a78bfa;
+    }
+
+    .solution-card.violet-accent .sol-step {
+      color: #a78bfa;
+    }
+
+    .solution-card.violet-accent:hover {
+      border-color: rgba(167, 139, 250, 0.5);
+      box-shadow: 0 0 30px rgba(167, 139, 250, 0.08);
+    }
+
+    .solution-name,
+    .team-name,
+    .model-name,
+    .market-value,
+    .round-value,
+    .cta-title,
+    .metric-value {
+      margin: 0;
+      color: var(--text);
+      font-weight: 700;
+      letter-spacing: -0.04em;
+    }
+
+    .solution-name {
+      font-size: var(--card-title-size);
+    }
+
+    .solution-text,
+    .team-role,
+    .model-text,
+    .market-text,
+    .round-text,
+    .cta-text,
+    .metric-label {
+      margin: 0;
+      color: var(--text-2);
+      font-size: var(--card-body-size);
+      line-height: 1.5;
+    }
+
+    /* ===== TEAM ===== */
+    .team-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .team-card {
+      min-height: 13rem;
+      display: grid;
+      align-content: start;
+      justify-items: center;
+      gap: 0.55rem;
+      text-align: center;
+      padding: 1.5rem 1.3rem;
+    }
+
+    .team-step {
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: clamp(2.2rem, 3.6vw, 3.2rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.08em;
+      margin-bottom: 0.1rem;
+      opacity: 0.55;
+      pointer-events: none;
+    }
+
+    .team-tag {
+      color: var(--text-3);
+      font-family: var(--mono);
+      font-size: var(--pill-text);
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      margin-top: -0.15rem;
+    }
+
+    .team-list {
+      display: grid;
+      gap: 0.4rem;
+      color: var(--text);
+      font-size: clamp(1rem, 1.35vw, 1.15rem);
+      font-weight: 600;
+      line-height: 1.4;
+      margin-top: 0.3rem;
+    }
+    /* ===== CASE (UTN) ===== */
+    .case-shell {
+      gap: 1.5rem;
+    }
+
+    .case-dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 0.9fr);
+      gap: 1.2rem;
+      width: 100%;
+      align-items: stretch;
+    }
+
+    .case-chart-panel {
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(16, 16, 16, 0.92), rgba(8, 8, 8, 0.97));
+      padding: clamp(1.2rem, 2.2vw, 1.6rem);
+      display: flex;
+      flex-direction: column;
+      box-shadow: var(--shadow);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .case-chart-panel::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: linear-gradient(180deg, transparent, rgba(6, 182, 212, 0.9), transparent);
+      opacity: 0.9;
+    }
+
+    .case-chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.2rem;
+      z-index: 2;
+    }
+
+    .case-chart-title {
+      font-family: var(--mono);
+      font-size: var(--pill-text);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(248, 113, 113, 0.3);
+      border-radius: 999px;
+      background: rgba(248, 113, 113, 0.1);
+      color: #fca5a5;
+      padding: 0.58rem 0.82rem;
+      font-family: var(--mono);
+      font-size: var(--pill-text);
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .case-chart-wrapper {
+      flex: 1;
+      position: relative;
+      min-height: 12rem;
+      width: 100%;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .case-metrics-sidebar {
+      display: grid;
+      grid-template-rows: repeat(3, 1fr);
+      gap: 0.8rem;
+    }
+
+    .case-stat-card {
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      background: rgba(255, 255, 255, 0.02);
+      padding: 1.2rem 1.4rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      gap: 0.2rem;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+    }
+
+    .case-stat-card::before {
+      content: "";
+      position: absolute;
+      left: 0; top: 0; bottom: 0; width: 4px;
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .case-stat-card.alert {
+      border-color: rgba(248, 113, 113, 0.25);
+      background: linear-gradient(90deg, rgba(248, 113, 113, 0.06), transparent);
+    }
+
+    .case-stat-card.alert::before {
+      background: var(--danger);
+      box-shadow: 0 0 12px var(--danger);
+    }
+
+    .case-stat-card.highlight {
+      border-color: rgba(6, 182, 212, 0.25);
+      background: linear-gradient(90deg, rgba(6, 182, 212, 0.06), transparent);
+    }
+
+    .case-stat-card.highlight::before {
+      background: var(--accent);
+      box-shadow: 0 0 12px var(--accent);
+    }
+
+    .case-stat-value {
+      font-family: var(--mono);
+      font-size: clamp(1.8rem, 3.2vw, 2.6rem);
+      font-weight: 700;
+      color: var(--text);
+      line-height: 1;
+      letter-spacing: -0.03em;
+      margin: 0;
+    }
+
+    .case-stat-card.alert .case-stat-value {
+      color: #fca5a5;
+    }
+
+    .case-stat-label {
+      font-size: clamp(0.72rem, 1vw, 0.82rem);
+      color: var(--text-3);
+      font-family: var(--mono);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin: 0;
+    }
+
+    .case-stat-card.alert .case-stat-label {
+      color: rgba(248, 113, 113, 0.8);
+    }
+
+    .trend-area {
+      fill: url(#trendGradient);
+    }
+
+    .trend-area-spike {
+      fill: url(#spikeGradient);
+    }
+
+    .trend-line {
+      fill: none;
+      stroke: var(--accent);
+      stroke-width: 3.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      filter: drop-shadow(0 4px 10px rgba(6, 182, 212, 0.25));
+    }
+
+    .trend-line.spike {
+      stroke: var(--danger);
+      filter: drop-shadow(0 4px 12px rgba(248, 113, 113, 0.4));
+    }
+
+    .trend-point {
+      fill: var(--bg-2);
+      stroke: var(--accent);
+      stroke-width: 2.5;
+    }
+
+    .trend-point.spike {
+      stroke: var(--danger);
+      fill: #450a0a;
+    }
+
+    .axis-label {
+      fill: var(--text-3);
+      font-family: var(--mono);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+    }
+
+    .reference-line {
+      stroke: rgba(255, 255, 255, 0.08);
+      stroke-width: 1.5;
+      stroke-dasharray: 4 4;
+    }
+
+    .trend-line.spike {
+      stroke-dasharray: 200;
+      stroke-dashoffset: 200;
+      animation: drawSpikePath 1.2s var(--ease-smooth) 0.8s forwards;
+    }
+
+    .trend-area-spike {
+      opacity: 0;
+      animation: fadeIn 1s ease 1.2s forwards;
+    }
+
+    .spike-tooltip {
+      opacity: 0;
+      transform: translateY(10px);
+      animation: fadeUp 0.6s var(--ease-smooth) 1.5s forwards;
+    }
+
+    @keyframes drawSpikePath {
+      to { stroke-dashoffset: 0; }
+    }
+
+    .metric-row {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .metric-card {
+      min-height: 8.5rem;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      gap: 0.5rem;
+    }
+
+    .metric-value,
+    .market-value,
+    .round-value {
+      font-family: var(--mono);
+      font-size: var(--metric-big);
+      line-height: 1.0;
+    }
+
+    .metric-label {
+      font-size: var(--pill-text);
+      color: var(--text-3);
+      font-family: var(--mono);
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+    }
+
+    /* ===== MODEL ===== */
+    .model-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .model-card {
+      min-height: 11rem;
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      text-align: center;
+      gap: 0.5rem;
+      padding: 1.2rem 1rem;
+    }
+
+    .model-index {
+      color: var(--accent);
+      opacity: 0.35;
+      font-family: var(--mono);
+      font-size: clamp(2.4rem, 3.8vw, 3.4rem);
+      font-weight: 700;
+      line-height: 1;
+      letter-spacing: -0.08em;
+      pointer-events: none;
+    }
+
+    .model-card .model-icon {
+      width: 2.8rem;
+      height: 2.8rem;
+      stroke: var(--accent);
+      stroke-width: 1.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      fill: none;
+      opacity: 0.8;
+    }
+
+    .model-card .model-name {
+      font-size: var(--card-title-size);
+      color: var(--text);
+      letter-spacing: -0.02em;
+    }
+
+    .model-card .model-text {
+      max-width: 16ch;
+      font-size: var(--card-body-size);
+      color: var(--text-2);
+      line-height: 1.45;
+    }
+
+    /* ===== MARKET ===== */
+    .market-layout {
+      display: grid;
+      grid-template-columns: 1.15fr 0.85fr;
+      gap: 1.1rem;
+      align-items: stretch;
+    }
+
+    .market-panel,
+    .round-panel {
+      padding: clamp(1.2rem, 2.2vw, 1.6rem);
+      display: grid;
+      gap: 1rem;
+    }
+
+    .market-panel .body-copy {
+      font-size: clamp(1.05rem, 1.5vw, 1.25rem);
+      line-height: 1.6;
+    }
+
+    .market-panel .headline-pill {
+      font-size: clamp(0.85rem, 1.2vw, 1rem);
+      padding: 0.8rem 1.1rem;
+    }
+
+    .market-highlights {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+      height: 100%;
+    }
+
+    .market-card {
+      min-height: auto;
+      display: grid;
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+      justify-items: center;
+      align-content: center;
+      gap: 0.3rem;
+      padding: 1.4rem 1.2rem;
+      flex: 1;
+    }
+
+    .market-card .metric-label {
+      font-size: clamp(1.2rem, 2vw, 1.6rem);
+      color: var(--accent);
+    }
+
+    .market-card .market-value {
+      font-size: clamp(1.5rem, 2.6vw, 2.2rem);
+    }
+
+    .market-card .market-text {
+      font-size: clamp(0.72rem, 0.9vw, 0.82rem);
+      color: var(--text-3);
+      text-align: center;
+    }
+
+    .sector-row {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .sector-chip {
+      min-height: 3.6rem;
+      padding: 0.7rem 0.8rem;
+      border-radius: 14px;
+      font-size: var(--pill-text);
+    }
+
+    /* ===== ROUND ===== */
+    .round-dashboard {
+      display: grid;
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      gap: 1.2rem;
+      width: 100%;
+      align-items: stretch;
+    }
+
+    .round-hero-block {
+      padding: clamp(1.8rem, 3vw, 2.4rem);
+      display: grid;
+      align-content: center;
+      gap: 0.8rem;
+      text-align: center;
+    }
+
+    .round-tags {
+      display: flex;
+      gap: 0.8rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tag-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.55rem 1rem;
+      border-radius: 999px;
+      font-family: var(--mono);
+      font-size: 0.78rem;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      line-height: 1.2;
+    }
+
+    .tag-pill.equity {
+      background: rgba(6, 182, 212, 0.12);
+      border: 1px solid rgba(6, 182, 212, 0.3);
+      color: var(--accent-2);
+    }
+
+    .tag-pill.instrument {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border);
+      color: var(--text-2);
+    }
+
+    .round-amount {
+      font-family: var(--mono);
+      font-size: clamp(2.8rem, 5vw, 4.2rem);
+      font-weight: 700;
+      letter-spacing: -0.06em;
+      line-height: 1;
+      color: var(--text);
+      margin: 0;
+    }
+
+    .round-copy {
+      color: var(--text-2);
+      font-size: var(--card-body-size);
+      line-height: 1.5;
+      max-width: 28ch;
+      margin: 0 auto;
+    }
+
+    .funds-allocation {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-top: 0.4rem;
+    }
+
+    .fund-item {
+      display: flex;
+      flex-direction: column;
+      gap: 0.35rem;
+    }
+
+    .fund-header {
+      display: flex;
+      justify-content: space-between;
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+
+    .fund-name { color: var(--text-2); }
+    .fund-pct { color: var(--accent); }
+
+    .fund-bar-bg {
+      width: 100%;
+      height: 4px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .fund-bar-fill {
+      height: 100%;
+      background: var(--accent);
+      border-radius: 999px;
+      transform-origin: left;
+      transform: scaleX(0);
+      animation: fillBar 1s var(--ease-smooth) var(--delay, 0s) forwards;
+    }
+
+    @keyframes fillBar {
+      to { transform: scaleX(1); }
+    }
+
+    .round-timeline {
+      padding: clamp(1.2rem, 2.2vw, 1.6rem);
+      display: grid;
+      gap: 0;
+      position: relative;
+    }
+
+    .timeline-track {
+      position: absolute;
+      left: 2.8rem;
+      top: 2.5rem;
+      bottom: 7.8rem;
+      width: 2px;
+      background: linear-gradient(180deg, rgba(6, 182, 212, 0.5), rgba(6, 182, 212, 0.06));
+      pointer-events: none;
+    }
+
+    .tl-item {
+      display: grid;
+      grid-template-columns: 2.6rem 1fr;
+      gap: 0.8rem;
+      padding: 0.5rem 0;
+      position: relative;
+      min-height: 4.5rem;
+    }
+
+    .tl-marker {
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 14px rgba(6, 182, 212, 0.35);
+      justify-self: center;
+      margin-top: 0.3rem;
+      z-index: 2;
+    }
+
+    .tl-content {
+      display: grid;
+      gap: 0.1rem;
+      align-content: start;
+    }
+
+    .tl-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 1rem;
+    }
+
+    .tl-step {
+      font-family: var(--mono);
+      font-size: 0.72rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--text-3);
+    }
+
+    .tl-amount {
+      font-family: var(--mono);
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .tl-title {
+      font-size: var(--card-title-size);
+      font-weight: 700;
+      color: var(--text);
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+
+    .tl-desc {
+      font-size: var(--card-body-size);
+      color: var(--text-2);
+      line-height: 1.45;
+      margin: 0;
+    }
+
+    /* ===== CLOSE / CTA ===== */
+    .close-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.05fr) minmax(0, 0.95fr);
+      gap: 1.2rem;
+      align-items: stretch;
+    }
+
+    .close-copy {
+      display: grid;
+      align-content: center;
+      gap: 1rem;
+    }
+
+    .close-slide-v2 > .close-mark,
+    .close-slide-v2 > .slide-title,
+    .close-slide-v2 > .slide-subtitle,
+    .close-slide-v2 > .cta-row,
+    .close-slide-v2 > .close-footer {
+      display: none;
+    }
+
+    .cta-row {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      width: 100%;
+    }
+
+    .cta-card {
+      min-height: 10rem;
+      display: grid;
+      align-content: space-between;
+      gap: 0.8rem;
+      text-align: left;
+      padding: 1.35rem 1.2rem;
+    }
+
+    .cta-card-head {
+      display: grid;
+      gap: 0.8rem;
+    }
+
+    .cta-icon {
+      width: 3rem;
+      height: 3rem;
+      display: grid;
+      place-items: center;
+      border: 1px solid rgba(6, 182, 212, 0.22);
+      border-radius: 14px;
+      background: rgba(6, 182, 212, 0.08);
+      color: var(--accent);
+    }
+
+    .cta-icon svg {
+      width: 1.5rem;
+      height: 1.5rem;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .cta-title {
+      font-size: var(--card-title-size);
+    }
+
+    .contact-card {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(16, 16, 16, 0.92), rgba(8, 8, 8, 0.97));
+      box-shadow: var(--shadow);
+      padding: clamp(1.25rem, 2.2vw, 1.6rem);
+      display: grid;
+      grid-template-rows: auto 1fr;
+      align-items: stretch;
+      justify-items: center;
+      text-align: center;
+      gap: 1.2rem;
+    }
+
+    .contact-card::before {
+      content: "";
+      position: absolute;
+      inset: 0 auto 0 0;
+      width: 3px;
+      background: linear-gradient(180deg, transparent, rgba(6, 182, 212, 0.9), transparent);
+      opacity: 0.9;
+    }
+
+    .qr-block,
+    .contact-stack,
+    .contact-group {
+      display: grid;
+    }
+
+    .qr-block {
+      gap: 0.75rem;
+      justify-items: center;
+      align-content: center;
+    }
+
+    .qr-shell {
+      display: grid;
+      gap: 0.55rem;
+      width: 100%;
+      max-width: 18rem;
+      justify-items: center;
+    }
+
+    .qr-caption,
+    .contact-title {
+      color: var(--text-3);
+      font-family: var(--mono);
+      font-size: 0.68rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      line-height: 1.3;
+    }
+
+    .contact-stack {
+      gap: 1rem;
+      justify-items: center;
+    }
+
+    .contact-group {
+      gap: 0.35rem;
+      justify-items: center;
+    }
+
+    .contact-line {
+      color: var(--text-2);
+      font-size: var(--card-body-size);
+      line-height: 1.5;
+      word-break: break-word;
+    }
+
+    .contact-line strong,
+    .contact-line a {
+      color: var(--text);
+    }
+
+    .contact-line a {
+      text-decoration: none;
+    }
+
+    /* ===== ANIMATIONS ===== */
+    .slide [data-anim] {
+      opacity: 0;
+    }
+
+    .slide.active [data-anim="up"] {
+      animation: fadeUp 0.8s var(--ease-smooth) var(--delay, 0s) both;
+    }
+
+    .slide.active [data-anim="fade"] {
+      animation: fadeIn 0.7s ease var(--delay, 0s) both;
+    }
+
+    .slide.active [data-anim="scale"] {
+      animation: scaleIn 0.78s var(--ease-smooth) var(--delay, 0s) both;
+    }
+
+    .slide.active [data-anim="char"] {
+      animation: charRise 0.42s var(--ease-smooth) var(--delay, 0s) both;
+    }
+
+    .slide.active [data-anim="stagger"] {
+      animation: fadeUp 0.66s var(--ease-smooth) var(--delay, 0s) both;
+    }
+
+    @keyframes fadeUp {
+      from {
+        opacity: 0;
+        transform: translateY(24px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+
+      to {
+        opacity: 1;
+      }
+    }
+
+    @keyframes scaleIn {
+      from {
+        opacity: 0;
+        transform: scale(0.94);
+      }
+
+      to {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+
+    @keyframes charRise {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes drawPath {
+      from {
+        stroke-dashoffset: 100;
+      }
+
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @keyframes fadeOut {
+      from {
+        opacity: 1;
+      }
+
+      to {
+        opacity: 0;
+      }
+    }
+
+    /* ===== RESPONSIVE ===== */
+    @media (max-width: 1100px) {
+      html {
+        font-size: 16px;
+      }
+
+      .split-shell,
+      .market-layout,
+      .round-dashboard,
+      .close-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .solution-grid,
+      .team-grid {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .solution-card:not(:last-child)::after {
+        display: none;
+      }
+
+      .case-dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .case-metrics-sidebar {
+        grid-template-columns: repeat(3, 1fr);
+        grid-template-rows: auto;
+      }
+
+      .model-grid,
+      .cta-row {
+        grid-template-columns: 1fr;
+      }
+
+      .support-pills,
+      .metric-row,
+      .sector-row,
+      .market-highlights {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-aspect-ratio: 4/3) {
+      :root {
+        --frame-x: clamp(1.2rem, 2.4vw, 2rem);
+        --frame-y: clamp(1.1rem, 2.8vh, 2rem);
+        --safe-right: clamp(2.8rem, 4.8vw, 3.6rem);
+        --title-size: clamp(2.6rem, 6vw, 4.6rem);
+        --title-wide: clamp(2.4rem, 5.2vw, 4.2rem);
+      }
+
+      .slide-shell {
+        min-height: calc(100vh - (var(--frame-y) * 2));
+        gap: 0.9rem;
+      }
+
+      .proposal-graphic {
+        min-height: min(48vh, 22rem);
+      }
+
+      .premium-graph {
+        min-height: min(50vh, 24rem);
+      }
+
+      .solution-card,
+      .model-card {
+        min-height: 13.5rem;
+      }
+
+      .team-card,
+      .metric-card,
+      .cta-card {
+        min-height: auto;
+        align-content: center;
+      }
+    }
+
+    @media (max-width: 760px) {
+      html {
+        font-size: 14px;
+      }
+
+      .slide {
+        padding-right: var(--frame-x);
+      }
+
+      .nav-dots {
+        right: 0.8rem;
+      }
+
+      .solution-grid,
+      .team-grid,
+      .model-grid,
+      .sector-row,
+      .cta-row,
+      .metric-row,
+      .market-highlights,
+      .legend-row,
+      .round-dashboard,
+      .case-dashboard {
+        grid-template-columns: 1fr;
+      }
+
+      .case-metrics-sidebar {
+        grid-template-columns: 1fr;
+      }
+
+      .contact-card,
+      .qr-block {
+        justify-items: center;
+      }
+
+      .contact-card,
+      .contact-group {
+        text-align: center;
+      }
+
+      .solution-card:not(:last-child)::after {
+        display: none;
+      }
+
+      .control-dock {
+        top: 0.9rem;
+        right: 0.9rem;
+      }
+
+      .proposal-stage {
+        padding: 0;
+      }
+
+      .premium-graph {
+        min-height: min(48vh, 22rem);
+      }
+
+      .premium-graph .pg-badge {
+        top: 0.85rem;
+        right: 0.85rem;
+      }
+
+      .premium-graph .pg-legend {
+        right: 0.85rem;
+        bottom: 0.85rem;
+        padding: 0.8rem 0.95rem;
+      }
+
+      .proposal-label.legacy,
+      .proposal-label.optimized {
+        left: auto;
+        right: 1rem;
+        transform: none;
+      }
+
+      .proposal-label.optimized {
+        bottom: 3.8rem;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+
+      *,
+      *::before,
+      *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+
+      .slide,
+      .slide.active,
+      .slide [data-anim],
+      .proposal-status,
+      .proposal-callout,
+      .proposal-label,
+      .optimized-area,
+      .peak-marker,
+      .legacy-line.muted {
+        opacity: 1 !important;
+        transform: none !important;
+        filter: none !important;
+      }
+
+      .excess-line,
+      .legacy-line,
+      .optimized-line {
+        stroke-dashoffset: 0 !important;
+      }
+    }
+
+    .qr-link {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 17rem;
+      aspect-ratio: 1;
+      min-width: 0;
+      min-height: 0;
+      padding: 0.8rem;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: #ffffff;
+      color: var(--text);
+      text-decoration: none;
+      transition: border-color 220ms ease, transform 220ms ease, box-shadow 220ms ease, background 220ms ease;
+    }
+
+    .qr-link svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .qr-link:hover,
+    .qr-link:focus-visible {
+      border-color: rgba(6, 182, 212, 0.6);
+      background: #ffffff;
+      transform: translateY(-1px);
+      box-shadow: 0 0 0 1px rgba(6, 182, 212, 0.22), 0 18px 40px rgba(0, 0, 0, 0.36);
+      outline: none;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="presentation-shell">
+    <div class="section-badge" id="sectionBadge"><span class="badge-dot"></span><span id="sectionBadgeText"></span>
+    </div>
+
+    <div class="control-dock" id="controlDock" aria-label="Modo de presentacion">
+      <button class="control-button primary" id="startPresentation" type="button">Iniciar</button>
+      <button class="control-button" id="enterManualMode" type="button">Manual</button>
+    </div>
+
+    <div class="nav-dots" id="navDots" aria-label="Progreso de la presentacion"></div>
+
+    <main class="slides" aria-live="polite">
+      <section class="slide active" data-label="Portada">
+        <div class="slide-shell cover-shell center-shell">
+          <div class="cover-brand">
+            <div class="cover-mark-wrap" data-anim="scale" style="--delay: 0.18s;">
+              <img class="cover-mark"
+                src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMDgiIGZpbGw9IiMwMDAwMDAiLz4KICA8cGF0aCBkPSJNMjcyIDQ0IEwxMjQgMjg0IEwyNDggMjg0IEwxODggNDY4IEwzOTYgMTg4IEwyNzIgMTg4IFoiIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo="
+                alt="Isotipo de PicoCERO">
+              <div class="cover-glow"></div>
+            </div>
+            <div class="cover-line" data-anim="fade" style="--delay: 0.48s;"></div>
+            <div class="cover-wordmark" aria-label="PicoCERO">
+              <span class="wordmark-char word-pico" data-anim="char" style="--delay: 0.56s;">P</span>
+              <span class="wordmark-char word-pico" data-anim="char" style="--delay: 0.62s;">i</span>
+              <span class="wordmark-char word-pico" data-anim="char" style="--delay: 0.68s;">c</span>
+              <span class="wordmark-char word-pico" data-anim="char" style="--delay: 0.74s;">o</span>
+              <span class="wordmark-char word-cero" data-anim="char" style="--delay: 0.82s;">C</span>
+              <span class="wordmark-char word-cero" data-anim="char" style="--delay: 0.88s;">E</span>
+              <span class="wordmark-char word-cero" data-anim="char" style="--delay: 0.94s;">R</span>
+              <span class="wordmark-char word-cero" data-anim="char" style="--delay: 1.00s;">O</span>
+            </div>
+          </div>
+
+          <p class="cover-tagline" data-anim="fade" style="--delay: 1.08s;">Ahorro energ&eacute;tico industrial
+            verificable para convertir consumo invisible en decisiones con impacto econ&oacute;mico.</p>
+          <div class="cover-meta" data-anim="fade" style="--delay: 1.2s;">Pre-seed &middot; Energy Tech &middot;
+            Argentina</div>
+        </div>
+      </section>
+
+      <section class="slide" data-label="Problema">
+        <div class="slide-shell center-shell problem-shell">
+
+          <div class="problem-kicker" data-anim="fade" style="--delay: 0.08s;">Costo invisible. Riesgo real.</div>
+
+          <h1 class="slide-title problem-title" data-anim="up" style="--delay: 0.16s;">La energ&iacute;a se paga<br>El
+            <span class="glitch-danger" data-text="desv&iacute;o">desv&iacute;o</span> no se ve
+          </h1>
+          <p class="slide-subtitle narrow problem-subtitle" data-anim="fade" style="--delay: 0.34s;">El dolor no es
+            t&eacute;cnico: es financiero. Cada mes sin visibilidad suficiente deja costo sin explicar y decisiones sin
+            priorizar.</p>
+
+          <div class="support-pills">
+            <div class="support-pill danger" data-anim="stagger" style="--delay: 0.54s;"><span class="pill-icon"
+                aria-hidden="true"></span><span class="pill-copy">Sin l&iacute;nea base</span></div>
+            <div class="support-pill danger" data-anim="stagger" style="--delay: 0.64s;"><span class="pill-icon"
+                aria-hidden="true"></span><span class="pill-copy">Sin alertas</span></div>
+            <div class="support-pill danger" data-anim="stagger" style="--delay: 0.74s;"><span class="pill-icon"
+                aria-hidden="true"></span><span class="pill-copy">Sin prueba de ahorro</span></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-label="Propuesta PicoCERO">
+        <div class="slide-shell proposal-shell">
+          <div class="proposal-stage" data-anim="fade" style="--delay: 0.1s;">
+            <div class="proposal-header">
+              <h2 class="slide-title wide proposal-title" data-anim="up" style="--delay: 0.14s;"><span
+                  class="title-line">El pico</span><span class="title-line">define el <span
+                    class="accent">costo</span></span></h2>
+              <p class="slide-subtitle proposal-subtitle" data-anim="fade" style="--delay: 0.28s;">Cuando la demanda se concentra en una zona cr&iacute;tica, la curva muestra d&oacute;nde se encarece la operaci&oacute;n y d&oacute;nde PicoCERO puede intervenir.</p>
+            </div>
+
+            <div class="premium-graph" data-anim="fade" style="--delay: 0.42s;"
+              aria-label="Animaci&oacute;n de curva de consumo: perfil original vs optimizado por PicoCERO">
+              <!-- Background grid -->
+              <div class="pg-grid"></div>
+              <div class="pg-glow"></div>
+
+              <!-- Axis labels -->
+              <div class="pg-axis-label pg-axis-x pg-anim pg-seq-1">Ciclo Operativo (24 Horas)</div>
+              <div class="pg-axis-label pg-axis-y pg-anim pg-seq-1">Potencia Activa (kW)</div>
+
+              <!-- SVG Chart -->
+              <svg class="absolute inset-0 w-full h-full" viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid meet"
+                aria-hidden="true">
+                <defs>
+                  <filter id="neonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur1" />
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur2" />
+                    <feMerge>
+                      <feMergeNode in="blur2" />
+                      <feMergeNode in="blur1" />
+                      <feMergeNode in="SourceGraphic" />
+                    </feMerge>
+                  </filter>
+
+                  <pattern id="dangerPattern" width="20" height="20" patternUnits="userSpaceOnUse"
+                    patternTransform="rotate(45)">
+                    <line x1="0" y1="0" x2="0" y2="20" stroke="var(--warn)" stroke-width="2" opacity="0.15" />
+                  </pattern>
+
+                  <linearGradient id="cyanArea" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.15" />
+                    <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
+                  </linearGradient>
+
+                  <linearGradient id="tradGradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0" />
+                    <stop offset="10%" stop-color="#ffffff" stop-opacity="1" />
+                    <stop offset="90%" stop-color="#ffffff" stop-opacity="1" />
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0" />
+                  </linearGradient>
+
+                  <clipPath id="peakClip">
+                    <path
+                      d="M 120 480 C 250 480, 300 450, 400 350 C 480 270, 520 90, 610 90 C 700 90, 740 270, 820 350 C 920 450, 970 480, 1100 480 L 1100 550 L 120 550 Z" />
+                  </clipPath>
+                </defs>
+
+                <!-- Grid lines -->
+                <g class="pg-anim pg-seq-1" stroke="rgba(255,255,255,0.05)" stroke-width="1">
+                  <line x1="120" y1="520" x2="1100" y2="520" />
+                  <line x1="120" y1="380" x2="1100" y2="380" />
+                  <line x1="120" y1="240" x2="1100" y2="240" />
+                  <line x1="120" y1="100" x2="1100" y2="100" />
+                  <text x="120" y="552" fill="rgba(199, 210, 218, 0.72)" font-family="var(--mono)" font-size="15"
+                    font-weight="700" text-anchor="middle">00:00</text>
+                  <text x="610" y="552" fill="rgba(199, 210, 218, 0.72)" font-family="var(--mono)" font-size="15"
+                    font-weight="700" text-anchor="middle">12:00</text>
+                  <text x="1100" y="552" fill="rgba(199, 210, 218, 0.72)" font-family="var(--mono)" font-size="15"
+                    font-weight="700" text-anchor="middle">23:59</text>
+                </g>
+
+                <!-- Danger zone -->
+                <g class="pg-anim pg-seq-2">
+                  <rect x="120" y="0" width="980" height="240" fill="url(#dangerPattern)" clip-path="url(#peakClip)"
+                    class="pg-anim pg-seq-danger" />
+                  <rect x="120" y="0" width="980" height="240" fill="url(#dangerPattern)" opacity="0.5"
+                    clip-path="url(#peakClip)" class="pg-anim pg-seq-danger" />
+                  <line x1="100" y1="240" x2="1120" y2="240" stroke="var(--warn)" stroke-width="2"
+                    stroke-dasharray="8 8" />
+                  <rect x="874" y="244" width="226" height="38" rx="7" fill="rgba(251, 146, 60, 0.18)"
+                    stroke="var(--warn)" stroke-width="1.3" />
+                  <text x="987" y="269" fill="var(--warn)" font-family="var(--mono)" font-size="16" font-weight="700"
+                    text-anchor="middle" letter-spacing="1.5">L&Iacute;MITE CONTRATADO</text>
+                </g>
+
+                <!-- Legacy curve dashed (final state) -->
+                <path class="pg-anim pg-seq-5"
+                  d="M 120 480 C 250 480, 300 450, 400 350 C 480 270, 520 90, 610 90 C 700 90, 740 270, 820 350 C 920 450, 970 480, 1100 480"
+                  stroke="rgba(255,255,255,0.18)" stroke-width="3" stroke-dasharray="6 8" fill="none" />
+
+                <!-- Legacy curve (animated solid, then fades) -->
+                <path class="pg-seq-3-path"
+                  d="M 120 480 C 250 480, 300 450, 400 350 C 480 270, 520 90, 610 90 C 700 90, 740 270, 820 350 C 920 450, 970 480, 1100 480"
+                  stroke="url(#tradGradient)" stroke-width="5" fill="none" pathLength="1500" stroke-linecap="round" />
+
+                <!-- Optimized area -->
+                <path class="pg-anim pg-seq-6-area"
+                  d="M 120 520 L 120 480 C 220 480, 260 420, 340 350 C 400 300, 440 260, 520 260 L 700 260 C 780 260, 820 300, 880 350 C 960 420, 1000 480, 1100 480 L 1100 520 Z"
+                  fill="url(#cyanArea)" />
+
+                <!-- Optimized curve (neon cyan) -->
+                <path class="pg-seq-6-path"
+                  d="M 120 480 C 220 480, 260 420, 340 350 C 400 300, 440 260, 520 260 L 700 260 C 780 260, 820 300, 880 350 C 960 420, 1000 480, 1100 480"
+                  stroke="var(--accent)" stroke-width="5" fill="none" filter="url(#neonGlow)" pathLength="1500"
+                  stroke-linecap="round" />
+
+                <g class="pg-anim pg-seq-7">
+                  <path d="M 610 112 L 610 244" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="6 6" fill="none" />
+                  <polygon points="603,238 617,238 610,252" fill="var(--accent)" />
+                  <rect x="632" y="152" width="186" height="36" rx="6" fill="rgba(6, 182, 212, 0.12)" stroke="rgba(6, 182, 212, 0.48)" stroke-width="1.2" />
+                  <text x="725" y="176" fill="var(--accent)" font-family="var(--mono)" font-size="14" font-weight="700" text-anchor="middle" letter-spacing="1.1">PICO REDUCIDO</text>
+                </g>
+
+              </svg>
+
+              <!-- Floating badge -->
+              <div class="pg-badge pg-anim pg-seq-4">
+                <div class="pg-badge-dot"></div>
+                <span class="pg-badge-text">PicoCERO ANALIZANDO</span>
+              </div>
+
+              <!-- Legend -->
+              <div class="pg-legend">
+                <div class="pg-legend-item">
+                  <div class="pg-legend-line"></div>
+                  <span class="pg-legend-text">Perfil Original</span>
+                </div>
+                <div class="pg-legend-item pg-anim pg-seq-8">
+                  <div class="pg-legend-line optimized"></div>
+                  <span class="pg-legend-text">Perfil Optimizado</span>
+                </div>
+                <div class="pg-legend-item pg-anim pg-seq-8">
+                  <div class="pg-legend-line warning"></div>
+                  <span class="pg-legend-text">L&iacute;mite Contratado</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-label="Solucion">
+        <div class="slide-shell center-shell">
+
+          <h2 class="slide-title wide" data-anim="up" style="--delay: 0.14s;">As&iacute; atacamos el problema</h2>
+          <p class="slide-subtitle" data-anim="fade" style="--delay: 0.28s;">Integramos medici&oacute;n m&iacute;nima, construimos referencia, detectamos desv&iacute;os y demostramos ahorro verificable.</p>
+
+          <div class="solution-grid">
+            <article class="solution-card cyan-accent" data-anim="stagger" style="--delay: 0.46s;">
+              <div class="sol-step">01</div>
+              <svg class="solution-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="m12 14 4-4"></path>
+                <path d="M3.34 19a10 10 0 1 1 17.32 0"></path>
+              </svg>
+              <h3 class="solution-name">Medir</h3>
+            </article>
+
+            <article class="solution-card amber-accent" data-anim="stagger" style="--delay: 0.56s;">
+              <div class="sol-step">02</div>
+              <svg class="solution-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="5" cy="6" r="3"></circle>
+                <path d="M12 6h5a2 2 0 0 1 2 2v7"></path>
+                <path d="m15 9-3-3 3-3"></path>
+                <circle cx="19" cy="18" r="3"></circle>
+                <path d="M12 18H7a2 2 0 0 1-2-2V9"></path>
+                <path d="m9 15 3 3-3 3"></path>
+              </svg>
+              <h3 class="solution-name">Comparar</h3>
+            </article>
+
+            <article class="solution-card emerald-accent" data-anim="stagger" style="--delay: 0.66s;">
+              <div class="sol-step">03</div>
+              <svg class="solution-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M3 7V5a2 2 0 0 1 2-2h2"></path>
+                <path d="M17 3h2a2 2 0 0 1 2 2v2"></path>
+                <path d="M21 17v2a2 2 0 0 1-2 2h-2"></path>
+                <path d="M7 21H5a2 2 0 0 1-2-2v-2"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+                <path d="m16 16-1.9-1.9"></path>
+              </svg>
+              <h3 class="solution-name">Detectar</h3>
+            </article>
+
+            <article class="solution-card violet-accent" data-anim="stagger" style="--delay: 0.76s;">
+              <div class="sol-step">04</div>
+              <svg class="solution-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path
+                  d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z">
+                </path>
+                <path d="m9 12 2 2 4-4"></path>
+              </svg>
+              <h3 class="solution-name">Demostrar</h3>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-label="Equipo">
+        <div class="slide-shell">
+
+          <h2 class="slide-title wide" data-anim="up" style="--delay: 0.14s;"><span class="title-line">6
+              Perfiles.</span><span class="title-line">3 Capacidades.</span><span class="title-line">1 sola
+              ejecuci&oacute;n.</span></h2>
+
+          <div class="team-grid">
+            <article class="team-card" data-anim="stagger" style="--delay: 0.44s;">
+              <div class="team-step">01</div>
+              <div class="team-tag">Comercial y validaci&oacute;n</div>
+              <div class="team-list">
+                <span>Loana Cruzate</span>
+              </div>
+            </article>
+
+            <article class="team-card" data-anim="stagger" style="--delay: 0.56s;">
+              <div class="team-step">02</div>
+              <div class="team-tag">Integraci&oacute;n industrial</div>
+              <div class="team-list">
+                <span>Franco Falcone</span>
+                <span>Daniel Fendyk</span>
+                <span>Pablo Nu&ntilde;ez</span>
+              </div>
+            </article>
+
+            <article class="team-card" data-anim="stagger" style="--delay: 0.68s;">
+              <div class="team-step">03</div>
+              <div class="team-tag">Producto y anal&iacute;tica</div>
+              <div class="team-list">
+                <span>Lucas Holgado</span>
+                <span>Nicolas Sgandurra</span>
+              </div>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-label="Caso UTN-FRSR">
+        <div class="slide-shell case-shell">
+
+          <h2 class="slide-title wide" data-anim="up" style="--delay: 0.14s;">Piloto confirmado<br><span
+              class="accent">UTN-FRSR</span></h2>
+          <p class="slide-subtitle" data-anim="fade" style="--delay: 0.28s;">Nuestro primer caso real para validar si la
+            propuesta puede pasar de hip&oacute;tesis a evidencia &uacute;til para direcci&oacute;n e inversores.</p>
+
+          <div class="case-dashboard" data-anim="fade" style="--delay: 0.42s;">
+            <div class="case-chart-panel">
+              <div class="case-chart-header">
+                <span class="case-chart-title">Evoluci&oacute;n Facturaci&oacute;n</span>
+                <span class="status-badge">Desv&iacute;o Detectado</span>
+              </div>
+
+              <div class="case-chart-wrapper">
+                <svg viewBox="0 0 500 220" style="width:100%; height:100%; overflow:visible;"
+                  aria-label="Gráfico de evolución de facturación">
+                  <defs>
+                    <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.18"/>
+                      <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
+                    </linearGradient>
+                    <linearGradient id="spikeGradient" x1="0" y1="0" x2="0" y2="1">
+                      <stop offset="0%" stop-color="var(--danger)" stop-opacity="0.25"/>
+                      <stop offset="100%" stop-color="var(--danger)" stop-opacity="0" />
+                    </linearGradient>
+                  </defs>
+
+                  <line x1="40" y1="160" x2="480" y2="160" class="reference-line" />
+                  <text x="30" y="164" class="axis-label" text-anchor="end">4M</text>
+
+                  <line x1="40" y1="110" x2="480" y2="110" class="reference-line" />
+                  <text x="30" y="114" class="axis-label" text-anchor="end">6M</text>
+
+                  <line x1="40" y1="60" x2="480" y2="60" class="reference-line"
+                    stroke="rgba(248, 113, 113, 0.25)" />
+                  <text x="30" y="64" class="axis-label" text-anchor="end" fill="rgba(248, 113, 113, 0.8)">8M</text>
+
+                  <path d="M 60 190 L 60 140 C 110 140, 110 155, 160 155 C 210 155, 210 130, 260 130 C 310 130, 310 145, 360 145 L 360 190 Z"
+                    class="trend-area" />
+                  <path d="M 360 190 L 360 145 L 460 60 L 460 190 Z" class="trend-area-spike" />
+
+                  <path d="M 60 140 C 110 140, 110 155, 160 155 C 210 155, 210 130, 260 130 C 310 130, 310 145, 360 145"
+                    class="trend-line" />
+                  <path d="M 360 145 L 460 60" class="trend-line spike" />
+
+                  <circle cx="60" cy="140" r="4" class="trend-point" />
+                  <text x="60" y="205" class="axis-label" text-anchor="middle">M-4</text>
+
+                  <circle cx="160" cy="155" r="4" class="trend-point" />
+                  <text x="160" y="205" class="axis-label" text-anchor="middle">M-3</text>
+
+                  <circle cx="260" cy="130" r="4" class="trend-point" />
+                  <text x="260" y="205" class="axis-label" text-anchor="middle">M-2</text>
+
+                  <circle cx="360" cy="145" r="4" class="trend-point" />
+                  <text x="360" y="205" class="axis-label" text-anchor="middle">M-1</text>
+
+                  <circle cx="460" cy="60" r="5" class="trend-point spike" />
+                  <text x="460" y="205" class="axis-label" text-anchor="middle" fill="#fca5a5">&Uacute;ltimo</text>
+
+
+                </svg>
+              </div>
+            </div>
+
+            <div class="case-metrics-sidebar">
+              <article class="case-stat-card alert" data-anim="stagger" style="--delay: 0.52s;">
+                <h3 class="case-stat-label">&Uacute;ltimo cierre</h3>
+                <p class="case-stat-value">AR$ 8.0M</p>
+              </article>
+              <article class="case-stat-card" data-anim="stagger" style="--delay: 0.62s;">
+                <h3 class="case-stat-label">Rango hist&oacute;rico</h3>
+                <p class="case-stat-value">4M - 6M</p>
+              </article>
+              <article class="case-stat-card highlight" data-anim="stagger" style="--delay: 0.72s;">
+                <h3 class="case-stat-label">Hip&oacute;tesis inicial</h3>
+                <p class="case-stat-value">10% - 35%</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-label="Modelo de negocio">
+        <div class="slide-shell">
+
+          <h2 class="slide-title wide" data-anim="up" style="--delay: 0.14s;">Piloto. Implementacion. <span
+              class="accent">Analitica recurrente.</span></h2>
+          <p class="slide-subtitle" data-anim="fade" style="--delay: 0.28s;">Entramos con diagn&oacute;stico, dejamos el sitio integrado y construimos seguimiento continuo por planta.</p>
+
+          <div class="model-grid">
+            <article class="model-card" data-anim="stagger" style="--delay: 0.46s;">
+              <div class="model-index">01</div>
+              <svg class="model-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <path d="M12 16h.01"/>
+                <path d="M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/>
+              </svg>
+              <h3 class="model-name">Piloto</h3>
+              <p class="model-text">Medici&oacute;n inicial, lectura del caso y oportunidad visible.</p>
+            </article>
+
+            <article class="model-card" data-anim="stagger" style="--delay: 0.58s;">
+              <div class="model-index">02</div>
+              <svg class="model-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <rect width="8" height="8" x="3" y="3" rx="2"/>
+                <path d="M7 11v4a2 2 0 0 0 2 2h4"/>
+                <rect width="8" height="8" x="13" y="13" rx="2"/>
+              </svg>
+              <h3 class="model-name">Implementaci&oacute;n</h3>
+              <p class="model-text">Integraci&oacute;n y configuraci&oacute;n base para operar con datos reales.</p>
+            </article>
+
+            <article class="model-card" data-anim="stagger" style="--delay: 0.70s;">
+              <div class="model-index">03</div>
+              <svg class="model-icon" viewBox="0 0 24 24" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
+                <path d="M12 18V6"/>
+              </svg>
+              <h3 class="model-name">Anal&iacute;tica</h3>
+              <p class="model-text">Alertas, reportes y seguimiento continuo bajo suscripci&oacute;n por planta.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-label="Mercado">
+        <div class="slide-shell">
+
+          <h2 class="slide-title wide" data-anim="up" style="--delay: 0.14s;">Cuyo primero.<br><span
+              class="accent">Argentina despu&eacute;s.</span></h2>
+          <p class="slide-subtitle" data-anim="fade" style="--delay: 0.28s;">Entramos por sectores con gasto alto,
+            retorno visible y cercan&iacute;a comercial para validar m&aacute;s r&aacute;pido.</p>
+
+          <div class="market-layout">
+            <article class="market-panel" data-anim="fade" style="--delay: 0.42s;">
+              <div class="headline-pill" data-anim="stagger" style="--delay: 0.54s;">Entrada comercial local</div>
+              <p class="body-copy" data-anim="fade" style="--delay: 0.64s;">PicoCERO tiene una ventaja inicial clara:
+                proximidad territorial, red UTN y una narrativa comercial entendible para industrias argentinas.</p>
+              <div class="sector-row">
+                <div class="sector-chip" data-anim="stagger" style="--delay: 0.74s;">Bodegas</div>
+                <div class="sector-chip" data-anim="stagger" style="--delay: 0.82s;">Frigor&iacute;ficos</div>
+                <div class="sector-chip" data-anim="stagger" style="--delay: 0.90s;">Qu&iacute;mica</div>
+                <div class="sector-chip" data-anim="stagger" style="--delay: 0.98s;">Metalmec&aacute;nica</div>
+                <div class="sector-chip" data-anim="stagger" style="--delay: 1.06s;">Renovables</div>
+                <div class="sector-chip" data-anim="stagger" style="--delay: 1.14s;">Manufactura</div>
+              </div>
+            </article>
+
+            <div class="market-highlights">
+              <article class="market-card" data-anim="stagger" style="--delay: 0.58s;">
+                <p class="metric-label">Acceso local</p>
+                <p class="market-text">Menos fricci&oacute;n comercial y m&aacute;s velocidad para abrir primeras
+                  conversaciones.</p>
+              </article>
+              <article class="market-card" data-anim="stagger" style="--delay: 0.70s;">
+                <p class="metric-label">Dolor econ&oacute;mico visible</p>
+                <p class="market-text">La energ&iacute;a pesa en la operaci&oacute;n y el retorno se entiende r&aacute;pido.</p>
+              </article>
+              <article class="market-card" data-anim="stagger" style="--delay: 0.82s;">
+                <p class="metric-label">Pilotos m&aacute;s r&aacute;pidos</p>
+                <p class="market-text">La proximidad permite validar, ajustar y volver a vender con menos tiempo muerto.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-label="Ronda">
+        <div class="slide-shell">
+
+          <h2 class="slide-title wide" data-anim="up" style="--delay: 0.14s;">Ronda <span class="accent">pre-seed</span>
+          </h2>
+
+          <div class="round-dashboard" data-anim="fade" style="--delay: 0.32s;">
+            <article class="round-hero-block">
+              <p class="round-amount" data-anim="stagger" style="--delay: 0.44s;"
+                data-count="98700" data-prefix="USD " data-decimals="0">USD 0</p>
+
+              <div class="round-tags" data-anim="fade" style="--delay: 0.56s;">
+                <span class="tag-pill equity">Hasta 3% Equity</span>
+                <span class="tag-pill instrument">SAFE / Convertible</span>
+              </div>
+
+              <p class="round-copy" data-anim="fade" style="--delay: 0.68s;">Tres etapas. Diez a doce meses. Foco en
+                producto, evidencia y ventas.</p>
+
+              <div class="funds-allocation" data-anim="fade" style="--delay: 0.76s;">
+                <div class="fund-item">
+                  <div class="fund-header">
+                    <span class="fund-name">Producto &amp; Tech</span>
+                    <span class="fund-pct">55%</span>
+                  </div>
+                  <div class="fund-bar-bg">
+                    <div class="fund-bar-fill" style="width: 55%; --delay: 0.9s;"></div>
+                  </div>
+                </div>
+                <div class="fund-item">
+                  <div class="fund-header">
+                    <span class="fund-name">Validaci&oacute;n Comercial</span>
+                    <span class="fund-pct">30%</span>
+                  </div>
+                  <div class="fund-bar-bg">
+                    <div class="fund-bar-fill" style="width: 30%; --delay: 1.05s;"></div>
+                  </div>
+                </div>
+                <div class="fund-item">
+                  <div class="fund-header">
+                    <span class="fund-name">Legal &amp; Operaciones</span>
+                    <span class="fund-pct">15%</span>
+                  </div>
+                  <div class="fund-bar-bg">
+                    <div class="fund-bar-fill" style="width: 15%; --delay: 1.2s;"></div>
+                  </div>
+                </div>
+              </div>
+            </article>
+
+            <div class="round-timeline">
+              <div class="timeline-track" data-anim="fade" style="--delay: 0.4s;"></div>
+
+              <article class="tl-item" data-anim="stagger" style="--delay: 0.52s;">
+                <div class="tl-marker"></div>
+                <div class="tl-content">
+                  <div class="tl-header">
+                    <span class="tl-step">Etapa 1</span>
+                    <span class="tl-amount">USD 44,700</span>
+                  </div>
+                  <h3 class="tl-title">Producto base + UTN</h3>
+                  <p class="tl-desc">Dashboard, alertas, integraci&oacute;n y primeras 100 h de datos continuos.</p>
+                </div>
+              </article>
+
+              <article class="tl-item" data-anim="stagger" style="--delay: 0.64s;">
+                <div class="tl-marker"></div>
+                <div class="tl-content">
+                  <div class="tl-header">
+                    <span class="tl-step">Etapa 2</span>
+                    <span class="tl-amount">USD 29,000</span>
+                  </div>
+                  <h3 class="tl-title">MVP completo + anal&iacute;tica</h3>
+                  <p class="tl-desc">EnPI, CUSUM, reportes ejecutivos y 500 h de datos con l&iacute;nea de base validada.</p>
+                </div>
+              </article>
+
+              <article class="tl-item" data-anim="stagger" style="--delay: 0.76s;">
+                <div class="tl-marker"></div>
+                <div class="tl-content">
+                  <div class="tl-header">
+                    <span class="tl-step">Etapa 3</span>
+                    <span class="tl-amount">USD 25,000</span>
+                  </div>
+                  <h3 class="tl-title">Validaci&oacute;n comercial</h3>
+                  <p class="tl-desc">Pilotos pagos, apertura de cuentas y primeras ventas recurrentes.</p>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="slide" data-label="Cierre">
+        <div class="slide-shell close-layout close-slide-v2">
+
+          <div class="close-copy">
+            <h2 class="slide-title wide" data-anim="up" style="--delay: 0.28s;">Buscamos el siguiente paso
+              <span class="accent">real.</span></h2>
+            <p class="slide-subtitle" data-anim="fade" style="--delay: 0.42s;">Queremos abrir conversaciones con plantas y aliados que puedan acelerar validaci&oacute;n, implementaci&oacute;n y aprendizaje comercial.</p>
+
+            <div class="cta-row">
+              <article class="cta-card" data-anim="stagger" style="--delay: 0.56s;">
+                <div class="cta-card-head">
+                  <div class="cta-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <path d="M12 16h.01"></path>
+                      <path d="M16 16h.01"></path>
+                      <path d="M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"></path>
+                      <path d="M8 16h.01"></path>
+                    </svg>
+                  </div>
+                  <h3 class="cta-title">Pilotos industriales</h3>
+                </div>
+                <p class="cta-text">Plantas que quieran medir, entender su curva y encontrar ahorro con base real.</p>
+              </article>
+              <article class="cta-card" data-anim="stagger" style="--delay: 0.68s;">
+                <div class="cta-card-head">
+                  <div class="cta-icon" aria-hidden="true">
+                    <svg viewBox="0 0 24 24">
+                      <rect width="8" height="8" x="3" y="3" rx="2"></rect>
+                      <path d="M7 11v4a2 2 0 0 0 2 2h4"></path>
+                      <rect width="8" height="8" x="13" y="13" rx="2"></rect>
+                    </svg>
+                  </div>
+                  <h3 class="cta-title">Aliados estrat&eacute;gicos</h3>
+                </div>
+                <p class="cta-text">Colaboradores t&eacute;cnicos, comerciales o institucionales que puedan acercar casos y acelerar implementaci&oacute;n.</p>
+              </article>
+            </div>
+
+          </div>
+
+          <aside class="contact-card" data-anim="fade" style="--delay: 0.52s;">
+            <div class="qr-block">
+              <div class="contact-title">Escanear para ver la landing</div>
+              <div class="qr-shell">
+                <a class="qr-link" href="https://nicosgandurra.github.io/PicoCERO-Landing/" target="_blank" rel="noopener" aria-label="Abrir landing de PicoCERO"><svg
+                  xmlns="http://www.w3.org/2000/svg" version="1.1" width="145" height="145" viewBox="0 0 145 145"
+                  aria-hidden="true">
+                  <rect fill="rgb(255, 255, 255)" x="0" y="0" width="145" height="145" />
+                  <path fill="rgb(0, 0, 0)"
+                    d="M 0,0 l 5,0 0,5 -5,0 z M 5,0 l 5,0 0,5 -5,0 z M 10,0 l 5,0 0,5 -5,0 z M 15,0 l 5,0 0,5 -5,0 z M 20,0 l 5,0 0,5 -5,0 z M 25,0 l 5,0 0,5 -5,0 z M 30,0 l 5,0 0,5 -5,0 z M 45,0 l 5,0 0,5 -5,0 z M 90,0 l 5,0 0,5 -5,0 z M 95,0 l 5,0 0,5 -5,0 z M 100,0 l 5,0 0,5 -5,0 z M 110,0 l 5,0 0,5 -5,0 z M 115,0 l 5,0 0,5 -5,0 z M 120,0 l 5,0 0,5 -5,0 z M 125,0 l 5,0 0,5 -5,0 z M 130,0 l 5,0 0,5 -5,0 z M 135,0 l 5,0 0,5 -5,0 z M 140,0 l 5,0 0,5 -5,0 z M 0,5 l 5,0 0,5 -5,0 z M 30,5 l 5,0 0,5 -5,0 z M 40,5 l 5,0 0,5 -5,0 z M 45,5 l 5,0 0,5 -5,0 z M 55,5 l 5,0 0,5 -5,0 z M 75,5 l 5,0 0,5 -5,0 z M 80,5 l 5,0 0,5 -5,0 z M 85,5 l 5,0 0,5 -5,0 z M 110,5 l 5,0 0,5 -5,0 z M 140,5 l 5,0 0,5 -5,0 z M 0,10 l 5,0 0,5 -5,0 z M 10,10 l 5,0 0,5 -5,0 z M 15,10 l 5,0 0,5 -5,0 z M 20,10 l 5,0 0,5 -5,0 z M 30,10 l 5,0 0,5 -5,0 z M 45,10 l 5,0 0,5 -5,0 z M 55,10 l 5,0 0,5 -5,0 z M 60,10 l 5,0 0,5 -5,0 z M 80,10 l 5,0 0,5 -5,0 z M 95,10 l 5,0 0,5 -5,0 z M 100,10 l 5,0 0,5 -5,0 z M 110,10 l 5,0 0,5 -5,0 z M 120,10 l 5,0 0,5 -5,0 z M 125,10 l 5,0 0,5 -5,0 z M 130,10 l 5,0 0,5 -5,0 z M 140,10 l 5,0 0,5 -5,0 z M 0,15 l 5,0 0,5 -5,0 z M 10,15 l 5,0 0,5 -5,0 z M 15,15 l 5,0 0,5 -5,0 z M 20,15 l 5,0 0,5 -5,0 z M 30,15 l 5,0 0,5 -5,0 z M 40,15 l 5,0 0,5 -5,0 z M 45,15 l 5,0 0,5 -5,0 z M 55,15 l 5,0 0,5 -5,0 z M 60,15 l 5,0 0,5 -5,0 z M 65,15 l 5,0 0,5 -5,0 z M 85,15 l 5,0 0,5 -5,0 z M 95,15 l 5,0 0,5 -5,0 z M 110,15 l 5,0 0,5 -5,0 z M 120,15 l 5,0 0,5 -5,0 z M 125,15 l 5,0 0,5 -5,0 z M 130,15 l 5,0 0,5 -5,0 z M 140,15 l 5,0 0,5 -5,0 z M 0,20 l 5,0 0,5 -5,0 z M 10,20 l 5,0 0,5 -5,0 z M 15,20 l 5,0 0,5 -5,0 z M 20,20 l 5,0 0,5 -5,0 z M 30,20 l 5,0 0,5 -5,0 z M 70,20 l 5,0 0,5 -5,0 z M 80,20 l 5,0 0,5 -5,0 z M 85,20 l 5,0 0,5 -5,0 z M 90,20 l 5,0 0,5 -5,0 z M 95,20 l 5,0 0,5 -5,0 z M 110,20 l 5,0 0,5 -5,0 z M 120,20 l 5,0 0,5 -5,0 z M 125,20 l 5,0 0,5 -5,0 z M 130,20 l 5,0 0,5 -5,0 z M 140,20 l 5,0 0,5 -5,0 z M 0,25 l 5,0 0,5 -5,0 z M 30,25 l 5,0 0,5 -5,0 z M 40,25 l 5,0 0,5 -5,0 z M 50,25 l 5,0 0,5 -5,0 z M 55,25 l 5,0 0,5 -5,0 z M 65,25 l 5,0 0,5 -5,0 z M 75,25 l 5,0 0,5 -5,0 z M 80,25 l 5,0 0,5 -5,0 z M 90,25 l 5,0 0,5 -5,0 z M 100,25 l 5,0 0,5 -5,0 z M 110,25 l 5,0 0,5 -5,0 z M 140,25 l 5,0 0,5 -5,0 z M 0,30 l 5,0 0,5 -5,0 z M 5,30 l 5,0 0,5 -5,0 z M 10,30 l 5,0 0,5 -5,0 z M 15,30 l 5,0 0,5 -5,0 z M 20,30 l 5,0 0,5 -5,0 z M 25,30 l 5,0 0,5 -5,0 z M 30,30 l 5,0 0,5 -5,0 z M 40,30 l 5,0 0,5 -5,0 z M 50,30 l 5,0 0,5 -5,0 z M 60,30 l 5,0 0,5 -5,0 z M 70,30 l 5,0 0,5 -5,0 z M 80,30 l 5,0 0,5 -5,0 z M 90,30 l 5,0 0,5 -5,0 z M 100,30 l 5,0 0,5 -5,0 z M 110,30 l 5,0 0,5 -5,0 z M 115,30 l 5,0 0,5 -5,0 z M 120,30 l 5,0 0,5 -5,0 z M 125,30 l 5,0 0,5 -5,0 z M 130,30 l 5,0 0,5 -5,0 z M 135,30 l 5,0 0,5 -5,0 z M 140,30 l 5,0 0,5 -5,0 z M 60,35 l 5,0 0,5 -5,0 z M 0,40 l 5,0 0,5 -5,0 z M 5,40 l 5,0 0,5 -5,0 z M 10,40 l 5,0 0,5 -5,0 z M 15,40 l 5,0 0,5 -5,0 z M 20,40 l 5,0 0,5 -5,0 z M 30,40 l 5,0 0,5 -5,0 z M 35,40 l 5,0 0,5 -5,0 z M 40,40 l 5,0 0,5 -5,0 z M 45,40 l 5,0 0,5 -5,0 z M 50,40 l 5,0 0,5 -5,0 z M 55,40 l 5,0 0,5 -5,0 z M 65,40 l 5,0 0,5 -5,0 z M 75,40 l 5,0 0,5 -5,0 z M 85,40 l 5,0 0,5 -5,0 z M 105,40 l 5,0 0,5 -5,0 z M 115,40 l 5,0 0,5 -5,0 z M 125,40 l 5,0 0,5 -5,0 z M 135,40 l 5,0 0,5 -5,0 z M 0,45 l 5,0 0,5 -5,0 z M 5,45 l 5,0 0,5 -5,0 z M 15,45 l 5,0 0,5 -5,0 z M 20,45 l 5,0 0,5 -5,0 z M 25,45 l 5,0 0,5 -5,0 z M 40,45 l 5,0 0,5 -5,0 z M 45,45 l 5,0 0,5 -5,0 z M 60,45 l 5,0 0,5 -5,0 z M 65,45 l 5,0 0,5 -5,0 z M 80,45 l 5,0 0,5 -5,0 z M 95,45 l 5,0 0,5 -5,0 z M 100,45 l 5,0 0,5 -5,0 z M 110,45 l 5,0 0,5 -5,0 z M 115,45 l 5,0 0,5 -5,0 z M 120,45 l 5,0 0,5 -5,0 z M 140,45 l 5,0 0,5 -5,0 z M 0,50 l 5,0 0,5 -5,0 z M 10,50 l 5,0 0,5 -5,0 z M 30,50 l 5,0 0,5 -5,0 z M 45,50 l 5,0 0,5 -5,0 z M 55,50 l 5,0 0,5 -5,0 z M 65,50 l 5,0 0,5 -5,0 z M 75,50 l 5,0 0,5 -5,0 z M 80,50 l 5,0 0,5 -5,0 z M 105,50 l 5,0 0,5 -5,0 z M 115,50 l 5,0 0,5 -5,0 z M 15,55 l 5,0 0,5 -5,0 z M 45,55 l 5,0 0,5 -5,0 z M 50,55 l 5,0 0,5 -5,0 z M 55,55 l 5,0 0,5 -5,0 z M 60,55 l 5,0 0,5 -5,0 z M 65,55 l 5,0 0,5 -5,0 z M 75,55 l 5,0 0,5 -5,0 z M 90,55 l 5,0 0,5 -5,0 z M 95,55 l 5,0 0,5 -5,0 z M 110,55 l 5,0 0,5 -5,0 z M 115,55 l 5,0 0,5 -5,0 z M 125,55 l 5,0 0,5 -5,0 z M 135,55 l 5,0 0,5 -5,0 z M 5,60 l 5,0 0,5 -5,0 z M 10,60 l 5,0 0,5 -5,0 z M 15,60 l 5,0 0,5 -5,0 z M 20,60 l 5,0 0,5 -5,0 z M 30,60 l 5,0 0,5 -5,0 z M 35,60 l 5,0 0,5 -5,0 z M 45,60 l 5,0 0,5 -5,0 z M 55,60 l 5,0 0,5 -5,0 z M 85,60 l 5,0 0,5 -5,0 z M 100,60 l 5,0 0,5 -5,0 z M 125,60 l 5,0 0,5 -5,0 z M 130,60 l 5,0 0,5 -5,0 z M 0,65 l 5,0 0,5 -5,0 z M 5,65 l 5,0 0,5 -5,0 z M 15,65 l 5,0 0,5 -5,0 z M 35,65 l 5,0 0,5 -5,0 z M 50,65 l 5,0 0,5 -5,0 z M 65,65 l 5,0 0,5 -5,0 z M 70,65 l 5,0 0,5 -5,0 z M 80,65 l 5,0 0,5 -5,0 z M 85,65 l 5,0 0,5 -5,0 z M 90,65 l 5,0 0,5 -5,0 z M 95,65 l 5,0 0,5 -5,0 z M 100,65 l 5,0 0,5 -5,0 z M 105,65 l 5,0 0,5 -5,0 z M 110,65 l 5,0 0,5 -5,0 z M 115,65 l 5,0 0,5 -5,0 z M 120,65 l 5,0 0,5 -5,0 z M 140,65 l 5,0 0,5 -5,0 z M 0,70 l 5,0 0,5 -5,0 z M 10,70 l 5,0 0,5 -5,0 z M 15,70 l 5,0 0,5 -5,0 z M 30,70 l 5,0 0,5 -5,0 z M 40,70 l 5,0 0,5 -5,0 z M 45,70 l 5,0 0,5 -5,0 z M 50,70 l 5,0 0,5 -5,0 z M 60,70 l 5,0 0,5 -5,0 z M 65,70 l 5,0 0,5 -5,0 z M 75,70 l 5,0 0,5 -5,0 z M 90,70 l 5,0 0,5 -5,0 z M 115,70 l 5,0 0,5 -5,0 z M 125,70 l 5,0 0,5 -5,0 z M 130,70 l 5,0 0,5 -5,0 z M 5,75 l 5,0 0,5 -5,0 z M 15,75 l 5,0 0,5 -5,0 z M 20,75 l 5,0 0,5 -5,0 z M 25,75 l 5,0 0,5 -5,0 z M 40,75 l 5,0 0,5 -5,0 z M 50,75 l 5,0 0,5 -5,0 z M 55,75 l 5,0 0,5 -5,0 z M 60,75 l 5,0 0,5 -5,0 z M 65,75 l 5,0 0,5 -5,0 z M 75,75 l 5,0 0,5 -5,0 z M 90,75 l 5,0 0,5 -5,0 z M 95,75 l 5,0 0,5 -5,0 z M 110,75 l 5,0 0,5 -5,0 z M 120,75 l 5,0 0,5 -5,0 z M 135,75 l 5,0 0,5 -5,0 z M 0,80 l 5,0 0,5 -5,0 z M 5,80 l 5,0 0,5 -5,0 z M 15,80 l 5,0 0,5 -5,0 z M 20,80 l 5,0 0,5 -5,0 z M 25,80 l 5,0 0,5 -5,0 z M 30,80 l 5,0 0,5 -5,0 z M 45,80 l 5,0 0,5 -5,0 z M 50,80 l 5,0 0,5 -5,0 z M 55,80 l 5,0 0,5 -5,0 z M 65,80 l 5,0 0,5 -5,0 z M 70,80 l 5,0 0,5 -5,0 z M 75,80 l 5,0 0,5 -5,0 z M 80,80 l 5,0 0,5 -5,0 z M 85,80 l 5,0 0,5 -5,0 z M 100,80 l 5,0 0,5 -5,0 z M 125,80 l 5,0 0,5 -5,0 z M 130,80 l 5,0 0,5 -5,0 z M 0,85 l 5,0 0,5 -5,0 z M 40,85 l 5,0 0,5 -5,0 z M 45,85 l 5,0 0,5 -5,0 z M 60,85 l 5,0 0,5 -5,0 z M 65,85 l 5,0 0,5 -5,0 z M 70,85 l 5,0 0,5 -5,0 z M 75,85 l 5,0 0,5 -5,0 z M 80,85 l 5,0 0,5 -5,0 z M 95,85 l 5,0 0,5 -5,0 z M 100,85 l 5,0 0,5 -5,0 z M 105,85 l 5,0 0,5 -5,0 z M 110,85 l 5,0 0,5 -5,0 z M 115,85 l 5,0 0,5 -5,0 z M 120,85 l 5,0 0,5 -5,0 z M 130,85 l 5,0 0,5 -5,0 z M 140,85 l 5,0 0,5 -5,0 z M 0,90 l 5,0 0,5 -5,0 z M 10,90 l 5,0 0,5 -5,0 z M 30,90 l 5,0 0,5 -5,0 z M 35,90 l 5,0 0,5 -5,0 z M 40,90 l 5,0 0,5 -5,0 z M 70,90 l 5,0 0,5 -5,0 z M 75,90 l 5,0 0,5 -5,0 z M 80,90 l 5,0 0,5 -5,0 z M 100,90 l 5,0 0,5 -5,0 z M 105,90 l 5,0 0,5 -5,0 z M 115,90 l 5,0 0,5 -5,0 z M 120,90 l 5,0 0,5 -5,0 z M 130,90 l 5,0 0,5 -5,0 z M 0,95 l 5,0 0,5 -5,0 z M 10,95 l 5,0 0,5 -5,0 z M 20,95 l 5,0 0,5 -5,0 z M 50,95 l 5,0 0,5 -5,0 z M 60,95 l 5,0 0,5 -5,0 z M 70,95 l 5,0 0,5 -5,0 z M 80,95 l 5,0 0,5 -5,0 z M 100,95 l 5,0 0,5 -5,0 z M 135,95 l 5,0 0,5 -5,0 z M 0,100 l 5,0 0,5 -5,0 z M 10,100 l 5,0 0,5 -5,0 z M 25,100 l 5,0 0,5 -5,0 z M 30,100 l 5,0 0,5 -5,0 z M 40,100 l 5,0 0,5 -5,0 z M 55,100 l 5,0 0,5 -5,0 z M 65,100 l 5,0 0,5 -5,0 z M 85,100 l 5,0 0,5 -5,0 z M 100,100 l 5,0 0,5 -5,0 z M 105,100 l 5,0 0,5 -5,0 z M 110,100 l 5,0 0,5 -5,0 z M 115,100 l 5,0 0,5 -5,0 z M 120,100 l 5,0 0,5 -5,0 z M 130,100 l 5,0 0,5 -5,0 z M 135,100 l 5,0 0,5 -5,0 z M 140,100 l 5,0 0,5 -5,0 z M 40,105 l 5,0 0,5 -5,0 z M 60,105 l 5,0 0,5 -5,0 z M 65,105 l 5,0 0,5 -5,0 z M 90,105 l 5,0 0,5 -5,0 z M 95,105 l 5,0 0,5 -5,0 z M 100,105 l 5,0 0,5 -5,0 z M 120,105 l 5,0 0,5 -5,0 z M 125,105 l 5,0 0,5 -5,0 z M 130,105 l 5,0 0,5 -5,0 z M 135,105 l 5,0 0,5 -5,0 z M 140,105 l 5,0 0,5 -5,0 z M 0,110 l 5,0 0,5 -5,0 z M 5,110 l 5,0 0,5 -5,0 z M 10,110 l 5,0 0,5 -5,0 z M 15,110 l 5,0 0,5 -5,0 z M 20,110 l 5,0 0,5 -5,0 z M 25,110 l 5,0 0,5 -5,0 z M 30,110 l 5,0 0,5 -5,0 z M 40,110 l 5,0 0,5 -5,0 z M 45,110 l 5,0 0,5 -5,0 z M 55,110 l 5,0 0,5 -5,0 z M 75,110 l 5,0 0,5 -5,0 z M 80,110 l 5,0 0,5 -5,0 z M 85,110 l 5,0 0,5 -5,0 z M 90,110 l 5,0 0,5 -5,0 z M 95,110 l 5,0 0,5 -5,0 z M 100,110 l 5,0 0,5 -5,0 z M 110,110 l 5,0 0,5 -5,0 z M 120,110 l 5,0 0,5 -5,0 z M 125,110 l 5,0 0,5 -5,0 z M 130,110 l 5,0 0,5 -5,0 z M 0,115 l 5,0 0,5 -5,0 z M 30,115 l 5,0 0,5 -5,0 z M 45,115 l 5,0 0,5 -5,0 z M 50,115 l 5,0 0,5 -5,0 z M 55,115 l 5,0 0,5 -5,0 z M 60,115 l 5,0 0,5 -5,0 z M 70,115 l 5,0 0,5 -5,0 z M 80,115 l 5,0 0,5 -5,0 z M 90,115 l 5,0 0,5 -5,0 z M 95,115 l 5,0 0,5 -5,0 z M 100,115 l 5,0 0,5 -5,0 z M 120,115 l 5,0 0,5 -5,0 z M 135,115 l 5,0 0,5 -5,0 z M 0,120 l 5,0 0,5 -5,0 z M 10,120 l 5,0 0,5 -5,0 z M 15,120 l 5,0 0,5 -5,0 z M 20,120 l 5,0 0,5 -5,0 z M 30,120 l 5,0 0,5 -5,0 z M 40,120 l 5,0 0,5 -5,0 z M 45,120 l 5,0 0,5 -5,0 z M 55,120 l 5,0 0,5 -5,0 z M 85,120 l 5,0 0,5 -5,0 z M 90,120 l 5,0 0,5 -5,0 z M 100,120 l 5,0 0,5 -5,0 z M 105,120 l 5,0 0,5 -5,0 z M 110,120 l 5,0 0,5 -5,0 z M 115,120 l 5,0 0,5 -5,0 z M 120,120 l 5,0 0,5 -5,0 z M 130,120 l 5,0 0,5 -5,0 z M 0,125 l 5,0 0,5 -5,0 z M 10,125 l 5,0 0,5 -5,0 z M 15,125 l 5,0 0,5 -5,0 z M 20,125 l 5,0 0,5 -5,0 z M 30,125 l 5,0 0,5 -5,0 z M 40,125 l 5,0 0,5 -5,0 z M 50,125 l 5,0 0,5 -5,0 z M 80,125 l 5,0 0,5 -5,0 z M 85,125 l 5,0 0,5 -5,0 z M 90,125 l 5,0 0,5 -5,0 z M 125,125 l 5,0 0,5 -5,0 z M 130,125 l 5,0 0,5 -5,0 z M 135,125 l 5,0 0,5 -5,0 z M 140,125 l 5,0 0,5 -5,0 z M 0,130 l 5,0 0,5 -5,0 z M 10,130 l 5,0 0,5 -5,0 z M 15,130 l 5,0 0,5 -5,0 z M 20,130 l 5,0 0,5 -5,0 z M 30,130 l 5,0 0,5 -5,0 z M 40,130 l 5,0 0,5 -5,0 z M 45,130 l 5,0 0,5 -5,0 z M 50,130 l 5,0 0,5 -5,0 z M 60,130 l 5,0 0,5 -5,0 z M 75,130 l 5,0 0,5 -5,0 z M 80,130 l 5,0 0,5 -5,0 z M 85,130 l 5,0 0,5 -5,0 z M 95,130 l 5,0 0,5 -5,0 z M 105,130 l 5,0 0,5 -5,0 z M 110,130 l 5,0 0,5 -5,0 z M 115,130 l 5,0 0,5 -5,0 z M 120,130 l 5,0 0,5 -5,0 z M 125,130 l 5,0 0,5 -5,0 z M 130,130 l 5,0 0,5 -5,0 z M 135,130 l 5,0 0,5 -5,0 z M 0,135 l 5,0 0,5 -5,0 z M 30,135 l 5,0 0,5 -5,0 z M 40,135 l 5,0 0,5 -5,0 z M 45,135 l 5,0 0,5 -5,0 z M 60,135 l 5,0 0,5 -5,0 z M 65,135 l 5,0 0,5 -5,0 z M 70,135 l 5,0 0,5 -5,0 z M 75,135 l 5,0 0,5 -5,0 z M 90,135 l 5,0 0,5 -5,0 z M 100,135 l 5,0 0,5 -5,0 z M 110,135 l 5,0 0,5 -5,0 z M 125,135 l 5,0 0,5 -5,0 z M 135,135 l 5,0 0,5 -5,0 z M 0,140 l 5,0 0,5 -5,0 z M 5,140 l 5,0 0,5 -5,0 z M 10,140 l 5,0 0,5 -5,0 z M 15,140 l 5,0 0,5 -5,0 z M 20,140 l 5,0 0,5 -5,0 z M 25,140 l 5,0 0,5 -5,0 z M 30,140 l 5,0 0,5 -5,0 z M 40,140 l 5,0 0,5 -5,0 z M 45,140 l 5,0 0,5 -5,0 z M 50,140 l 5,0 0,5 -5,0 z M 55,140 l 5,0 0,5 -5,0 z M 70,140 l 5,0 0,5 -5,0 z M 85,140 l 5,0 0,5 -5,0 z M 95,140 l 5,0 0,5 -5,0 z M 105,140 l 5,0 0,5 -5,0 z M 110,140 l 5,0 0,5 -5,0 z M 115,140 l 5,0 0,5 -5,0 z M 130,140 l 5,0 0,5 -5,0 z" />
+                </svg></a>
+                <span class="qr-caption">Abrir landing de PicoCERO</span>
+              </div>
+            </div>
+
+            <div class="contact-stack">
+              <div class="contact-group">
+                <div class="contact-title">Contacto</div>
+                <div class="contact-line"><strong>picocero.energy@gmail.com</strong></div>
+                <div class="contact-line">+54 260 4617198</div>
+                <div class="contact-line">San Rafael / Mendoza / Argentina</div>
+              </div>
+              <div class="contact-group">
+                <div class="contact-title">Landing</div>
+                <div class="contact-line"><a href="https://nicosgandurra.github.io/PicoCERO-Landing/" target="_blank" rel="noopener">PicoCERO Landing</a></div>
+              </div>
+            </div>
+          </aside>
+
+          <img class="close-mark"
+            src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1MTIgNTEyIiB3aWR0aD0iNTEyIiBoZWlnaHQ9IjUxMiI+CiAgPHJlY3Qgd2lkdGg9IjUxMiIgaGVpZ2h0PSI1MTIiIHJ4PSIxMDgiIGZpbGw9IiMwNmI2ZDQiLz4KICA8cGF0aCBkPSJNMjcyIDQ0IEwxMjQgMjg0IEwyNDggMjg0IEwxODggNDY4IEwzOTYgMTg4IEwyNzIgMTg4IFoiIGZpbGw9IiNmZmZmZmYiIHN0cm9rZT0iI2ZmZmZmZiIgc3Ryb2tlLXdpZHRoPSI0IiBzdHJva2UtbGluZWpvaW49InJvdW5kIi8+Cjwvc3ZnPgo="
+            alt="Isotipo de PicoCERO" data-anim="scale" style="--delay: 0.16s;">
+          <h2 class="slide-title wide" data-anim="up" style="--delay: 0.28s;">Hablemos de <span class="accent">ahorro
+              verificable</span></h2>
+          <p class="slide-subtitle narrow" data-anim="fade" style="--delay: 0.42s;">Inversores, clientes piloto y
+            aliados estrat&eacute;gicos que quieran acelerar validaci&oacute;n y ventas.</p>
+
+          <div class="cta-row">
+            <article class="cta-card" data-anim="stagger" style="--delay: 0.56s;">
+              <h3 class="cta-title">Inversores</h3>
+              <p class="cta-text">Capital pre-seed para convertir evidencia en tracci&oacute;n.</p>
+            </article>
+            <article class="cta-card" data-anim="stagger" style="--delay: 0.66s;">
+              <h3 class="cta-title">Clientes piloto</h3>
+              <p class="cta-text">Industrias que quieran medir y reducir su costo energ&eacute;tico.</p>
+            </article>
+            <article class="cta-card" data-anim="stagger" style="--delay: 0.76s;">
+              <h3 class="cta-title">Aliados</h3>
+              <p class="cta-text">C&aacute;maras, instaladores y redes sectoriales.</p>
+            </article>
+          </div>
+
+          <div class="close-footer" data-anim="fade" style="--delay: 0.9s;">
+            <div class="qr-container"><a class="qr-link" href="https://nicosgandurra.github.io/PicoCERO-Landing/"
+                target="_blank" rel="noopener" aria-label="Abrir landing de PicoCERO"><svg
+                  xmlns="http://www.w3.org/2000/svg" version="1.1" width="145" height="145" viewBox="0 0 145 145"
+                  aria-hidden="true">
+                  <rect fill="rgb(255, 255, 255)" x="0" y="0" width="145" height="145" />
+                  <path fill="rgb(0, 0, 0)"
+                    d="M 0,0 l 5,0 0,5 -5,0 z M 5,0 l 5,0 0,5 -5,0 z M 10,0 l 5,0 0,5 -5,0 z M 15,0 l 5,0 0,5 -5,0 z M 20,0 l 5,0 0,5 -5,0 z M 25,0 l 5,0 0,5 -5,0 z M 30,0 l 5,0 0,5 -5,0 z M 45,0 l 5,0 0,5 -5,0 z M 90,0 l 5,0 0,5 -5,0 z M 95,0 l 5,0 0,5 -5,0 z M 100,0 l 5,0 0,5 -5,0 z M 110,0 l 5,0 0,5 -5,0 z M 115,0 l 5,0 0,5 -5,0 z M 120,0 l 5,0 0,5 -5,0 z M 125,0 l 5,0 0,5 -5,0 z M 130,0 l 5,0 0,5 -5,0 z M 135,0 l 5,0 0,5 -5,0 z M 140,0 l 5,0 0,5 -5,0 z M 0,5 l 5,0 0,5 -5,0 z M 30,5 l 5,0 0,5 -5,0 z M 40,5 l 5,0 0,5 -5,0 z M 45,5 l 5,0 0,5 -5,0 z M 55,5 l 5,0 0,5 -5,0 z M 75,5 l 5,0 0,5 -5,0 z M 80,5 l 5,0 0,5 -5,0 z M 85,5 l 5,0 0,5 -5,0 z M 110,5 l 5,0 0,5 -5,0 z M 140,5 l 5,0 0,5 -5,0 z M 0,10 l 5,0 0,5 -5,0 z M 10,10 l 5,0 0,5 -5,0 z M 15,10 l 5,0 0,5 -5,0 z M 20,10 l 5,0 0,5 -5,0 z M 30,10 l 5,0 0,5 -5,0 z M 45,10 l 5,0 0,5 -5,0 z M 55,10 l 5,0 0,5 -5,0 z M 60,10 l 5,0 0,5 -5,0 z M 80,10 l 5,0 0,5 -5,0 z M 95,10 l 5,0 0,5 -5,0 z M 100,10 l 5,0 0,5 -5,0 z M 110,10 l 5,0 0,5 -5,0 z M 120,10 l 5,0 0,5 -5,0 z M 125,10 l 5,0 0,5 -5,0 z M 130,10 l 5,0 0,5 -5,0 z M 140,10 l 5,0 0,5 -5,0 z M 0,15 l 5,0 0,5 -5,0 z M 10,15 l 5,0 0,5 -5,0 z M 15,15 l 5,0 0,5 -5,0 z M 20,15 l 5,0 0,5 -5,0 z M 30,15 l 5,0 0,5 -5,0 z M 40,15 l 5,0 0,5 -5,0 z M 45,15 l 5,0 0,5 -5,0 z M 55,15 l 5,0 0,5 -5,0 z M 60,15 l 5,0 0,5 -5,0 z M 65,15 l 5,0 0,5 -5,0 z M 85,15 l 5,0 0,5 -5,0 z M 95,15 l 5,0 0,5 -5,0 z M 110,15 l 5,0 0,5 -5,0 z M 120,15 l 5,0 0,5 -5,0 z M 125,15 l 5,0 0,5 -5,0 z M 130,15 l 5,0 0,5 -5,0 z M 140,15 l 5,0 0,5 -5,0 z M 0,20 l 5,0 0,5 -5,0 z M 10,20 l 5,0 0,5 -5,0 z M 15,20 l 5,0 0,5 -5,0 z M 20,20 l 5,0 0,5 -5,0 z M 30,20 l 5,0 0,5 -5,0 z M 70,20 l 5,0 0,5 -5,0 z M 80,20 l 5,0 0,5 -5,0 z M 85,20 l 5,0 0,5 -5,0 z M 90,20 l 5,0 0,5 -5,0 z M 95,20 l 5,0 0,5 -5,0 z M 110,20 l 5,0 0,5 -5,0 z M 120,20 l 5,0 0,5 -5,0 z M 125,20 l 5,0 0,5 -5,0 z M 130,20 l 5,0 0,5 -5,0 z M 140,20 l 5,0 0,5 -5,0 z M 0,25 l 5,0 0,5 -5,0 z M 30,25 l 5,0 0,5 -5,0 z M 40,25 l 5,0 0,5 -5,0 z M 50,25 l 5,0 0,5 -5,0 z M 55,25 l 5,0 0,5 -5,0 z M 65,25 l 5,0 0,5 -5,0 z M 75,25 l 5,0 0,5 -5,0 z M 80,25 l 5,0 0,5 -5,0 z M 90,25 l 5,0 0,5 -5,0 z M 100,25 l 5,0 0,5 -5,0 z M 110,25 l 5,0 0,5 -5,0 z M 140,25 l 5,0 0,5 -5,0 z M 0,30 l 5,0 0,5 -5,0 z M 5,30 l 5,0 0,5 -5,0 z M 10,30 l 5,0 0,5 -5,0 z M 15,30 l 5,0 0,5 -5,0 z M 20,30 l 5,0 0,5 -5,0 z M 25,30 l 5,0 0,5 -5,0 z M 30,30 l 5,0 0,5 -5,0 z M 40,30 l 5,0 0,5 -5,0 z M 50,30 l 5,0 0,5 -5,0 z M 60,30 l 5,0 0,5 -5,0 z M 70,30 l 5,0 0,5 -5,0 z M 80,30 l 5,0 0,5 -5,0 z M 90,30 l 5,0 0,5 -5,0 z M 100,30 l 5,0 0,5 -5,0 z M 110,30 l 5,0 0,5 -5,0 z M 115,30 l 5,0 0,5 -5,0 z M 120,30 l 5,0 0,5 -5,0 z M 125,30 l 5,0 0,5 -5,0 z M 130,30 l 5,0 0,5 -5,0 z M 135,30 l 5,0 0,5 -5,0 z M 140,30 l 5,0 0,5 -5,0 z M 60,35 l 5,0 0,5 -5,0 z M 0,40 l 5,0 0,5 -5,0 z M 5,40 l 5,0 0,5 -5,0 z M 10,40 l 5,0 0,5 -5,0 z M 15,40 l 5,0 0,5 -5,0 z M 20,40 l 5,0 0,5 -5,0 z M 30,40 l 5,0 0,5 -5,0 z M 35,40 l 5,0 0,5 -5,0 z M 40,40 l 5,0 0,5 -5,0 z M 45,40 l 5,0 0,5 -5,0 z M 50,40 l 5,0 0,5 -5,0 z M 55,40 l 5,0 0,5 -5,0 z M 65,40 l 5,0 0,5 -5,0 z M 75,40 l 5,0 0,5 -5,0 z M 85,40 l 5,0 0,5 -5,0 z M 105,40 l 5,0 0,5 -5,0 z M 115,40 l 5,0 0,5 -5,0 z M 125,40 l 5,0 0,5 -5,0 z M 135,40 l 5,0 0,5 -5,0 z M 0,45 l 5,0 0,5 -5,0 z M 5,45 l 5,0 0,5 -5,0 z M 15,45 l 5,0 0,5 -5,0 z M 20,45 l 5,0 0,5 -5,0 z M 25,45 l 5,0 0,5 -5,0 z M 40,45 l 5,0 0,5 -5,0 z M 45,45 l 5,0 0,5 -5,0 z M 60,45 l 5,0 0,5 -5,0 z M 65,45 l 5,0 0,5 -5,0 z M 80,45 l 5,0 0,5 -5,0 z M 95,45 l 5,0 0,5 -5,0 z M 100,45 l 5,0 0,5 -5,0 z M 110,45 l 5,0 0,5 -5,0 z M 115,45 l 5,0 0,5 -5,0 z M 120,45 l 5,0 0,5 -5,0 z M 140,45 l 5,0 0,5 -5,0 z M 0,50 l 5,0 0,5 -5,0 z M 10,50 l 5,0 0,5 -5,0 z M 30,50 l 5,0 0,5 -5,0 z M 45,50 l 5,0 0,5 -5,0 z M 55,50 l 5,0 0,5 -5,0 z M 65,50 l 5,0 0,5 -5,0 z M 75,50 l 5,0 0,5 -5,0 z M 80,50 l 5,0 0,5 -5,0 z M 105,50 l 5,0 0,5 -5,0 z M 115,50 l 5,0 0,5 -5,0 z M 15,55 l 5,0 0,5 -5,0 z M 45,55 l 5,0 0,5 -5,0 z M 50,55 l 5,0 0,5 -5,0 z M 55,55 l 5,0 0,5 -5,0 z M 60,55 l 5,0 0,5 -5,0 z M 65,55 l 5,0 0,5 -5,0 z M 75,55 l 5,0 0,5 -5,0 z M 90,55 l 5,0 0,5 -5,0 z M 95,55 l 5,0 0,5 -5,0 z M 110,55 l 5,0 0,5 -5,0 z M 115,55 l 5,0 0,5 -5,0 z M 125,55 l 5,0 0,5 -5,0 z M 135,55 l 5,0 0,5 -5,0 z M 5,60 l 5,0 0,5 -5,0 z M 10,60 l 5,0 0,5 -5,0 z M 15,60 l 5,0 0,5 -5,0 z M 20,60 l 5,0 0,5 -5,0 z M 30,60 l 5,0 0,5 -5,0 z M 35,60 l 5,0 0,5 -5,0 z M 45,60 l 5,0 0,5 -5,0 z M 55,60 l 5,0 0,5 -5,0 z M 85,60 l 5,0 0,5 -5,0 z M 100,60 l 5,0 0,5 -5,0 z M 125,60 l 5,0 0,5 -5,0 z M 130,60 l 5,0 0,5 -5,0 z M 0,65 l 5,0 0,5 -5,0 z M 5,65 l 5,0 0,5 -5,0 z M 15,65 l 5,0 0,5 -5,0 z M 35,65 l 5,0 0,5 -5,0 z M 50,65 l 5,0 0,5 -5,0 z M 65,65 l 5,0 0,5 -5,0 z M 70,65 l 5,0 0,5 -5,0 z M 80,65 l 5,0 0,5 -5,0 z M 85,65 l 5,0 0,5 -5,0 z M 90,65 l 5,0 0,5 -5,0 z M 95,65 l 5,0 0,5 -5,0 z M 100,65 l 5,0 0,5 -5,0 z M 105,65 l 5,0 0,5 -5,0 z M 110,65 l 5,0 0,5 -5,0 z M 115,65 l 5,0 0,5 -5,0 z M 120,65 l 5,0 0,5 -5,0 z M 140,65 l 5,0 0,5 -5,0 z M 0,70 l 5,0 0,5 -5,0 z M 10,70 l 5,0 0,5 -5,0 z M 15,70 l 5,0 0,5 -5,0 z M 30,70 l 5,0 0,5 -5,0 z M 40,70 l 5,0 0,5 -5,0 z M 45,70 l 5,0 0,5 -5,0 z M 50,70 l 5,0 0,5 -5,0 z M 60,70 l 5,0 0,5 -5,0 z M 65,70 l 5,0 0,5 -5,0 z M 75,70 l 5,0 0,5 -5,0 z M 90,70 l 5,0 0,5 -5,0 z M 115,70 l 5,0 0,5 -5,0 z M 125,70 l 5,0 0,5 -5,0 z M 130,70 l 5,0 0,5 -5,0 z M 5,75 l 5,0 0,5 -5,0 z M 15,75 l 5,0 0,5 -5,0 z M 20,75 l 5,0 0,5 -5,0 z M 25,75 l 5,0 0,5 -5,0 z M 40,75 l 5,0 0,5 -5,0 z M 50,75 l 5,0 0,5 -5,0 z M 55,75 l 5,0 0,5 -5,0 z M 60,75 l 5,0 0,5 -5,0 z M 65,75 l 5,0 0,5 -5,0 z M 75,75 l 5,0 0,5 -5,0 z M 90,75 l 5,0 0,5 -5,0 z M 95,75 l 5,0 0,5 -5,0 z M 110,75 l 5,0 0,5 -5,0 z M 120,75 l 5,0 0,5 -5,0 z M 135,75 l 5,0 0,5 -5,0 z M 0,80 l 5,0 0,5 -5,0 z M 5,80 l 5,0 0,5 -5,0 z M 15,80 l 5,0 0,5 -5,0 z M 20,80 l 5,0 0,5 -5,0 z M 25,80 l 5,0 0,5 -5,0 z M 30,80 l 5,0 0,5 -5,0 z M 45,80 l 5,0 0,5 -5,0 z M 50,80 l 5,0 0,5 -5,0 z M 55,80 l 5,0 0,5 -5,0 z M 65,80 l 5,0 0,5 -5,0 z M 70,80 l 5,0 0,5 -5,0 z M 75,80 l 5,0 0,5 -5,0 z M 80,80 l 5,0 0,5 -5,0 z M 85,80 l 5,0 0,5 -5,0 z M 100,80 l 5,0 0,5 -5,0 z M 125,80 l 5,0 0,5 -5,0 z M 130,80 l 5,0 0,5 -5,0 z M 0,85 l 5,0 0,5 -5,0 z M 40,85 l 5,0 0,5 -5,0 z M 45,85 l 5,0 0,5 -5,0 z M 60,85 l 5,0 0,5 -5,0 z M 65,85 l 5,0 0,5 -5,0 z M 70,85 l 5,0 0,5 -5,0 z M 75,85 l 5,0 0,5 -5,0 z M 80,85 l 5,0 0,5 -5,0 z M 95,85 l 5,0 0,5 -5,0 z M 100,85 l 5,0 0,5 -5,0 z M 105,85 l 5,0 0,5 -5,0 z M 110,85 l 5,0 0,5 -5,0 z M 115,85 l 5,0 0,5 -5,0 z M 120,85 l 5,0 0,5 -5,0 z M 130,85 l 5,0 0,5 -5,0 z M 140,85 l 5,0 0,5 -5,0 z M 0,90 l 5,0 0,5 -5,0 z M 10,90 l 5,0 0,5 -5,0 z M 30,90 l 5,0 0,5 -5,0 z M 35,90 l 5,0 0,5 -5,0 z M 40,90 l 5,0 0,5 -5,0 z M 70,90 l 5,0 0,5 -5,0 z M 75,90 l 5,0 0,5 -5,0 z M 80,90 l 5,0 0,5 -5,0 z M 100,90 l 5,0 0,5 -5,0 z M 105,90 l 5,0 0,5 -5,0 z M 115,90 l 5,0 0,5 -5,0 z M 120,90 l 5,0 0,5 -5,0 z M 130,90 l 5,0 0,5 -5,0 z M 0,95 l 5,0 0,5 -5,0 z M 10,95 l 5,0 0,5 -5,0 z M 20,95 l 5,0 0,5 -5,0 z M 50,95 l 5,0 0,5 -5,0 z M 60,95 l 5,0 0,5 -5,0 z M 70,95 l 5,0 0,5 -5,0 z M 80,95 l 5,0 0,5 -5,0 z M 100,95 l 5,0 0,5 -5,0 z M 135,95 l 5,0 0,5 -5,0 z M 0,100 l 5,0 0,5 -5,0 z M 10,100 l 5,0 0,5 -5,0 z M 25,100 l 5,0 0,5 -5,0 z M 30,100 l 5,0 0,5 -5,0 z M 40,100 l 5,0 0,5 -5,0 z M 55,100 l 5,0 0,5 -5,0 z M 65,100 l 5,0 0,5 -5,0 z M 85,100 l 5,0 0,5 -5,0 z M 100,100 l 5,0 0,5 -5,0 z M 105,100 l 5,0 0,5 -5,0 z M 110,100 l 5,0 0,5 -5,0 z M 115,100 l 5,0 0,5 -5,0 z M 120,100 l 5,0 0,5 -5,0 z M 130,100 l 5,0 0,5 -5,0 z M 135,100 l 5,0 0,5 -5,0 z M 140,100 l 5,0 0,5 -5,0 z M 40,105 l 5,0 0,5 -5,0 z M 60,105 l 5,0 0,5 -5,0 z M 65,105 l 5,0 0,5 -5,0 z M 90,105 l 5,0 0,5 -5,0 z M 95,105 l 5,0 0,5 -5,0 z M 100,105 l 5,0 0,5 -5,0 z M 120,105 l 5,0 0,5 -5,0 z M 125,105 l 5,0 0,5 -5,0 z M 130,105 l 5,0 0,5 -5,0 z M 135,105 l 5,0 0,5 -5,0 z M 140,105 l 5,0 0,5 -5,0 z M 0,110 l 5,0 0,5 -5,0 z M 5,110 l 5,0 0,5 -5,0 z M 10,110 l 5,0 0,5 -5,0 z M 15,110 l 5,0 0,5 -5,0 z M 20,110 l 5,0 0,5 -5,0 z M 25,110 l 5,0 0,5 -5,0 z M 30,110 l 5,0 0,5 -5,0 z M 40,110 l 5,0 0,5 -5,0 z M 45,110 l 5,0 0,5 -5,0 z M 55,110 l 5,0 0,5 -5,0 z M 75,110 l 5,0 0,5 -5,0 z M 80,110 l 5,0 0,5 -5,0 z M 85,110 l 5,0 0,5 -5,0 z M 90,110 l 5,0 0,5 -5,0 z M 95,110 l 5,0 0,5 -5,0 z M 100,110 l 5,0 0,5 -5,0 z M 110,110 l 5,0 0,5 -5,0 z M 120,110 l 5,0 0,5 -5,0 z M 125,110 l 5,0 0,5 -5,0 z M 130,110 l 5,0 0,5 -5,0 z M 0,115 l 5,0 0,5 -5,0 z M 30,115 l 5,0 0,5 -5,0 z M 45,115 l 5,0 0,5 -5,0 z M 50,115 l 5,0 0,5 -5,0 z M 55,115 l 5,0 0,5 -5,0 z M 60,115 l 5,0 0,5 -5,0 z M 70,115 l 5,0 0,5 -5,0 z M 80,115 l 5,0 0,5 -5,0 z M 90,115 l 5,0 0,5 -5,0 z M 95,115 l 5,0 0,5 -5,0 z M 100,115 l 5,0 0,5 -5,0 z M 120,115 l 5,0 0,5 -5,0 z M 135,115 l 5,0 0,5 -5,0 z M 0,120 l 5,0 0,5 -5,0 z M 10,120 l 5,0 0,5 -5,0 z M 15,120 l 5,0 0,5 -5,0 z M 20,120 l 5,0 0,5 -5,0 z M 30,120 l 5,0 0,5 -5,0 z M 40,120 l 5,0 0,5 -5,0 z M 45,120 l 5,0 0,5 -5,0 z M 55,120 l 5,0 0,5 -5,0 z M 85,120 l 5,0 0,5 -5,0 z M 90,120 l 5,0 0,5 -5,0 z M 100,120 l 5,0 0,5 -5,0 z M 105,120 l 5,0 0,5 -5,0 z M 110,120 l 5,0 0,5 -5,0 z M 115,120 l 5,0 0,5 -5,0 z M 120,120 l 5,0 0,5 -5,0 z M 130,120 l 5,0 0,5 -5,0 z M 0,125 l 5,0 0,5 -5,0 z M 10,125 l 5,0 0,5 -5,0 z M 15,125 l 5,0 0,5 -5,0 z M 20,125 l 5,0 0,5 -5,0 z M 30,125 l 5,0 0,5 -5,0 z M 40,125 l 5,0 0,5 -5,0 z M 50,125 l 5,0 0,5 -5,0 z M 80,125 l 5,0 0,5 -5,0 z M 85,125 l 5,0 0,5 -5,0 z M 90,125 l 5,0 0,5 -5,0 z M 125,125 l 5,0 0,5 -5,0 z M 130,125 l 5,0 0,5 -5,0 z M 135,125 l 5,0 0,5 -5,0 z M 140,125 l 5,0 0,5 -5,0 z M 0,130 l 5,0 0,5 -5,0 z M 10,130 l 5,0 0,5 -5,0 z M 15,130 l 5,0 0,5 -5,0 z M 20,130 l 5,0 0,5 -5,0 z M 30,130 l 5,0 0,5 -5,0 z M 40,130 l 5,0 0,5 -5,0 z M 45,130 l 5,0 0,5 -5,0 z M 50,130 l 5,0 0,5 -5,0 z M 60,130 l 5,0 0,5 -5,0 z M 75,130 l 5,0 0,5 -5,0 z M 80,130 l 5,0 0,5 -5,0 z M 85,130 l 5,0 0,5 -5,0 z M 95,130 l 5,0 0,5 -5,0 z M 105,130 l 5,0 0,5 -5,0 z M 110,130 l 5,0 0,5 -5,0 z M 115,130 l 5,0 0,5 -5,0 z M 120,130 l 5,0 0,5 -5,0 z M 125,130 l 5,0 0,5 -5,0 z M 130,130 l 5,0 0,5 -5,0 z M 135,130 l 5,0 0,5 -5,0 z M 0,135 l 5,0 0,5 -5,0 z M 30,135 l 5,0 0,5 -5,0 z M 40,135 l 5,0 0,5 -5,0 z M 45,135 l 5,0 0,5 -5,0 z M 60,135 l 5,0 0,5 -5,0 z M 65,135 l 5,0 0,5 -5,0 z M 70,135 l 5,0 0,5 -5,0 z M 75,135 l 5,0 0,5 -5,0 z M 90,135 l 5,0 0,5 -5,0 z M 100,135 l 5,0 0,5 -5,0 z M 110,135 l 5,0 0,5 -5,0 z M 125,135 l 5,0 0,5 -5,0 z M 135,135 l 5,0 0,5 -5,0 z M 0,140 l 5,0 0,5 -5,0 z M 5,140 l 5,0 0,5 -5,0 z M 10,140 l 5,0 0,5 -5,0 z M 15,140 l 5,0 0,5 -5,0 z M 20,140 l 5,0 0,5 -5,0 z M 25,140 l 5,0 0,5 -5,0 z M 30,140 l 5,0 0,5 -5,0 z M 40,140 l 5,0 0,5 -5,0 z M 45,140 l 5,0 0,5 -5,0 z M 50,140 l 5,0 0,5 -5,0 z M 55,140 l 5,0 0,5 -5,0 z M 70,140 l 5,0 0,5 -5,0 z M 85,140 l 5,0 0,5 -5,0 z M 95,140 l 5,0 0,5 -5,0 z M 105,140 l 5,0 0,5 -5,0 z M 110,140 l 5,0 0,5 -5,0 z M 115,140 l 5,0 0,5 -5,0 z M 130,140 l 5,0 0,5 -5,0 z" />
+                </svg></a><span class="qr-label">Escanear para ver la landing</span></div>
+            <div class="contact-block">
+              <div class="contact-line"><strong>picocero.energy@gmail.com</strong></div>
+              <div class="contact-line">+54 260 4617198</div>
+              <div class="contact-line">San Rafael / Mendoza / Argentina</div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script>
+    window.PICO_PITCH_CONFIG = {
+      autoTimings: [12000, 25000, 60000, 30000, 18000, 25000, 28000, 20000, 45000, 37000]
+    };
+  </script>
+  <script>
+    (function () {
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const dotsRoot = document.getElementById('navDots');
+      const controlDock = document.getElementById('controlDock');
+      const startButton = document.getElementById('startPresentation');
+      const manualButton = document.getElementById('enterManualMode');
+      const sectionBadge = document.getElementById('sectionBadge');
+      const sectionBadgeText = document.getElementById('sectionBadgeText');
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      const config = window.PICO_PITCH_CONFIG || {};
+      const timings = Array.isArray(config.autoTimings) && config.autoTimings.length === slides.length
+        ? config.autoTimings
+        : slides.map(() => 30000);
+
+      let current = 0;
+      let autoMode = false;
+      let autoTimer = null;
+
+      function isInteractiveTarget(target) {
+        return !!target.closest('button, a, input, textarea, select');
+      }
+
+      function stopAutoMode() {
+        autoMode = false;
+        if (autoTimer) {
+          window.clearTimeout(autoTimer);
+          autoTimer = null;
+        }
+      }
+
+      function hideControlDock() {
+        if (!controlDock) return;
+        controlDock.classList.add('hidden');
+      }
+
+      function requestDeckFullscreen() {
+        const root = document.documentElement;
+        if (root.requestFullscreen) {
+          root.requestFullscreen().catch(() => { });
+        }
+      }
+
+      function buildDots() {
+        if (!dotsRoot) return;
+        dotsRoot.innerHTML = '';
+
+        slides.forEach((slide, index) => {
+          const dot = document.createElement('button');
+          dot.type = 'button';
+          dot.className = 'nav-dot';
+          dot.setAttribute('aria-label', slide.dataset.label || ('Slide ' + (index + 1)));
+          dot.addEventListener('click', () => {
+            goTo(index, true);
+          });
+          dotsRoot.appendChild(dot);
+        });
+      }
+
+      function resetAnimatedElements(scope) {
+        if (reducedMotion || !scope) return;
+
+        // Reset standard data-anim elements
+        const animated = scope.querySelectorAll('[data-anim], .proposal-svg .excess-line, .proposal-svg .legacy-line, .proposal-svg .optimized-line, .proposal-status, .proposal-label, .legend-row');
+
+        animated.forEach((element) => {
+          element.style.animation = 'none';
+          element.style.transition = 'none';
+          void element.offsetWidth;
+          element.style.animation = '';
+          element.style.transition = '';
+        });
+
+        // Reset premium 4K graph animations
+        const premiumElements = scope.querySelectorAll('.pg-anim, [class*="pg-seq"]');
+        premiumElements.forEach((element) => {
+          element.style.animation = 'none';
+          element.style.transition = 'none';
+          void element.offsetWidth;
+          element.style.animation = '';
+          element.style.transition = '';
+        });
+      }
+
+      function updateDots() {
+        if (!dotsRoot) return;
+        dotsRoot.querySelectorAll('.nav-dot').forEach((dot, index) => {
+          dot.classList.toggle('active', index === current);
+        });
+      }
+
+      function updateBadge() {
+        if (!sectionBadge || !sectionBadgeText) return;
+        const label = slides[current] ? slides[current].dataset.label : '';
+        if (label && current > 0) {
+          sectionBadgeText.textContent = label;
+          sectionBadge.classList.add('visible');
+        } else {
+          sectionBadge.classList.remove('visible');
+        }
+      }
+
+      function scheduleNextSlide() {
+        if (!autoMode) return;
+        if (autoTimer) {
+          window.clearTimeout(autoTimer);
+          autoTimer = null;
+        }
+
+        if (current >= slides.length - 1) {
+          stopAutoMode();
+          return;
+        }
+
+        autoTimer = window.setTimeout(() => {
+          goTo(current + 1, false);
+        }, timings[current]);
+      }
+
+      function goTo(index, fromUser, forceRestart) {
+        if (index < 0 || index >= slides.length) return;
+        if (fromUser && autoMode) stopAutoMode();
+
+        const previous = slides[current];
+        const next = slides[index];
+        const sameSlide = index === current;
+
+        if (sameSlide && !forceRestart) return;
+
+        if (previous) previous.classList.remove('active');
+        current = index;
+        if (next) next.classList.add('active');
+
+        // Toggle pg-ready on premium graphs: add to active slide, remove from others
+        slides.forEach((s) => {
+          const pg = s.querySelector('.premium-graph');
+          if (pg) pg.classList.toggle('pg-ready', s.classList.contains('active'));
+        });
+
+        updateDots();
+        updateBadge();
+        resetAnimatedElements(next);
+        triggerCounters(next);
+        scheduleNextSlide();
+      }
+
+      function triggerCounters(scope) {
+        if (reducedMotion || !scope) return;
+        scope.querySelectorAll('[data-count]').forEach((item) => {
+          const target = Number(item.dataset.count);
+          const prefix = item.dataset.prefix || '';
+          const suffix = item.dataset.suffix || '';
+          const decimals = Number(item.dataset.decimals) || 0;
+          if (!Number.isFinite(target)) return;
+
+          let start;
+          const duration = 1200;
+          const tick = (timestamp) => {
+            start ??= timestamp;
+            const progress = Math.min((timestamp - start) / duration, 1);
+            const eased = 1 - Math.pow(1 - progress, 3);
+            const value = target * eased;
+            item.textContent = `${prefix}${value.toFixed(decimals)}${suffix}`;
+            if (progress < 1) requestAnimationFrame(tick);
+          };
+          requestAnimationFrame(tick);
+        });
+      }
+
+      function restartFromBeginning() {
+        stopAutoMode();
+        slides.forEach((slide) => {
+          slide.classList.remove('active');
+          const pg = slide.querySelector('.premium-graph');
+          if (pg) pg.classList.remove('pg-ready');
+        });
+        current = 0;
+        slides[0].classList.add('active');
+        updateDots();
+        resetAnimatedElements(slides[0]);
+        triggerCounters(slides[0]);
+      }
+
+      function startAutoPresentation() {
+        hideControlDock();
+        requestDeckFullscreen();
+        restartFromBeginning();
+        autoMode = true;
+        scheduleNextSlide();
+      }
+
+      function startManualPresentation() {
+        hideControlDock();
+        restartFromBeginning();
+      }
+
+      document.addEventListener('keydown', (event) => {
+        if (isInteractiveTarget(event.target)) return;
+
+        if (event.key === 'ArrowRight' || event.key === 'ArrowDown' || event.key === ' ') {
+          event.preventDefault();
+          goTo(Math.min(current + 1, slides.length - 1), true);
+          return;
+        }
+
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          goTo(Math.max(current - 1, 0), true);
+          return;
+        }
+
+        if (event.key === 'Home') {
+          event.preventDefault();
+          goTo(0, true, true);
+          return;
+        }
+
+        if (event.key === 'End') {
+          event.preventDefault();
+          goTo(slides.length - 1, true);
+        }
+      });
+
+      let touchStartX = 0;
+
+      document.addEventListener('touchstart', (event) => {
+        touchStartX = event.touches[0].clientX;
+      }, { passive: true });
+
+      document.addEventListener('touchend', (event) => {
+        const delta = touchStartX - event.changedTouches[0].clientX;
+        if (Math.abs(delta) < 50) return;
+        if (delta > 0) {
+          goTo(Math.min(current + 1, slides.length - 1), true);
+        } else {
+          goTo(Math.max(current - 1, 0), true);
+        }
+      }, { passive: true });
+
+      if (startButton) {
+        startButton.addEventListener('click', startAutoPresentation);
+      }
+
+      if (manualButton) {
+        manualButton.addEventListener('click', startManualPresentation);
+      }
+
+      buildDots();
+      slides.forEach((slide, index) => slide.classList.toggle('active', index === 0));
+      updateDots();
+      updateBadge();
+      resetAnimatedElements(slides[0]);
+      triggerCounters(slides[0]);
+    })();
+
+  </script>
+
+</body>
+
+</html>
