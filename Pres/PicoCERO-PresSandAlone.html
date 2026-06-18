@@ -351,6 +351,10 @@
       font-size: var(--title-wide);
     }
 
+    .slide-title.title-wide-fit {
+      max-width: 100%;
+    }
+
     .slide-title .accent,
     .accent-text {
       color: var(--accent);
@@ -1024,6 +1028,28 @@
       background: transparent;
       border: 0;
       box-shadow: none;
+      --pg-seq-1-duration: 1.2s;
+      --pg-seq-1-delay: 0s;
+      --pg-seq-2-duration: 1.1s;
+      --pg-seq-2-delay: 1s;
+      --pg-seq-danger-duration: 1.6s;
+      --pg-seq-danger-delay: 3.1s;
+      --pg-seq-3-draw-duration: 3s;
+      --pg-seq-3-draw-delay: 2.3s;
+      --pg-seq-3-fade-duration: 0.9s;
+      --pg-seq-3-fade-delay: 6.4s;
+      --pg-seq-4-duration: 0.7s;
+      --pg-seq-4-delay: 5.1s;
+      --pg-seq-5-duration: 1s;
+      --pg-seq-5-delay: 6.5s;
+      --pg-seq-6-draw-duration: 3s;
+      --pg-seq-6-draw-delay: 6.7s;
+      --pg-seq-6-area-duration: 2.2s;
+      --pg-seq-6-area-delay: 8.2s;
+      --pg-seq-7-duration: 0.9s;
+      --pg-seq-7-delay: 10.4s;
+      --pg-seq-8-duration: 0.8s;
+      --pg-seq-8-delay: 11s;
     }
 
     .premium-graph .pg-grid {
@@ -1245,49 +1271,49 @@
 
     /* Animations only run when pg-ready is present */
     .premium-graph.pg-ready .pg-seq-1 {
-      animation: pgFadeIn 1.2s ease forwards 0s;
+      animation: pgFadeIn var(--pg-seq-1-duration) ease forwards var(--pg-seq-1-delay);
     }
 
     .premium-graph.pg-ready .pg-seq-2 {
-      animation: pgFadeIn 1.1s ease forwards 1s;
+      animation: pgFadeIn var(--pg-seq-2-duration) ease forwards var(--pg-seq-2-delay);
     }
 
     .premium-graph.pg-ready .pg-seq-danger {
-      animation: pgFadeIn 1.6s ease forwards 3.1s;
+      animation: pgFadeIn var(--pg-seq-danger-duration) ease forwards var(--pg-seq-danger-delay);
     }
 
     .premium-graph.pg-ready .pg-seq-3-path {
       stroke-dasharray: 1500;
       stroke-dashoffset: 1500;
       animation:
-        pgDrawPath 3s cubic-bezier(0.4, 0, 0.2, 1) forwards 2.3s,
-        pgFadeOut 0.9s ease forwards 6.4s;
+        pgDrawPath var(--pg-seq-3-draw-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards var(--pg-seq-3-draw-delay),
+        pgFadeOut var(--pg-seq-3-fade-duration) ease forwards var(--pg-seq-3-fade-delay);
     }
 
     .premium-graph.pg-ready .pg-seq-4 {
-      animation: pgSlideUp 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards 5.1s;
+      animation: pgSlideUp var(--pg-seq-4-duration) cubic-bezier(0.16, 1, 0.3, 1) forwards var(--pg-seq-4-delay);
     }
 
     .premium-graph.pg-ready .pg-seq-5 {
-      animation: pgFadeIn 1s ease forwards 6.5s;
+      animation: pgFadeIn var(--pg-seq-5-duration) ease forwards var(--pg-seq-5-delay);
     }
 
     .premium-graph.pg-ready .pg-seq-6-path {
       stroke-dasharray: 1500;
       stroke-dashoffset: 1500;
-      animation: pgDrawPath 3s cubic-bezier(0.4, 0, 0.2, 1) forwards 6.7s;
+      animation: pgDrawPath var(--pg-seq-6-draw-duration) cubic-bezier(0.4, 0, 0.2, 1) forwards var(--pg-seq-6-draw-delay);
     }
 
     .premium-graph.pg-ready .pg-seq-6-area {
-      animation: pgFadeIn 2.2s ease forwards 8.2s;
+      animation: pgFadeIn var(--pg-seq-6-area-duration) ease forwards var(--pg-seq-6-area-delay);
     }
 
     .premium-graph.pg-ready .pg-seq-7 {
-      animation: pgFadeIn 0.9s ease forwards 10.4s;
+      animation: pgFadeIn var(--pg-seq-7-duration) ease forwards var(--pg-seq-7-delay);
     }
 
     .premium-graph.pg-ready .pg-seq-8 {
-      animation: pgFadeIn 0.8s ease forwards 11s;
+      animation: pgFadeIn var(--pg-seq-8-duration) ease forwards var(--pg-seq-8-delay);
     }
 
     /* Premium SVG container */
@@ -1581,6 +1607,7 @@
       line-height: 1.4;
       margin-top: 0.3rem;
     }
+
     /* ===== CASE (UTN) ===== */
     .case-shell {
       gap: 1.5rem;
@@ -1675,13 +1702,16 @@
       gap: 0.2rem;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 10px 20px rgba(0,0,0,0.15);
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
     }
 
     .case-stat-card::before {
       content: "";
       position: absolute;
-      left: 0; top: 0; bottom: 0; width: 4px;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
       background: rgba(255, 255, 255, 0.1);
     }
 
@@ -1797,7 +1827,9 @@
     }
 
     @keyframes drawSpikePath {
-      to { stroke-dashoffset: 0; }
+      to {
+        stroke-dashoffset: 0;
+      }
     }
 
     .metric-row {
@@ -1915,17 +1947,24 @@
       min-height: auto;
       display: grid;
       grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto;
+      grid-template-rows: auto;
       justify-items: center;
       align-content: center;
-      gap: 0.3rem;
+      gap: 0;
       padding: 1.4rem 1.2rem;
       flex: 1;
+      text-align: center;
     }
 
     .market-card .metric-label {
-      font-size: clamp(1.2rem, 2vw, 1.6rem);
-      color: var(--accent);
+      font-family: var(--mono);
+      font-size: clamp(1.08rem, 1.7vw, 1.42rem);
+      font-weight: 700;
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      text-transform: none;
+      color: rgba(244, 247, 250, 0.82);
+      text-align: center;
     }
 
     .market-card .market-value {
@@ -2039,8 +2078,13 @@
       text-transform: uppercase;
     }
 
-    .fund-name { color: var(--text-2); }
-    .fund-pct { color: var(--accent); }
+    .fund-name {
+      color: var(--text-2);
+    }
+
+    .fund-pct {
+      color: var(--accent);
+    }
 
     .fund-bar-bg {
       width: 100%;
@@ -2060,7 +2104,9 @@
     }
 
     @keyframes fillBar {
-      to { transform: scaleX(1); }
+      to {
+        transform: scaleX(1);
+      }
     }
 
     .round-timeline {
@@ -2160,11 +2206,11 @@
       gap: 1rem;
     }
 
-    .close-slide-v2 > .close-mark,
-    .close-slide-v2 > .slide-title,
-    .close-slide-v2 > .slide-subtitle,
-    .close-slide-v2 > .cta-row,
-    .close-slide-v2 > .close-footer {
+    .close-slide-v2>.close-mark,
+    .close-slide-v2>.slide-title,
+    .close-slide-v2>.slide-subtitle,
+    .close-slide-v2>.cta-row,
+    .close-slide-v2>.close-footer {
       display: none;
     }
 
@@ -2684,7 +2730,9 @@
               <h2 class="slide-title wide proposal-title" data-anim="up" style="--delay: 0.14s;"><span
                   class="title-line">El pico</span><span class="title-line">define el <span
                     class="accent">costo</span></span></h2>
-              <p class="slide-subtitle proposal-subtitle" data-anim="fade" style="--delay: 0.28s;">Cuando la demanda se concentra en una zona cr&iacute;tica, la curva muestra d&oacute;nde se encarece la operaci&oacute;n y d&oacute;nde PicoCERO puede intervenir.</p>
+              <p class="slide-subtitle proposal-subtitle" data-anim="fade" style="--delay: 0.28s;">Cuando la demanda se
+                concentra en una zona cr&iacute;tica, la curva muestra d&oacute;nde se encarece la operaci&oacute;n y
+                d&oacute;nde PicoCERO puede intervenir.</p>
             </div>
 
             <div class="premium-graph" data-anim="fade" style="--delay: 0.42s;"
@@ -2784,10 +2832,13 @@
                   stroke-linecap="round" />
 
                 <g class="pg-anim pg-seq-7">
-                  <path d="M 610 112 L 610 244" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="6 6" fill="none" />
-                  <polygon points="603,238 617,238 610,252" fill="var(--accent)" />
-                  <rect x="632" y="152" width="186" height="36" rx="6" fill="rgba(6, 182, 212, 0.12)" stroke="rgba(6, 182, 212, 0.48)" stroke-width="1.2" />
-                  <text x="725" y="176" fill="var(--accent)" font-family="var(--mono)" font-size="14" font-weight="700" text-anchor="middle" letter-spacing="1.1">PICO REDUCIDO</text>
+                  <line data-pg-peak-line x1="610" y1="76" x2="610" y2="244" stroke="var(--accent)" stroke-width="2.5"
+                    stroke-dasharray="6 6" />
+                  <polygon data-pg-peak-arrow points="603,238 617,238 610,252" fill="var(--accent)" />
+                  <rect data-pg-peak-box x="520" y="40" width="186" height="36" rx="6" fill="rgba(6, 182, 212, 0.12)"
+                    stroke="rgba(6, 182, 212, 0.48)" stroke-width="1.2" />
+                  <text data-pg-peak-text x="620" y="65" fill="var(--accent)" font-family="var(--mono)" font-size="14"
+                    font-weight="700" text-anchor="middle" letter-spacing="1.1">PICO REDUCIDO</text>
                 </g>
 
               </svg>
@@ -2822,7 +2873,8 @@
         <div class="slide-shell center-shell">
 
           <h2 class="slide-title wide" data-anim="up" style="--delay: 0.14s;">As&iacute; atacamos el problema</h2>
-          <p class="slide-subtitle" data-anim="fade" style="--delay: 0.28s;">Integramos medici&oacute;n m&iacute;nima, construimos referencia, detectamos desv&iacute;os y demostramos ahorro verificable.</p>
+          <p class="slide-subtitle" data-anim="fade" style="--delay: 0.28s;">Integramos medici&oacute;n m&iacute;nima,
+            construimos referencia, detectamos desv&iacute;os y demostramos ahorro verificable.</p>
 
           <div class="solution-grid">
             <article class="solution-card cyan-accent" data-anim="stagger" style="--delay: 0.46s;">
@@ -2919,8 +2971,8 @@
       <section class="slide" data-label="Caso UTN-FRSR">
         <div class="slide-shell case-shell">
 
-          <h2 class="slide-title wide" data-anim="up" style="--delay: 0.14s;">Piloto confirmado<br><span
-              class="accent">UTN-FRSR</span></h2>
+          <h2 class="slide-title wide title-wide-fit" data-anim="up" style="--delay: 0.14s;">
+            Piloto&nbsp;confirmado<br><span class="accent">UTN-FRSR</span></h2>
           <p class="slide-subtitle" data-anim="fade" style="--delay: 0.28s;">Nuestro primer caso real para validar si la
             propuesta puede pasar de hip&oacute;tesis a evidencia &uacute;til para direcci&oacute;n e inversores.</p>
 
@@ -2936,11 +2988,11 @@
                   aria-label="Gráfico de evolución de facturación">
                   <defs>
                     <linearGradient id="trendGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.18"/>
+                      <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.18" />
                       <stop offset="100%" stop-color="var(--accent)" stop-opacity="0" />
                     </linearGradient>
                     <linearGradient id="spikeGradient" x1="0" y1="0" x2="0" y2="1">
-                      <stop offset="0%" stop-color="var(--danger)" stop-opacity="0.25"/>
+                      <stop offset="0%" stop-color="var(--danger)" stop-opacity="0.25" />
                       <stop offset="100%" stop-color="var(--danger)" stop-opacity="0" />
                     </linearGradient>
                   </defs>
@@ -2951,11 +3003,11 @@
                   <line x1="40" y1="110" x2="480" y2="110" class="reference-line" />
                   <text x="30" y="114" class="axis-label" text-anchor="end">6M</text>
 
-                  <line x1="40" y1="60" x2="480" y2="60" class="reference-line"
-                    stroke="rgba(248, 113, 113, 0.25)" />
+                  <line x1="40" y1="60" x2="480" y2="60" class="reference-line" stroke="rgba(248, 113, 113, 0.25)" />
                   <text x="30" y="64" class="axis-label" text-anchor="end" fill="rgba(248, 113, 113, 0.8)">8M</text>
 
-                  <path d="M 60 190 L 60 140 C 110 140, 110 155, 160 155 C 210 155, 210 130, 260 130 C 310 130, 310 145, 360 145 L 360 190 Z"
+                  <path
+                    d="M 60 190 L 60 140 C 110 140, 110 155, 160 155 C 210 155, 210 130, 260 130 C 310 130, 310 145, 360 145 L 360 190 Z"
                     class="trend-area" />
                   <path d="M 360 190 L 360 145 L 460 60 L 460 190 Z" class="trend-area-spike" />
 
@@ -3004,16 +3056,19 @@
       <section class="slide" data-label="Modelo de negocio">
         <div class="slide-shell">
 
-          <h2 class="slide-title wide" data-anim="up" style="--delay: 0.14s;">Piloto. Implementacion. <span
-              class="accent">Analitica recurrente.</span></h2>
-          <p class="slide-subtitle" data-anim="fade" style="--delay: 0.28s;">Entramos con diagn&oacute;stico, dejamos el sitio integrado y construimos seguimiento continuo por planta.</p>
+          <h2 class="slide-title wide title-wide-fit" data-anim="up" style="--delay: 0.14s;">Piloto. Implementacion.
+            <span class="accent">Analitica&nbsp;recurrente.</span>
+          </h2>
+          <p class="slide-subtitle" data-anim="fade" style="--delay: 0.28s;">Entramos con diagn&oacute;stico, dejamos el
+            sitio integrado y construimos seguimiento continuo por planta.</p>
 
           <div class="model-grid">
             <article class="model-card" data-anim="stagger" style="--delay: 0.46s;">
               <div class="model-index">01</div>
               <svg class="model-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <path d="M12 16h.01"/>
-                <path d="M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"/>
+                <path d="M12 16h.01" />
+                <path
+                  d="M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z" />
               </svg>
               <h3 class="model-name">Piloto</h3>
               <p class="model-text">Medici&oacute;n inicial, lectura del caso y oportunidad visible.</p>
@@ -3022,9 +3077,9 @@
             <article class="model-card" data-anim="stagger" style="--delay: 0.58s;">
               <div class="model-index">02</div>
               <svg class="model-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <rect width="8" height="8" x="3" y="3" rx="2"/>
-                <path d="M7 11v4a2 2 0 0 0 2 2h4"/>
-                <rect width="8" height="8" x="13" y="13" rx="2"/>
+                <rect width="8" height="8" x="3" y="3" rx="2" />
+                <path d="M7 11v4a2 2 0 0 0 2 2h4" />
+                <rect width="8" height="8" x="13" y="13" rx="2" />
               </svg>
               <h3 class="model-name">Implementaci&oacute;n</h3>
               <p class="model-text">Integraci&oacute;n y configuraci&oacute;n base para operar con datos reales.</p>
@@ -3033,9 +3088,9 @@
             <article class="model-card" data-anim="stagger" style="--delay: 0.70s;">
               <div class="model-index">03</div>
               <svg class="model-icon" viewBox="0 0 24 24" aria-hidden="true">
-                <circle cx="12" cy="12" r="10"/>
-                <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8"/>
-                <path d="M12 18V6"/>
+                <circle cx="12" cy="12" r="10" />
+                <path d="M16 8h-6a2 2 0 1 0 0 4h4a2 2 0 1 1 0 4H8" />
+                <path d="M12 18V6" />
               </svg>
               <h3 class="model-name">Anal&iacute;tica</h3>
               <p class="model-text">Alertas, reportes y seguimiento continuo bajo suscripci&oacute;n por planta.</p>
@@ -3047,8 +3102,8 @@
       <section class="slide" data-label="Mercado">
         <div class="slide-shell">
 
-          <h2 class="slide-title wide" data-anim="up" style="--delay: 0.14s;">Cuyo primero.<br><span
-              class="accent">Argentina despu&eacute;s.</span></h2>
+          <h2 class="slide-title wide title-wide-fit" data-anim="up" style="--delay: 0.14s;">Cuyo primero. <span
+              class="accent">Argentina&nbsp;despu&eacute;s.</span></h2>
           <p class="slide-subtitle" data-anim="fade" style="--delay: 0.28s;">Entramos por sectores con gasto alto,
             retorno visible y cercan&iacute;a comercial para validar m&aacute;s r&aacute;pido.</p>
 
@@ -3070,16 +3125,12 @@
             <div class="market-highlights">
               <article class="market-card" data-anim="stagger" style="--delay: 0.58s;">
                 <p class="metric-label">Acceso local</p>
-                <p class="market-text">Menos fricci&oacute;n comercial y m&aacute;s velocidad para abrir primeras
-                  conversaciones.</p>
               </article>
               <article class="market-card" data-anim="stagger" style="--delay: 0.70s;">
                 <p class="metric-label">Dolor econ&oacute;mico visible</p>
-                <p class="market-text">La energ&iacute;a pesa en la operaci&oacute;n y el retorno se entiende r&aacute;pido.</p>
               </article>
               <article class="market-card" data-anim="stagger" style="--delay: 0.82s;">
                 <p class="metric-label">Pilotos m&aacute;s r&aacute;pidos</p>
-                <p class="market-text">La proximidad permite validar, ajustar y volver a vender con menos tiempo muerto.</p>
               </article>
             </div>
           </div>
@@ -3094,8 +3145,8 @@
 
           <div class="round-dashboard" data-anim="fade" style="--delay: 0.32s;">
             <article class="round-hero-block">
-              <p class="round-amount" data-anim="stagger" style="--delay: 0.44s;"
-                data-count="98700" data-prefix="USD " data-decimals="0">USD 0</p>
+              <p class="round-amount" data-anim="stagger" style="--delay: 0.44s;" data-count="98700" data-prefix="USD "
+                data-decimals="0">USD 0</p>
 
               <div class="round-tags" data-anim="fade" style="--delay: 0.56s;">
                 <span class="tag-pill equity">Hasta 3% Equity</span>
@@ -3159,7 +3210,8 @@
                     <span class="tl-amount">USD 29,000</span>
                   </div>
                   <h3 class="tl-title">MVP completo + anal&iacute;tica</h3>
-                  <p class="tl-desc">EnPI, CUSUM, reportes ejecutivos y 500 h de datos con l&iacute;nea de base validada.</p>
+                  <p class="tl-desc">EnPI, CUSUM, reportes ejecutivos y 500 h de datos con l&iacute;nea de base
+                    validada.</p>
                 </div>
               </article>
 
@@ -3184,8 +3236,10 @@
 
           <div class="close-copy">
             <h2 class="slide-title wide" data-anim="up" style="--delay: 0.28s;">Buscamos el siguiente paso
-              <span class="accent">real.</span></h2>
-            <p class="slide-subtitle" data-anim="fade" style="--delay: 0.42s;">Queremos abrir conversaciones con plantas y aliados que puedan acelerar validaci&oacute;n, implementaci&oacute;n y aprendizaje comercial.</p>
+              <span class="accent">real.</span>
+            </h2>
+            <p class="slide-subtitle" data-anim="fade" style="--delay: 0.42s;">Queremos abrir conversaciones con plantas
+              y aliados que puedan acelerar validaci&oacute;n, implementaci&oacute;n y aprendizaje comercial.</p>
 
             <div class="cta-row">
               <article class="cta-card" data-anim="stagger" style="--delay: 0.56s;">
@@ -3194,7 +3248,9 @@
                     <svg viewBox="0 0 24 24">
                       <path d="M12 16h.01"></path>
                       <path d="M16 16h.01"></path>
-                      <path d="M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z"></path>
+                      <path
+                        d="M3 19a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a.5.5 0 0 0-.769-.422l-4.462 2.844A.5.5 0 0 1 15 10.5v-2a.5.5 0 0 0-.769-.422L9.77 10.922A.5.5 0 0 1 9 10.5V5a2 2 0 0 0-2-2H5a2 2 0 0 0-2 2z">
+                      </path>
                       <path d="M8 16h.01"></path>
                     </svg>
                   </div>
@@ -3213,7 +3269,8 @@
                   </div>
                   <h3 class="cta-title">Aliados estrat&eacute;gicos</h3>
                 </div>
-                <p class="cta-text">Colaboradores t&eacute;cnicos, comerciales o institucionales que puedan acercar casos y acelerar implementaci&oacute;n.</p>
+                <p class="cta-text">Colaboradores t&eacute;cnicos, comerciales o institucionales que puedan acercar
+                  casos y acelerar implementaci&oacute;n.</p>
               </article>
             </div>
 
@@ -3223,13 +3280,13 @@
             <div class="qr-block">
               <div class="contact-title">Escanear para ver la landing</div>
               <div class="qr-shell">
-                <a class="qr-link" href="https://nicosgandurra.github.io/PicoCERO-Landing/" target="_blank" rel="noopener" aria-label="Abrir landing de PicoCERO"><svg
-                  xmlns="http://www.w3.org/2000/svg" version="1.1" width="145" height="145" viewBox="0 0 145 145"
-                  aria-hidden="true">
-                  <rect fill="rgb(255, 255, 255)" x="0" y="0" width="145" height="145" />
-                  <path fill="rgb(0, 0, 0)"
-                    d="M 0,0 l 5,0 0,5 -5,0 z M 5,0 l 5,0 0,5 -5,0 z M 10,0 l 5,0 0,5 -5,0 z M 15,0 l 5,0 0,5 -5,0 z M 20,0 l 5,0 0,5 -5,0 z M 25,0 l 5,0 0,5 -5,0 z M 30,0 l 5,0 0,5 -5,0 z M 45,0 l 5,0 0,5 -5,0 z M 90,0 l 5,0 0,5 -5,0 z M 95,0 l 5,0 0,5 -5,0 z M 100,0 l 5,0 0,5 -5,0 z M 110,0 l 5,0 0,5 -5,0 z M 115,0 l 5,0 0,5 -5,0 z M 120,0 l 5,0 0,5 -5,0 z M 125,0 l 5,0 0,5 -5,0 z M 130,0 l 5,0 0,5 -5,0 z M 135,0 l 5,0 0,5 -5,0 z M 140,0 l 5,0 0,5 -5,0 z M 0,5 l 5,0 0,5 -5,0 z M 30,5 l 5,0 0,5 -5,0 z M 40,5 l 5,0 0,5 -5,0 z M 45,5 l 5,0 0,5 -5,0 z M 55,5 l 5,0 0,5 -5,0 z M 75,5 l 5,0 0,5 -5,0 z M 80,5 l 5,0 0,5 -5,0 z M 85,5 l 5,0 0,5 -5,0 z M 110,5 l 5,0 0,5 -5,0 z M 140,5 l 5,0 0,5 -5,0 z M 0,10 l 5,0 0,5 -5,0 z M 10,10 l 5,0 0,5 -5,0 z M 15,10 l 5,0 0,5 -5,0 z M 20,10 l 5,0 0,5 -5,0 z M 30,10 l 5,0 0,5 -5,0 z M 45,10 l 5,0 0,5 -5,0 z M 55,10 l 5,0 0,5 -5,0 z M 60,10 l 5,0 0,5 -5,0 z M 80,10 l 5,0 0,5 -5,0 z M 95,10 l 5,0 0,5 -5,0 z M 100,10 l 5,0 0,5 -5,0 z M 110,10 l 5,0 0,5 -5,0 z M 120,10 l 5,0 0,5 -5,0 z M 125,10 l 5,0 0,5 -5,0 z M 130,10 l 5,0 0,5 -5,0 z M 140,10 l 5,0 0,5 -5,0 z M 0,15 l 5,0 0,5 -5,0 z M 10,15 l 5,0 0,5 -5,0 z M 15,15 l 5,0 0,5 -5,0 z M 20,15 l 5,0 0,5 -5,0 z M 30,15 l 5,0 0,5 -5,0 z M 40,15 l 5,0 0,5 -5,0 z M 45,15 l 5,0 0,5 -5,0 z M 55,15 l 5,0 0,5 -5,0 z M 60,15 l 5,0 0,5 -5,0 z M 65,15 l 5,0 0,5 -5,0 z M 85,15 l 5,0 0,5 -5,0 z M 95,15 l 5,0 0,5 -5,0 z M 110,15 l 5,0 0,5 -5,0 z M 120,15 l 5,0 0,5 -5,0 z M 125,15 l 5,0 0,5 -5,0 z M 130,15 l 5,0 0,5 -5,0 z M 140,15 l 5,0 0,5 -5,0 z M 0,20 l 5,0 0,5 -5,0 z M 10,20 l 5,0 0,5 -5,0 z M 15,20 l 5,0 0,5 -5,0 z M 20,20 l 5,0 0,5 -5,0 z M 30,20 l 5,0 0,5 -5,0 z M 70,20 l 5,0 0,5 -5,0 z M 80,20 l 5,0 0,5 -5,0 z M 85,20 l 5,0 0,5 -5,0 z M 90,20 l 5,0 0,5 -5,0 z M 95,20 l 5,0 0,5 -5,0 z M 110,20 l 5,0 0,5 -5,0 z M 120,20 l 5,0 0,5 -5,0 z M 125,20 l 5,0 0,5 -5,0 z M 130,20 l 5,0 0,5 -5,0 z M 140,20 l 5,0 0,5 -5,0 z M 0,25 l 5,0 0,5 -5,0 z M 30,25 l 5,0 0,5 -5,0 z M 40,25 l 5,0 0,5 -5,0 z M 50,25 l 5,0 0,5 -5,0 z M 55,25 l 5,0 0,5 -5,0 z M 65,25 l 5,0 0,5 -5,0 z M 75,25 l 5,0 0,5 -5,0 z M 80,25 l 5,0 0,5 -5,0 z M 90,25 l 5,0 0,5 -5,0 z M 100,25 l 5,0 0,5 -5,0 z M 110,25 l 5,0 0,5 -5,0 z M 140,25 l 5,0 0,5 -5,0 z M 0,30 l 5,0 0,5 -5,0 z M 5,30 l 5,0 0,5 -5,0 z M 10,30 l 5,0 0,5 -5,0 z M 15,30 l 5,0 0,5 -5,0 z M 20,30 l 5,0 0,5 -5,0 z M 25,30 l 5,0 0,5 -5,0 z M 30,30 l 5,0 0,5 -5,0 z M 40,30 l 5,0 0,5 -5,0 z M 50,30 l 5,0 0,5 -5,0 z M 60,30 l 5,0 0,5 -5,0 z M 70,30 l 5,0 0,5 -5,0 z M 80,30 l 5,0 0,5 -5,0 z M 90,30 l 5,0 0,5 -5,0 z M 100,30 l 5,0 0,5 -5,0 z M 110,30 l 5,0 0,5 -5,0 z M 115,30 l 5,0 0,5 -5,0 z M 120,30 l 5,0 0,5 -5,0 z M 125,30 l 5,0 0,5 -5,0 z M 130,30 l 5,0 0,5 -5,0 z M 135,30 l 5,0 0,5 -5,0 z M 140,30 l 5,0 0,5 -5,0 z M 60,35 l 5,0 0,5 -5,0 z M 0,40 l 5,0 0,5 -5,0 z M 5,40 l 5,0 0,5 -5,0 z M 10,40 l 5,0 0,5 -5,0 z M 15,40 l 5,0 0,5 -5,0 z M 20,40 l 5,0 0,5 -5,0 z M 30,40 l 5,0 0,5 -5,0 z M 35,40 l 5,0 0,5 -5,0 z M 40,40 l 5,0 0,5 -5,0 z M 45,40 l 5,0 0,5 -5,0 z M 50,40 l 5,0 0,5 -5,0 z M 55,40 l 5,0 0,5 -5,0 z M 65,40 l 5,0 0,5 -5,0 z M 75,40 l 5,0 0,5 -5,0 z M 85,40 l 5,0 0,5 -5,0 z M 105,40 l 5,0 0,5 -5,0 z M 115,40 l 5,0 0,5 -5,0 z M 125,40 l 5,0 0,5 -5,0 z M 135,40 l 5,0 0,5 -5,0 z M 0,45 l 5,0 0,5 -5,0 z M 5,45 l 5,0 0,5 -5,0 z M 15,45 l 5,0 0,5 -5,0 z M 20,45 l 5,0 0,5 -5,0 z M 25,45 l 5,0 0,5 -5,0 z M 40,45 l 5,0 0,5 -5,0 z M 45,45 l 5,0 0,5 -5,0 z M 60,45 l 5,0 0,5 -5,0 z M 65,45 l 5,0 0,5 -5,0 z M 80,45 l 5,0 0,5 -5,0 z M 95,45 l 5,0 0,5 -5,0 z M 100,45 l 5,0 0,5 -5,0 z M 110,45 l 5,0 0,5 -5,0 z M 115,45 l 5,0 0,5 -5,0 z M 120,45 l 5,0 0,5 -5,0 z M 140,45 l 5,0 0,5 -5,0 z M 0,50 l 5,0 0,5 -5,0 z M 10,50 l 5,0 0,5 -5,0 z M 30,50 l 5,0 0,5 -5,0 z M 45,50 l 5,0 0,5 -5,0 z M 55,50 l 5,0 0,5 -5,0 z M 65,50 l 5,0 0,5 -5,0 z M 75,50 l 5,0 0,5 -5,0 z M 80,50 l 5,0 0,5 -5,0 z M 105,50 l 5,0 0,5 -5,0 z M 115,50 l 5,0 0,5 -5,0 z M 15,55 l 5,0 0,5 -5,0 z M 45,55 l 5,0 0,5 -5,0 z M 50,55 l 5,0 0,5 -5,0 z M 55,55 l 5,0 0,5 -5,0 z M 60,55 l 5,0 0,5 -5,0 z M 65,55 l 5,0 0,5 -5,0 z M 75,55 l 5,0 0,5 -5,0 z M 90,55 l 5,0 0,5 -5,0 z M 95,55 l 5,0 0,5 -5,0 z M 110,55 l 5,0 0,5 -5,0 z M 115,55 l 5,0 0,5 -5,0 z M 125,55 l 5,0 0,5 -5,0 z M 135,55 l 5,0 0,5 -5,0 z M 5,60 l 5,0 0,5 -5,0 z M 10,60 l 5,0 0,5 -5,0 z M 15,60 l 5,0 0,5 -5,0 z M 20,60 l 5,0 0,5 -5,0 z M 30,60 l 5,0 0,5 -5,0 z M 35,60 l 5,0 0,5 -5,0 z M 45,60 l 5,0 0,5 -5,0 z M 55,60 l 5,0 0,5 -5,0 z M 85,60 l 5,0 0,5 -5,0 z M 100,60 l 5,0 0,5 -5,0 z M 125,60 l 5,0 0,5 -5,0 z M 130,60 l 5,0 0,5 -5,0 z M 0,65 l 5,0 0,5 -5,0 z M 5,65 l 5,0 0,5 -5,0 z M 15,65 l 5,0 0,5 -5,0 z M 35,65 l 5,0 0,5 -5,0 z M 50,65 l 5,0 0,5 -5,0 z M 65,65 l 5,0 0,5 -5,0 z M 70,65 l 5,0 0,5 -5,0 z M 80,65 l 5,0 0,5 -5,0 z M 85,65 l 5,0 0,5 -5,0 z M 90,65 l 5,0 0,5 -5,0 z M 95,65 l 5,0 0,5 -5,0 z M 100,65 l 5,0 0,5 -5,0 z M 105,65 l 5,0 0,5 -5,0 z M 110,65 l 5,0 0,5 -5,0 z M 115,65 l 5,0 0,5 -5,0 z M 120,65 l 5,0 0,5 -5,0 z M 140,65 l 5,0 0,5 -5,0 z M 0,70 l 5,0 0,5 -5,0 z M 10,70 l 5,0 0,5 -5,0 z M 15,70 l 5,0 0,5 -5,0 z M 30,70 l 5,0 0,5 -5,0 z M 40,70 l 5,0 0,5 -5,0 z M 45,70 l 5,0 0,5 -5,0 z M 50,70 l 5,0 0,5 -5,0 z M 60,70 l 5,0 0,5 -5,0 z M 65,70 l 5,0 0,5 -5,0 z M 75,70 l 5,0 0,5 -5,0 z M 90,70 l 5,0 0,5 -5,0 z M 115,70 l 5,0 0,5 -5,0 z M 125,70 l 5,0 0,5 -5,0 z M 130,70 l 5,0 0,5 -5,0 z M 5,75 l 5,0 0,5 -5,0 z M 15,75 l 5,0 0,5 -5,0 z M 20,75 l 5,0 0,5 -5,0 z M 25,75 l 5,0 0,5 -5,0 z M 40,75 l 5,0 0,5 -5,0 z M 50,75 l 5,0 0,5 -5,0 z M 55,75 l 5,0 0,5 -5,0 z M 60,75 l 5,0 0,5 -5,0 z M 65,75 l 5,0 0,5 -5,0 z M 75,75 l 5,0 0,5 -5,0 z M 90,75 l 5,0 0,5 -5,0 z M 95,75 l 5,0 0,5 -5,0 z M 110,75 l 5,0 0,5 -5,0 z M 120,75 l 5,0 0,5 -5,0 z M 135,75 l 5,0 0,5 -5,0 z M 0,80 l 5,0 0,5 -5,0 z M 5,80 l 5,0 0,5 -5,0 z M 15,80 l 5,0 0,5 -5,0 z M 20,80 l 5,0 0,5 -5,0 z M 25,80 l 5,0 0,5 -5,0 z M 30,80 l 5,0 0,5 -5,0 z M 45,80 l 5,0 0,5 -5,0 z M 50,80 l 5,0 0,5 -5,0 z M 55,80 l 5,0 0,5 -5,0 z M 65,80 l 5,0 0,5 -5,0 z M 70,80 l 5,0 0,5 -5,0 z M 75,80 l 5,0 0,5 -5,0 z M 80,80 l 5,0 0,5 -5,0 z M 85,80 l 5,0 0,5 -5,0 z M 100,80 l 5,0 0,5 -5,0 z M 125,80 l 5,0 0,5 -5,0 z M 130,80 l 5,0 0,5 -5,0 z M 0,85 l 5,0 0,5 -5,0 z M 40,85 l 5,0 0,5 -5,0 z M 45,85 l 5,0 0,5 -5,0 z M 60,85 l 5,0 0,5 -5,0 z M 65,85 l 5,0 0,5 -5,0 z M 70,85 l 5,0 0,5 -5,0 z M 75,85 l 5,0 0,5 -5,0 z M 80,85 l 5,0 0,5 -5,0 z M 95,85 l 5,0 0,5 -5,0 z M 100,85 l 5,0 0,5 -5,0 z M 105,85 l 5,0 0,5 -5,0 z M 110,85 l 5,0 0,5 -5,0 z M 115,85 l 5,0 0,5 -5,0 z M 120,85 l 5,0 0,5 -5,0 z M 130,85 l 5,0 0,5 -5,0 z M 140,85 l 5,0 0,5 -5,0 z M 0,90 l 5,0 0,5 -5,0 z M 10,90 l 5,0 0,5 -5,0 z M 30,90 l 5,0 0,5 -5,0 z M 35,90 l 5,0 0,5 -5,0 z M 40,90 l 5,0 0,5 -5,0 z M 70,90 l 5,0 0,5 -5,0 z M 75,90 l 5,0 0,5 -5,0 z M 80,90 l 5,0 0,5 -5,0 z M 100,90 l 5,0 0,5 -5,0 z M 105,90 l 5,0 0,5 -5,0 z M 115,90 l 5,0 0,5 -5,0 z M 120,90 l 5,0 0,5 -5,0 z M 130,90 l 5,0 0,5 -5,0 z M 0,95 l 5,0 0,5 -5,0 z M 10,95 l 5,0 0,5 -5,0 z M 20,95 l 5,0 0,5 -5,0 z M 50,95 l 5,0 0,5 -5,0 z M 60,95 l 5,0 0,5 -5,0 z M 70,95 l 5,0 0,5 -5,0 z M 80,95 l 5,0 0,5 -5,0 z M 100,95 l 5,0 0,5 -5,0 z M 135,95 l 5,0 0,5 -5,0 z M 0,100 l 5,0 0,5 -5,0 z M 10,100 l 5,0 0,5 -5,0 z M 25,100 l 5,0 0,5 -5,0 z M 30,100 l 5,0 0,5 -5,0 z M 40,100 l 5,0 0,5 -5,0 z M 55,100 l 5,0 0,5 -5,0 z M 65,100 l 5,0 0,5 -5,0 z M 85,100 l 5,0 0,5 -5,0 z M 100,100 l 5,0 0,5 -5,0 z M 105,100 l 5,0 0,5 -5,0 z M 110,100 l 5,0 0,5 -5,0 z M 115,100 l 5,0 0,5 -5,0 z M 120,100 l 5,0 0,5 -5,0 z M 130,100 l 5,0 0,5 -5,0 z M 135,100 l 5,0 0,5 -5,0 z M 140,100 l 5,0 0,5 -5,0 z M 40,105 l 5,0 0,5 -5,0 z M 60,105 l 5,0 0,5 -5,0 z M 65,105 l 5,0 0,5 -5,0 z M 90,105 l 5,0 0,5 -5,0 z M 95,105 l 5,0 0,5 -5,0 z M 100,105 l 5,0 0,5 -5,0 z M 120,105 l 5,0 0,5 -5,0 z M 125,105 l 5,0 0,5 -5,0 z M 130,105 l 5,0 0,5 -5,0 z M 135,105 l 5,0 0,5 -5,0 z M 140,105 l 5,0 0,5 -5,0 z M 0,110 l 5,0 0,5 -5,0 z M 5,110 l 5,0 0,5 -5,0 z M 10,110 l 5,0 0,5 -5,0 z M 15,110 l 5,0 0,5 -5,0 z M 20,110 l 5,0 0,5 -5,0 z M 25,110 l 5,0 0,5 -5,0 z M 30,110 l 5,0 0,5 -5,0 z M 40,110 l 5,0 0,5 -5,0 z M 45,110 l 5,0 0,5 -5,0 z M 55,110 l 5,0 0,5 -5,0 z M 75,110 l 5,0 0,5 -5,0 z M 80,110 l 5,0 0,5 -5,0 z M 85,110 l 5,0 0,5 -5,0 z M 90,110 l 5,0 0,5 -5,0 z M 95,110 l 5,0 0,5 -5,0 z M 100,110 l 5,0 0,5 -5,0 z M 110,110 l 5,0 0,5 -5,0 z M 120,110 l 5,0 0,5 -5,0 z M 125,110 l 5,0 0,5 -5,0 z M 130,110 l 5,0 0,5 -5,0 z M 0,115 l 5,0 0,5 -5,0 z M 30,115 l 5,0 0,5 -5,0 z M 45,115 l 5,0 0,5 -5,0 z M 50,115 l 5,0 0,5 -5,0 z M 55,115 l 5,0 0,5 -5,0 z M 60,115 l 5,0 0,5 -5,0 z M 70,115 l 5,0 0,5 -5,0 z M 80,115 l 5,0 0,5 -5,0 z M 90,115 l 5,0 0,5 -5,0 z M 95,115 l 5,0 0,5 -5,0 z M 100,115 l 5,0 0,5 -5,0 z M 120,115 l 5,0 0,5 -5,0 z M 135,115 l 5,0 0,5 -5,0 z M 0,120 l 5,0 0,5 -5,0 z M 10,120 l 5,0 0,5 -5,0 z M 15,120 l 5,0 0,5 -5,0 z M 20,120 l 5,0 0,5 -5,0 z M 30,120 l 5,0 0,5 -5,0 z M 40,120 l 5,0 0,5 -5,0 z M 45,120 l 5,0 0,5 -5,0 z M 55,120 l 5,0 0,5 -5,0 z M 85,120 l 5,0 0,5 -5,0 z M 90,120 l 5,0 0,5 -5,0 z M 100,120 l 5,0 0,5 -5,0 z M 105,120 l 5,0 0,5 -5,0 z M 110,120 l 5,0 0,5 -5,0 z M 115,120 l 5,0 0,5 -5,0 z M 120,120 l 5,0 0,5 -5,0 z M 130,120 l 5,0 0,5 -5,0 z M 0,125 l 5,0 0,5 -5,0 z M 10,125 l 5,0 0,5 -5,0 z M 15,125 l 5,0 0,5 -5,0 z M 20,125 l 5,0 0,5 -5,0 z M 30,125 l 5,0 0,5 -5,0 z M 40,125 l 5,0 0,5 -5,0 z M 50,125 l 5,0 0,5 -5,0 z M 80,125 l 5,0 0,5 -5,0 z M 85,125 l 5,0 0,5 -5,0 z M 90,125 l 5,0 0,5 -5,0 z M 125,125 l 5,0 0,5 -5,0 z M 130,125 l 5,0 0,5 -5,0 z M 135,125 l 5,0 0,5 -5,0 z M 140,125 l 5,0 0,5 -5,0 z M 0,130 l 5,0 0,5 -5,0 z M 10,130 l 5,0 0,5 -5,0 z M 15,130 l 5,0 0,5 -5,0 z M 20,130 l 5,0 0,5 -5,0 z M 30,130 l 5,0 0,5 -5,0 z M 40,130 l 5,0 0,5 -5,0 z M 45,130 l 5,0 0,5 -5,0 z M 50,130 l 5,0 0,5 -5,0 z M 60,130 l 5,0 0,5 -5,0 z M 75,130 l 5,0 0,5 -5,0 z M 80,130 l 5,0 0,5 -5,0 z M 85,130 l 5,0 0,5 -5,0 z M 95,130 l 5,0 0,5 -5,0 z M 105,130 l 5,0 0,5 -5,0 z M 110,130 l 5,0 0,5 -5,0 z M 115,130 l 5,0 0,5 -5,0 z M 120,130 l 5,0 0,5 -5,0 z M 125,130 l 5,0 0,5 -5,0 z M 130,130 l 5,0 0,5 -5,0 z M 135,130 l 5,0 0,5 -5,0 z M 0,135 l 5,0 0,5 -5,0 z M 30,135 l 5,0 0,5 -5,0 z M 40,135 l 5,0 0,5 -5,0 z M 45,135 l 5,0 0,5 -5,0 z M 60,135 l 5,0 0,5 -5,0 z M 65,135 l 5,0 0,5 -5,0 z M 70,135 l 5,0 0,5 -5,0 z M 75,135 l 5,0 0,5 -5,0 z M 90,135 l 5,0 0,5 -5,0 z M 100,135 l 5,0 0,5 -5,0 z M 110,135 l 5,0 0,5 -5,0 z M 125,135 l 5,0 0,5 -5,0 z M 135,135 l 5,0 0,5 -5,0 z M 0,140 l 5,0 0,5 -5,0 z M 5,140 l 5,0 0,5 -5,0 z M 10,140 l 5,0 0,5 -5,0 z M 15,140 l 5,0 0,5 -5,0 z M 20,140 l 5,0 0,5 -5,0 z M 25,140 l 5,0 0,5 -5,0 z M 30,140 l 5,0 0,5 -5,0 z M 40,140 l 5,0 0,5 -5,0 z M 45,140 l 5,0 0,5 -5,0 z M 50,140 l 5,0 0,5 -5,0 z M 55,140 l 5,0 0,5 -5,0 z M 70,140 l 5,0 0,5 -5,0 z M 85,140 l 5,0 0,5 -5,0 z M 95,140 l 5,0 0,5 -5,0 z M 105,140 l 5,0 0,5 -5,0 z M 110,140 l 5,0 0,5 -5,0 z M 115,140 l 5,0 0,5 -5,0 z M 130,140 l 5,0 0,5 -5,0 z" />
-                </svg></a>
+                <a class="qr-link" href="https://nicosgandurra.github.io/PicoCERO-Landing/" target="_blank"
+                  rel="noopener" aria-label="Abrir landing de PicoCERO"><svg xmlns="http://www.w3.org/2000/svg"
+                    version="1.1" width="145" height="145" viewBox="0 0 145 145" aria-hidden="true">
+                    <rect fill="rgb(255, 255, 255)" x="0" y="0" width="145" height="145" />
+                    <path fill="rgb(0, 0, 0)"
+                      d="M 0,0 l 5,0 0,5 -5,0 z M 5,0 l 5,0 0,5 -5,0 z M 10,0 l 5,0 0,5 -5,0 z M 15,0 l 5,0 0,5 -5,0 z M 20,0 l 5,0 0,5 -5,0 z M 25,0 l 5,0 0,5 -5,0 z M 30,0 l 5,0 0,5 -5,0 z M 45,0 l 5,0 0,5 -5,0 z M 90,0 l 5,0 0,5 -5,0 z M 95,0 l 5,0 0,5 -5,0 z M 100,0 l 5,0 0,5 -5,0 z M 110,0 l 5,0 0,5 -5,0 z M 115,0 l 5,0 0,5 -5,0 z M 120,0 l 5,0 0,5 -5,0 z M 125,0 l 5,0 0,5 -5,0 z M 130,0 l 5,0 0,5 -5,0 z M 135,0 l 5,0 0,5 -5,0 z M 140,0 l 5,0 0,5 -5,0 z M 0,5 l 5,0 0,5 -5,0 z M 30,5 l 5,0 0,5 -5,0 z M 40,5 l 5,0 0,5 -5,0 z M 45,5 l 5,0 0,5 -5,0 z M 55,5 l 5,0 0,5 -5,0 z M 75,5 l 5,0 0,5 -5,0 z M 80,5 l 5,0 0,5 -5,0 z M 85,5 l 5,0 0,5 -5,0 z M 110,5 l 5,0 0,5 -5,0 z M 140,5 l 5,0 0,5 -5,0 z M 0,10 l 5,0 0,5 -5,0 z M 10,10 l 5,0 0,5 -5,0 z M 15,10 l 5,0 0,5 -5,0 z M 20,10 l 5,0 0,5 -5,0 z M 30,10 l 5,0 0,5 -5,0 z M 45,10 l 5,0 0,5 -5,0 z M 55,10 l 5,0 0,5 -5,0 z M 60,10 l 5,0 0,5 -5,0 z M 80,10 l 5,0 0,5 -5,0 z M 95,10 l 5,0 0,5 -5,0 z M 100,10 l 5,0 0,5 -5,0 z M 110,10 l 5,0 0,5 -5,0 z M 120,10 l 5,0 0,5 -5,0 z M 125,10 l 5,0 0,5 -5,0 z M 130,10 l 5,0 0,5 -5,0 z M 140,10 l 5,0 0,5 -5,0 z M 0,15 l 5,0 0,5 -5,0 z M 10,15 l 5,0 0,5 -5,0 z M 15,15 l 5,0 0,5 -5,0 z M 20,15 l 5,0 0,5 -5,0 z M 30,15 l 5,0 0,5 -5,0 z M 40,15 l 5,0 0,5 -5,0 z M 45,15 l 5,0 0,5 -5,0 z M 55,15 l 5,0 0,5 -5,0 z M 60,15 l 5,0 0,5 -5,0 z M 65,15 l 5,0 0,5 -5,0 z M 85,15 l 5,0 0,5 -5,0 z M 95,15 l 5,0 0,5 -5,0 z M 110,15 l 5,0 0,5 -5,0 z M 120,15 l 5,0 0,5 -5,0 z M 125,15 l 5,0 0,5 -5,0 z M 130,15 l 5,0 0,5 -5,0 z M 140,15 l 5,0 0,5 -5,0 z M 0,20 l 5,0 0,5 -5,0 z M 10,20 l 5,0 0,5 -5,0 z M 15,20 l 5,0 0,5 -5,0 z M 20,20 l 5,0 0,5 -5,0 z M 30,20 l 5,0 0,5 -5,0 z M 70,20 l 5,0 0,5 -5,0 z M 80,20 l 5,0 0,5 -5,0 z M 85,20 l 5,0 0,5 -5,0 z M 90,20 l 5,0 0,5 -5,0 z M 95,20 l 5,0 0,5 -5,0 z M 110,20 l 5,0 0,5 -5,0 z M 120,20 l 5,0 0,5 -5,0 z M 125,20 l 5,0 0,5 -5,0 z M 130,20 l 5,0 0,5 -5,0 z M 140,20 l 5,0 0,5 -5,0 z M 0,25 l 5,0 0,5 -5,0 z M 30,25 l 5,0 0,5 -5,0 z M 40,25 l 5,0 0,5 -5,0 z M 50,25 l 5,0 0,5 -5,0 z M 55,25 l 5,0 0,5 -5,0 z M 65,25 l 5,0 0,5 -5,0 z M 75,25 l 5,0 0,5 -5,0 z M 80,25 l 5,0 0,5 -5,0 z M 90,25 l 5,0 0,5 -5,0 z M 100,25 l 5,0 0,5 -5,0 z M 110,25 l 5,0 0,5 -5,0 z M 140,25 l 5,0 0,5 -5,0 z M 0,30 l 5,0 0,5 -5,0 z M 5,30 l 5,0 0,5 -5,0 z M 10,30 l 5,0 0,5 -5,0 z M 15,30 l 5,0 0,5 -5,0 z M 20,30 l 5,0 0,5 -5,0 z M 25,30 l 5,0 0,5 -5,0 z M 30,30 l 5,0 0,5 -5,0 z M 40,30 l 5,0 0,5 -5,0 z M 50,30 l 5,0 0,5 -5,0 z M 60,30 l 5,0 0,5 -5,0 z M 70,30 l 5,0 0,5 -5,0 z M 80,30 l 5,0 0,5 -5,0 z M 90,30 l 5,0 0,5 -5,0 z M 100,30 l 5,0 0,5 -5,0 z M 110,30 l 5,0 0,5 -5,0 z M 115,30 l 5,0 0,5 -5,0 z M 120,30 l 5,0 0,5 -5,0 z M 125,30 l 5,0 0,5 -5,0 z M 130,30 l 5,0 0,5 -5,0 z M 135,30 l 5,0 0,5 -5,0 z M 140,30 l 5,0 0,5 -5,0 z M 60,35 l 5,0 0,5 -5,0 z M 0,40 l 5,0 0,5 -5,0 z M 5,40 l 5,0 0,5 -5,0 z M 10,40 l 5,0 0,5 -5,0 z M 15,40 l 5,0 0,5 -5,0 z M 20,40 l 5,0 0,5 -5,0 z M 30,40 l 5,0 0,5 -5,0 z M 35,40 l 5,0 0,5 -5,0 z M 40,40 l 5,0 0,5 -5,0 z M 45,40 l 5,0 0,5 -5,0 z M 50,40 l 5,0 0,5 -5,0 z M 55,40 l 5,0 0,5 -5,0 z M 65,40 l 5,0 0,5 -5,0 z M 75,40 l 5,0 0,5 -5,0 z M 85,40 l 5,0 0,5 -5,0 z M 105,40 l 5,0 0,5 -5,0 z M 115,40 l 5,0 0,5 -5,0 z M 125,40 l 5,0 0,5 -5,0 z M 135,40 l 5,0 0,5 -5,0 z M 0,45 l 5,0 0,5 -5,0 z M 5,45 l 5,0 0,5 -5,0 z M 15,45 l 5,0 0,5 -5,0 z M 20,45 l 5,0 0,5 -5,0 z M 25,45 l 5,0 0,5 -5,0 z M 40,45 l 5,0 0,5 -5,0 z M 45,45 l 5,0 0,5 -5,0 z M 60,45 l 5,0 0,5 -5,0 z M 65,45 l 5,0 0,5 -5,0 z M 80,45 l 5,0 0,5 -5,0 z M 95,45 l 5,0 0,5 -5,0 z M 100,45 l 5,0 0,5 -5,0 z M 110,45 l 5,0 0,5 -5,0 z M 115,45 l 5,0 0,5 -5,0 z M 120,45 l 5,0 0,5 -5,0 z M 140,45 l 5,0 0,5 -5,0 z M 0,50 l 5,0 0,5 -5,0 z M 10,50 l 5,0 0,5 -5,0 z M 30,50 l 5,0 0,5 -5,0 z M 45,50 l 5,0 0,5 -5,0 z M 55,50 l 5,0 0,5 -5,0 z M 65,50 l 5,0 0,5 -5,0 z M 75,50 l 5,0 0,5 -5,0 z M 80,50 l 5,0 0,5 -5,0 z M 105,50 l 5,0 0,5 -5,0 z M 115,50 l 5,0 0,5 -5,0 z M 15,55 l 5,0 0,5 -5,0 z M 45,55 l 5,0 0,5 -5,0 z M 50,55 l 5,0 0,5 -5,0 z M 55,55 l 5,0 0,5 -5,0 z M 60,55 l 5,0 0,5 -5,0 z M 65,55 l 5,0 0,5 -5,0 z M 75,55 l 5,0 0,5 -5,0 z M 90,55 l 5,0 0,5 -5,0 z M 95,55 l 5,0 0,5 -5,0 z M 110,55 l 5,0 0,5 -5,0 z M 115,55 l 5,0 0,5 -5,0 z M 125,55 l 5,0 0,5 -5,0 z M 135,55 l 5,0 0,5 -5,0 z M 5,60 l 5,0 0,5 -5,0 z M 10,60 l 5,0 0,5 -5,0 z M 15,60 l 5,0 0,5 -5,0 z M 20,60 l 5,0 0,5 -5,0 z M 30,60 l 5,0 0,5 -5,0 z M 35,60 l 5,0 0,5 -5,0 z M 45,60 l 5,0 0,5 -5,0 z M 55,60 l 5,0 0,5 -5,0 z M 85,60 l 5,0 0,5 -5,0 z M 100,60 l 5,0 0,5 -5,0 z M 125,60 l 5,0 0,5 -5,0 z M 130,60 l 5,0 0,5 -5,0 z M 0,65 l 5,0 0,5 -5,0 z M 5,65 l 5,0 0,5 -5,0 z M 15,65 l 5,0 0,5 -5,0 z M 35,65 l 5,0 0,5 -5,0 z M 50,65 l 5,0 0,5 -5,0 z M 65,65 l 5,0 0,5 -5,0 z M 70,65 l 5,0 0,5 -5,0 z M 80,65 l 5,0 0,5 -5,0 z M 85,65 l 5,0 0,5 -5,0 z M 90,65 l 5,0 0,5 -5,0 z M 95,65 l 5,0 0,5 -5,0 z M 100,65 l 5,0 0,5 -5,0 z M 105,65 l 5,0 0,5 -5,0 z M 110,65 l 5,0 0,5 -5,0 z M 115,65 l 5,0 0,5 -5,0 z M 120,65 l 5,0 0,5 -5,0 z M 140,65 l 5,0 0,5 -5,0 z M 0,70 l 5,0 0,5 -5,0 z M 10,70 l 5,0 0,5 -5,0 z M 15,70 l 5,0 0,5 -5,0 z M 30,70 l 5,0 0,5 -5,0 z M 40,70 l 5,0 0,5 -5,0 z M 45,70 l 5,0 0,5 -5,0 z M 50,70 l 5,0 0,5 -5,0 z M 60,70 l 5,0 0,5 -5,0 z M 65,70 l 5,0 0,5 -5,0 z M 75,70 l 5,0 0,5 -5,0 z M 90,70 l 5,0 0,5 -5,0 z M 115,70 l 5,0 0,5 -5,0 z M 125,70 l 5,0 0,5 -5,0 z M 130,70 l 5,0 0,5 -5,0 z M 5,75 l 5,0 0,5 -5,0 z M 15,75 l 5,0 0,5 -5,0 z M 20,75 l 5,0 0,5 -5,0 z M 25,75 l 5,0 0,5 -5,0 z M 40,75 l 5,0 0,5 -5,0 z M 50,75 l 5,0 0,5 -5,0 z M 55,75 l 5,0 0,5 -5,0 z M 60,75 l 5,0 0,5 -5,0 z M 65,75 l 5,0 0,5 -5,0 z M 75,75 l 5,0 0,5 -5,0 z M 90,75 l 5,0 0,5 -5,0 z M 95,75 l 5,0 0,5 -5,0 z M 110,75 l 5,0 0,5 -5,0 z M 120,75 l 5,0 0,5 -5,0 z M 135,75 l 5,0 0,5 -5,0 z M 0,80 l 5,0 0,5 -5,0 z M 5,80 l 5,0 0,5 -5,0 z M 15,80 l 5,0 0,5 -5,0 z M 20,80 l 5,0 0,5 -5,0 z M 25,80 l 5,0 0,5 -5,0 z M 30,80 l 5,0 0,5 -5,0 z M 45,80 l 5,0 0,5 -5,0 z M 50,80 l 5,0 0,5 -5,0 z M 55,80 l 5,0 0,5 -5,0 z M 65,80 l 5,0 0,5 -5,0 z M 70,80 l 5,0 0,5 -5,0 z M 75,80 l 5,0 0,5 -5,0 z M 80,80 l 5,0 0,5 -5,0 z M 85,80 l 5,0 0,5 -5,0 z M 100,80 l 5,0 0,5 -5,0 z M 125,80 l 5,0 0,5 -5,0 z M 130,80 l 5,0 0,5 -5,0 z M 0,85 l 5,0 0,5 -5,0 z M 40,85 l 5,0 0,5 -5,0 z M 45,85 l 5,0 0,5 -5,0 z M 60,85 l 5,0 0,5 -5,0 z M 65,85 l 5,0 0,5 -5,0 z M 70,85 l 5,0 0,5 -5,0 z M 75,85 l 5,0 0,5 -5,0 z M 80,85 l 5,0 0,5 -5,0 z M 95,85 l 5,0 0,5 -5,0 z M 100,85 l 5,0 0,5 -5,0 z M 105,85 l 5,0 0,5 -5,0 z M 110,85 l 5,0 0,5 -5,0 z M 115,85 l 5,0 0,5 -5,0 z M 120,85 l 5,0 0,5 -5,0 z M 130,85 l 5,0 0,5 -5,0 z M 140,85 l 5,0 0,5 -5,0 z M 0,90 l 5,0 0,5 -5,0 z M 10,90 l 5,0 0,5 -5,0 z M 30,90 l 5,0 0,5 -5,0 z M 35,90 l 5,0 0,5 -5,0 z M 40,90 l 5,0 0,5 -5,0 z M 70,90 l 5,0 0,5 -5,0 z M 75,90 l 5,0 0,5 -5,0 z M 80,90 l 5,0 0,5 -5,0 z M 100,90 l 5,0 0,5 -5,0 z M 105,90 l 5,0 0,5 -5,0 z M 115,90 l 5,0 0,5 -5,0 z M 120,90 l 5,0 0,5 -5,0 z M 130,90 l 5,0 0,5 -5,0 z M 0,95 l 5,0 0,5 -5,0 z M 10,95 l 5,0 0,5 -5,0 z M 20,95 l 5,0 0,5 -5,0 z M 50,95 l 5,0 0,5 -5,0 z M 60,95 l 5,0 0,5 -5,0 z M 70,95 l 5,0 0,5 -5,0 z M 80,95 l 5,0 0,5 -5,0 z M 100,95 l 5,0 0,5 -5,0 z M 135,95 l 5,0 0,5 -5,0 z M 0,100 l 5,0 0,5 -5,0 z M 10,100 l 5,0 0,5 -5,0 z M 25,100 l 5,0 0,5 -5,0 z M 30,100 l 5,0 0,5 -5,0 z M 40,100 l 5,0 0,5 -5,0 z M 55,100 l 5,0 0,5 -5,0 z M 65,100 l 5,0 0,5 -5,0 z M 85,100 l 5,0 0,5 -5,0 z M 100,100 l 5,0 0,5 -5,0 z M 105,100 l 5,0 0,5 -5,0 z M 110,100 l 5,0 0,5 -5,0 z M 115,100 l 5,0 0,5 -5,0 z M 120,100 l 5,0 0,5 -5,0 z M 130,100 l 5,0 0,5 -5,0 z M 135,100 l 5,0 0,5 -5,0 z M 140,100 l 5,0 0,5 -5,0 z M 40,105 l 5,0 0,5 -5,0 z M 60,105 l 5,0 0,5 -5,0 z M 65,105 l 5,0 0,5 -5,0 z M 90,105 l 5,0 0,5 -5,0 z M 95,105 l 5,0 0,5 -5,0 z M 100,105 l 5,0 0,5 -5,0 z M 120,105 l 5,0 0,5 -5,0 z M 125,105 l 5,0 0,5 -5,0 z M 130,105 l 5,0 0,5 -5,0 z M 135,105 l 5,0 0,5 -5,0 z M 140,105 l 5,0 0,5 -5,0 z M 0,110 l 5,0 0,5 -5,0 z M 5,110 l 5,0 0,5 -5,0 z M 10,110 l 5,0 0,5 -5,0 z M 15,110 l 5,0 0,5 -5,0 z M 20,110 l 5,0 0,5 -5,0 z M 25,110 l 5,0 0,5 -5,0 z M 30,110 l 5,0 0,5 -5,0 z M 40,110 l 5,0 0,5 -5,0 z M 45,110 l 5,0 0,5 -5,0 z M 55,110 l 5,0 0,5 -5,0 z M 75,110 l 5,0 0,5 -5,0 z M 80,110 l 5,0 0,5 -5,0 z M 85,110 l 5,0 0,5 -5,0 z M 90,110 l 5,0 0,5 -5,0 z M 95,110 l 5,0 0,5 -5,0 z M 100,110 l 5,0 0,5 -5,0 z M 110,110 l 5,0 0,5 -5,0 z M 120,110 l 5,0 0,5 -5,0 z M 125,110 l 5,0 0,5 -5,0 z M 130,110 l 5,0 0,5 -5,0 z M 0,115 l 5,0 0,5 -5,0 z M 30,115 l 5,0 0,5 -5,0 z M 45,115 l 5,0 0,5 -5,0 z M 50,115 l 5,0 0,5 -5,0 z M 55,115 l 5,0 0,5 -5,0 z M 60,115 l 5,0 0,5 -5,0 z M 70,115 l 5,0 0,5 -5,0 z M 80,115 l 5,0 0,5 -5,0 z M 90,115 l 5,0 0,5 -5,0 z M 95,115 l 5,0 0,5 -5,0 z M 100,115 l 5,0 0,5 -5,0 z M 120,115 l 5,0 0,5 -5,0 z M 135,115 l 5,0 0,5 -5,0 z M 0,120 l 5,0 0,5 -5,0 z M 10,120 l 5,0 0,5 -5,0 z M 15,120 l 5,0 0,5 -5,0 z M 20,120 l 5,0 0,5 -5,0 z M 30,120 l 5,0 0,5 -5,0 z M 40,120 l 5,0 0,5 -5,0 z M 45,120 l 5,0 0,5 -5,0 z M 55,120 l 5,0 0,5 -5,0 z M 85,120 l 5,0 0,5 -5,0 z M 90,120 l 5,0 0,5 -5,0 z M 100,120 l 5,0 0,5 -5,0 z M 105,120 l 5,0 0,5 -5,0 z M 110,120 l 5,0 0,5 -5,0 z M 115,120 l 5,0 0,5 -5,0 z M 120,120 l 5,0 0,5 -5,0 z M 130,120 l 5,0 0,5 -5,0 z M 0,125 l 5,0 0,5 -5,0 z M 10,125 l 5,0 0,5 -5,0 z M 15,125 l 5,0 0,5 -5,0 z M 20,125 l 5,0 0,5 -5,0 z M 30,125 l 5,0 0,5 -5,0 z M 40,125 l 5,0 0,5 -5,0 z M 50,125 l 5,0 0,5 -5,0 z M 80,125 l 5,0 0,5 -5,0 z M 85,125 l 5,0 0,5 -5,0 z M 90,125 l 5,0 0,5 -5,0 z M 125,125 l 5,0 0,5 -5,0 z M 130,125 l 5,0 0,5 -5,0 z M 135,125 l 5,0 0,5 -5,0 z M 140,125 l 5,0 0,5 -5,0 z M 0,130 l 5,0 0,5 -5,0 z M 10,130 l 5,0 0,5 -5,0 z M 15,130 l 5,0 0,5 -5,0 z M 20,130 l 5,0 0,5 -5,0 z M 30,130 l 5,0 0,5 -5,0 z M 40,130 l 5,0 0,5 -5,0 z M 45,130 l 5,0 0,5 -5,0 z M 50,130 l 5,0 0,5 -5,0 z M 60,130 l 5,0 0,5 -5,0 z M 75,130 l 5,0 0,5 -5,0 z M 80,130 l 5,0 0,5 -5,0 z M 85,130 l 5,0 0,5 -5,0 z M 95,130 l 5,0 0,5 -5,0 z M 105,130 l 5,0 0,5 -5,0 z M 110,130 l 5,0 0,5 -5,0 z M 115,130 l 5,0 0,5 -5,0 z M 120,130 l 5,0 0,5 -5,0 z M 125,130 l 5,0 0,5 -5,0 z M 130,130 l 5,0 0,5 -5,0 z M 135,130 l 5,0 0,5 -5,0 z M 0,135 l 5,0 0,5 -5,0 z M 30,135 l 5,0 0,5 -5,0 z M 40,135 l 5,0 0,5 -5,0 z M 45,135 l 5,0 0,5 -5,0 z M 60,135 l 5,0 0,5 -5,0 z M 65,135 l 5,0 0,5 -5,0 z M 70,135 l 5,0 0,5 -5,0 z M 75,135 l 5,0 0,5 -5,0 z M 90,135 l 5,0 0,5 -5,0 z M 100,135 l 5,0 0,5 -5,0 z M 110,135 l 5,0 0,5 -5,0 z M 125,135 l 5,0 0,5 -5,0 z M 135,135 l 5,0 0,5 -5,0 z M 0,140 l 5,0 0,5 -5,0 z M 5,140 l 5,0 0,5 -5,0 z M 10,140 l 5,0 0,5 -5,0 z M 15,140 l 5,0 0,5 -5,0 z M 20,140 l 5,0 0,5 -5,0 z M 25,140 l 5,0 0,5 -5,0 z M 30,140 l 5,0 0,5 -5,0 z M 40,140 l 5,0 0,5 -5,0 z M 45,140 l 5,0 0,5 -5,0 z M 50,140 l 5,0 0,5 -5,0 z M 55,140 l 5,0 0,5 -5,0 z M 70,140 l 5,0 0,5 -5,0 z M 85,140 l 5,0 0,5 -5,0 z M 95,140 l 5,0 0,5 -5,0 z M 105,140 l 5,0 0,5 -5,0 z M 110,140 l 5,0 0,5 -5,0 z M 115,140 l 5,0 0,5 -5,0 z M 130,140 l 5,0 0,5 -5,0 z" />
+                  </svg></a>
                 <span class="qr-caption">Abrir landing de PicoCERO</span>
               </div>
             </div>
@@ -3243,7 +3300,8 @@
               </div>
               <div class="contact-group">
                 <div class="contact-title">Landing</div>
-                <div class="contact-line"><a href="https://nicosgandurra.github.io/PicoCERO-Landing/" target="_blank" rel="noopener">PicoCERO Landing</a></div>
+                <div class="contact-line"><a href="https://nicosgandurra.github.io/PicoCERO-Landing/" target="_blank"
+                    rel="noopener">PicoCERO Landing</a></div>
               </div>
             </div>
           </aside>
@@ -3292,7 +3350,47 @@
   </div>
   <script>
     window.PICO_PITCH_CONFIG = {
-      autoTimings: [12000, 25000, 60000, 30000, 18000, 25000, 28000, 20000, 45000, 37000]
+      autoTimings: [12000, 25000, 60000, 30000, 18000, 25000, 28000, 20000, 45000, 37000],
+      premiumGraph: {
+        // Posicion del callout "PICO REDUCIDO"
+        reducedPeakLabel: {
+          line: { x1: 610, y1: 76, x2: 610, y2: 244 },
+          arrow: { points: '603,238 617,238 610,252' },
+          rect: { x: 520, y: 40, width: 186, height: 36, rx: 6 },
+          text: { x: 620, y: 65 }
+        },
+        timings: {
+          // seq1: aparecen ejes y grilla base
+          seq1: { duration: '1.2s', delay: '0s' },
+
+          // seq2: entra la zona de peligro completa
+          seq2: { duration: '1.1s', delay: '0.5s' },
+
+          // danger: aparece el tramado naranja dentro del pico
+          danger: { duration: '1.6s', delay: '9s' },
+
+          // seq3Path: se dibuja la curva original y luego se desvanece
+          seq3Path: { drawDuration: '3s', drawDelay: '8s', fadeDuration: '0.9s', fadeDelay: '22s' },
+
+          // seq4: aparece el badge "PicoCERO ANALIZANDO"
+          seq4: { duration: '0.7s', delay: '20s' },
+
+          // seq5: queda visible la curva original punteada como referencia
+          seq5: { duration: '1s', delay: '22s' },
+
+          // seq6Path: se dibuja la curva optimizada
+          seq6Path: { drawDuration: '3s', drawDelay: '25s' },
+
+          // seq6Area: aparece el area cyan debajo de la curva optimizada
+          seq6Area: { duration: '2.2s', delay: '26s' },
+
+          // seq7: aparece el callout "PICO REDUCIDO"
+          seq7: { duration: '0.9s', delay: '28s' },
+
+          // seq8: aparece la leyenda final
+          seq8: { duration: '0.8s', delay: '29s' }
+        }
+      }
     };
   </script>
   <script>
@@ -3306,6 +3404,7 @@
       const sectionBadgeText = document.getElementById('sectionBadgeText');
       const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
       const config = window.PICO_PITCH_CONFIG || {};
+      const premiumGraphConfig = config.premiumGraph || {};
       const timings = Array.isArray(config.autoTimings) && config.autoTimings.length === slides.length
         ? config.autoTimings
         : slides.map(() => 30000);
@@ -3313,6 +3412,63 @@
       let current = 0;
       let autoMode = false;
       let autoTimer = null;
+
+      function applyAttributes(element, attributes) {
+        if (!element || !attributes) return;
+        Object.entries(attributes).forEach(([name, value]) => {
+          if (value === undefined || value === null || value === '') return;
+          element.setAttribute(name, String(value));
+        });
+      }
+
+      function applyPremiumGraphConfig() {
+        const graphs = document.querySelectorAll('.premium-graph');
+        if (!graphs.length) return;
+
+        const labelConfig = premiumGraphConfig.reducedPeakLabel || {};
+        const timingConfig = premiumGraphConfig.timings || {};
+
+        graphs.forEach((graph) => {
+          const timingVars = {
+            '--pg-seq-1-duration': timingConfig.seq1 && timingConfig.seq1.duration,
+            '--pg-seq-1-delay': timingConfig.seq1 && timingConfig.seq1.delay,
+            '--pg-seq-2-duration': timingConfig.seq2 && timingConfig.seq2.duration,
+            '--pg-seq-2-delay': timingConfig.seq2 && timingConfig.seq2.delay,
+            '--pg-seq-danger-duration': timingConfig.danger && timingConfig.danger.duration,
+            '--pg-seq-danger-delay': timingConfig.danger && timingConfig.danger.delay,
+            '--pg-seq-3-draw-duration': timingConfig.seq3Path && timingConfig.seq3Path.drawDuration,
+            '--pg-seq-3-draw-delay': timingConfig.seq3Path && timingConfig.seq3Path.drawDelay,
+            '--pg-seq-3-fade-duration': timingConfig.seq3Path && timingConfig.seq3Path.fadeDuration,
+            '--pg-seq-3-fade-delay': timingConfig.seq3Path && timingConfig.seq3Path.fadeDelay,
+            '--pg-seq-4-duration': timingConfig.seq4 && timingConfig.seq4.duration,
+            '--pg-seq-4-delay': timingConfig.seq4 && timingConfig.seq4.delay,
+            '--pg-seq-5-duration': timingConfig.seq5 && timingConfig.seq5.duration,
+            '--pg-seq-5-delay': timingConfig.seq5 && timingConfig.seq5.delay,
+            '--pg-seq-6-draw-duration': timingConfig.seq6Path && timingConfig.seq6Path.drawDuration,
+            '--pg-seq-6-draw-delay': timingConfig.seq6Path && timingConfig.seq6Path.drawDelay,
+            '--pg-seq-6-area-duration': timingConfig.seq6Area && timingConfig.seq6Area.duration,
+            '--pg-seq-6-area-delay': timingConfig.seq6Area && timingConfig.seq6Area.delay,
+            '--pg-seq-7-duration': timingConfig.seq7 && timingConfig.seq7.duration,
+            '--pg-seq-7-delay': timingConfig.seq7 && timingConfig.seq7.delay,
+            '--pg-seq-8-duration': timingConfig.seq8 && timingConfig.seq8.duration,
+            '--pg-seq-8-delay': timingConfig.seq8 && timingConfig.seq8.delay
+          };
+
+          Object.entries(timingVars).forEach(([name, value]) => {
+            if (!value) return;
+            graph.style.setProperty(name, value);
+          });
+
+          const peakLine = graph.querySelector('[data-pg-peak-line]');
+          if (peakLine && labelConfig.line) {
+            applyAttributes(peakLine, labelConfig.line);
+          }
+
+          applyAttributes(graph.querySelector('[data-pg-peak-arrow]'), labelConfig.arrow);
+          applyAttributes(graph.querySelector('[data-pg-peak-box]'), labelConfig.rect);
+          applyAttributes(graph.querySelector('[data-pg-peak-text]'), labelConfig.text);
+        });
+      }
 
       function isInteractiveTarget(target) {
         return !!target.closest('button, a, input, textarea, select');
@@ -3542,6 +3698,7 @@
         manualButton.addEventListener('click', startManualPresentation);
       }
 
+      applyPremiumGraphConfig();
       buildDots();
       slides.forEach((slide, index) => slide.classList.toggle('active', index === 0));
       updateDots();
