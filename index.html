@@ -4,18 +4,18 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>PicoCERO | Landing para inversores</title>
-  <meta name="description" content="PicoCERO ayuda a industrias argentinas a reducir costos energéticos con medición, analítica y ahorro verificable.">
+  <title>PicoCERO | Landing ampliada post-exposicion</title>
+  <meta name="description" content="PicoCERO amplia la exposicion con el caso UTN-FRSR, la curva de consumo, el modelo comercial y la ronda pre-seed para industrias, aliados e inversores.">
   <meta name="theme-color" content="#000000">
   <meta name="robots" content="index, follow">
   <meta property="og:type" content="website">
-  <meta property="og:title" content="PicoCERO | Ahorro energético industrial verificable">
-  <meta property="og:description" content="Landing para inversores de PicoCERO: problema, solución, piloto UTN-FRSR, mercado, modelo comercial e inversión solicitada.">
+  <meta property="og:title" content="PicoCERO | Ahorro energetico industrial verificable">
+  <meta property="og:description" content="Landing ampliada de PicoCERO: caso UTN-FRSR, curva de consumo, modelo comercial y oportunidad pre-seed.">
   <meta property="og:site_name" content="PicoCERO">
   <meta property="og:image" content="./isologotipo.svg">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="PicoCERO | Ahorro energético industrial verificable">
-  <meta name="twitter:description" content="Medición, analítica y ahorro verificable para industrias argentinas.">
+  <meta name="twitter:title" content="PicoCERO | Ahorro energetico industrial verificable">
+  <meta name="twitter:description" content="Caso UTN-FRSR, lectura de curva y ahorro verificable para industrias argentinas.">
   <meta name="twitter:image" content="./isologotipo.svg">
   <link rel="icon" href="./assets/favicon.svg" type="image/svg+xml">
   <script type="application/ld+json">
@@ -25,7 +25,7 @@
         {
           "@type": "Organization",
           "name": "PicoCERO",
-          "description": "Plataforma de gestión energética para ahorro verificable en industrias argentinas.",
+          "description": "Plataforma de gestion energetica para detectar desvios, priorizar acciones y demostrar ahorro verificable en industrias argentinas.",
           "email": "picocero.energy@gmail.com",
           "telephone": "+54 260 4617198",
           "address": {
@@ -37,8 +37,8 @@
         },
         {
           "@type": "WebSite",
-          "name": "PicoCERO - Landing para inversores",
-          "description": "Oportunidad de inversión en ahorro energético industrial verificable.",
+          "name": "PicoCERO - Landing ampliada",
+          "description": "Version ampliada de la exposicion de PicoCERO: caso inicial, curva de consumo, modelo comercial e inversion.",
           "publisher": {
             "@type": "Organization",
             "name": "PicoCERO"
@@ -422,6 +422,13 @@
       margin-bottom: 34px;
     }
 
+    .hero-note {
+      max-width: 620px;
+      margin: -8px 0 34px;
+      color: var(--text-3);
+      font-size: 14px;
+    }
+
     .button {
       display: inline-flex;
       align-items: center;
@@ -637,24 +644,28 @@
 
     .signal-chart {
       position: relative;
-      height: 190px;
+      height: 244px;
       margin: 22px 0;
       overflow: hidden;
       border: 1px solid var(--border-soft);
       background:
-        linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
-        linear-gradient(180deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+        radial-gradient(circle at 50% 18%, rgba(6, 182, 212, 0.08), transparent 18rem),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(180deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         #080808;
-      background-size: 48px 48px;
+      background-size: auto, 48px 48px, 48px 48px;
     }
 
-    .signal-chart::after {
-      content: "";
+    .signal-chart .chart-glow {
       position: absolute;
-      inset: 0;
-      background: linear-gradient(180deg, transparent, rgba(6, 182, 212, 0.12), transparent);
-      transform: translateY(-110%);
-      animation: scan-panel 5.2s ease-in-out infinite;
+      top: 50%;
+      left: 50%;
+      width: 72%;
+      height: 64%;
+      transform: translate(-50%, -50%);
+      background: rgba(6, 182, 212, 0.06);
+      filter: blur(88px);
+      border-radius: 50%;
       pointer-events: none;
     }
 
@@ -665,23 +676,168 @@
       height: 100%;
     }
 
-    .signal-chart path {
+    .signal-chart .chart-axis {
+      position: absolute;
+      z-index: 3;
+      color: rgba(199, 210, 218, 0.7);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      pointer-events: none;
+    }
+
+    .signal-chart .chart-axis-x {
+      left: 50%;
+      bottom: 10px;
+      transform: translateX(-50%);
+    }
+
+    .signal-chart .chart-axis-y {
+      top: 50%;
+      left: 10px;
+      transform: translateY(-50%) rotate(-90deg);
+      transform-origin: center;
+    }
+
+    .signal-chart .chart-badge {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      z-index: 4;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      background: rgba(12, 16, 20, 0.82);
+      color: var(--accent);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0;
+      animation: chart-slide-up 650ms cubic-bezier(0.16, 1, 0.3, 1) 2.8s forwards;
+    }
+
+    .signal-chart .chart-badge-dot {
+      position: relative;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    .signal-chart .chart-badge-dot::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      border-radius: 50%;
+      border: 2px solid var(--accent);
+      animation: badge-pulse 2s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+    }
+
+    .signal-chart .chart-legend {
+      position: absolute;
+      right: 12px;
+      bottom: 14px;
+      z-index: 4;
+      display: grid;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      background: rgba(12, 16, 20, 0.78);
+    }
+
+    .signal-chart .chart-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      color: rgba(199, 210, 218, 0.8);
+      font-family: var(--mono);
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+
+    .signal-chart .chart-legend-item.optimized,
+    .signal-chart .chart-legend-item.limit {
+      opacity: 0;
+      animation: chart-fade-in 600ms ease 5s forwards;
+    }
+
+    .signal-chart .chart-legend-line {
+      width: 24px;
+      height: 0;
+      border-bottom: 2px dashed rgba(255, 255, 255, 0.34);
+    }
+
+    .signal-chart .chart-legend-line.optimized {
+      height: 4px;
+      border-bottom: 0;
+      border-radius: 999px;
+      background: var(--accent);
+      box-shadow: 0 0 8px rgba(6, 182, 212, 0.72);
+    }
+
+    .signal-chart .chart-legend-line.limit {
+      border-bottom-color: var(--yellow);
+    }
+
+    .signal-chart .graph-grid,
+    .signal-chart .graph-limit-group,
+    .signal-chart .graph-danger-area,
+    .signal-chart .graph-optimized-area,
+    .signal-chart .graph-reduced-group,
+    .signal-chart .graph-legacy-muted {
+      opacity: 0;
+    }
+
+    .signal-chart .graph-grid {
+      animation: chart-fade-in 900ms ease forwards;
+    }
+
+    .signal-chart .graph-limit-group {
+      animation: chart-fade-in 800ms ease 400ms forwards;
+    }
+
+    .signal-chart .graph-danger-area {
+      animation: chart-fade-in 900ms ease 800ms forwards;
+    }
+
+    .signal-chart .graph-legacy-muted {
       fill: none;
-      stroke-width: 3;
-      stroke-linecap: square;
+      animation: chart-fade-in 600ms ease 4.2s forwards;
     }
 
-    .line-expected {
-      stroke: rgba(255, 255, 255, 0.32);
-      stroke-dasharray: 8 8;
+    .signal-chart .graph-optimized-area {
+      animation: chart-fade-in 1s ease 4.8s forwards;
     }
 
-    .line-real {
-      stroke: var(--accent);
-      filter: drop-shadow(0 0 12px rgba(6, 182, 212, 0.6));
-      stroke-dasharray: 760;
-      stroke-dashoffset: 760;
-      animation: draw-line 1.8s 650ms cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    .signal-chart .graph-reduced-group {
+      animation: chart-fade-in 700ms ease 5.3s forwards;
+    }
+
+    .signal-chart .graph-legacy,
+    .signal-chart .graph-optimized {
+      fill: none;
+      stroke-width: 5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 1500;
+      stroke-dashoffset: 1500;
+    }
+
+    .signal-chart .graph-legacy {
+      animation: chart-draw-path 2s cubic-bezier(0.4, 0, 0.2, 1) 1.1s forwards, chart-fade-out 700ms ease 4.2s forwards;
+    }
+
+    .signal-chart .graph-optimized {
+      animation: chart-draw-path 2.2s cubic-bezier(0.4, 0, 0.2, 1) 4.6s forwards;
     }
 
     .panel-grid {
@@ -1150,7 +1306,7 @@
 
     .business-grid {
       display: grid;
-      grid-template-columns: repeat(4, minmax(0, 1fr));
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 1px;
       border: 1px solid var(--border);
       background: var(--border);
@@ -1397,37 +1553,107 @@
     }
 
     .team-card {
-      min-height: 172px;
+      min-height: 100%;
       padding: 24px;
       background: #080808;
     }
 
     .team-card strong {
       display: block;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
       font-family: var(--mono);
       font-size: 18px;
       line-height: 1.2;
       text-transform: uppercase;
     }
 
-    .team-card span {
-      display: block;
-      color: var(--text-2);
-      font-size: 14px;
+    .team-card > span {
+      display: inline-flex;
+      margin-bottom: 18px;
+      padding: 6px 10px;
+      border: 1px solid rgba(6, 182, 212, 0.22);
+      background: rgba(6, 182, 212, 0.07);
+      color: var(--accent-2);
+      font-family: var(--mono);
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
     }
 
-    .team-card .team-role-primary {
-      margin-bottom: 10px;
+    .team-members {
+      display: grid;
+      gap: 14px;
+    }
+
+    .team-member {
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .team-member:first-child {
+      padding-top: 0;
+      border-top: 0;
+    }
+
+    .team-member-name {
+      display: block;
+      margin-bottom: 6px;
+      color: var(--text);
+      font-family: var(--mono);
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+
+    .team-member-education,
+    .team-member-duty {
+      margin: 0;
+      color: var(--text-2);
+      font-size: 13px;
+      line-height: 1.55;
+    }
+
+    .team-member-education {
+      margin-bottom: 6px;
       color: var(--text);
       font-weight: 600;
-      line-height: 1.45;
     }
 
-    .team-card .team-role-extra {
+    .team-member-duty {
       color: var(--text-3);
+    }
+
+    .audience-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 1px;
+      margin-bottom: 28px;
+      border: 1px solid var(--border);
+      background: var(--border);
+    }
+
+    .audience-card {
+      min-height: 156px;
+      padding: 22px;
+      background: rgba(0, 0, 0, 0.28);
+    }
+
+    .audience-card strong {
+      display: block;
+      margin-bottom: 10px;
+      font-family: var(--mono);
+      font-size: 17px;
+      line-height: 1.2;
+      text-transform: uppercase;
+    }
+
+    .audience-card p {
+      margin: 0;
+      color: var(--text-2);
       font-size: 13px;
-      line-height: 1.5;
+      line-height: 1.6;
     }
 
     .final-cta {
@@ -1677,6 +1903,44 @@
       72% { transform: translateX(100%); opacity: 0; }
     }
 
+    @keyframes badge-pulse {
+      0% {
+        transform: scale(0.8);
+        opacity: 0.5;
+      }
+
+      100% {
+        transform: scale(2.3);
+        opacity: 0;
+      }
+    }
+
+    @keyframes chart-fade-in {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes chart-fade-out {
+      from { opacity: 1; }
+      to { opacity: 0; }
+    }
+
+    @keyframes chart-slide-up {
+      from {
+        opacity: 0;
+        transform: translateY(16px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes chart-draw-path {
+      to { stroke-dashoffset: 0; }
+    }
+
     @media (max-width: 1080px) {
       .nav-links {
         display: none;
@@ -1700,10 +1964,11 @@
         grid-template-columns: repeat(2, minmax(0, 1fr));
       }
 
-      .modules-grid,
-      .team-grid {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-      }
+       .modules-grid,
+       .team-grid,
+       .audience-grid {
+         grid-template-columns: repeat(2, minmax(0, 1fr));
+       }
     }
 
     @media (max-width: 720px) {
@@ -1738,16 +2003,21 @@
         font-size: 16px;
       }
 
+      .hero-note {
+        font-size: 13px;
+      }
+
       .proof-strip,
       .metric-grid,
       .explain-flow,
       .modules-grid,
       .business-grid,
-      .pricing-strip,
-      .market-numbers,
-      .team-grid,
-      .panel-grid,
-      .scenario {
+       .pricing-strip,
+       .market-numbers,
+       .team-grid,
+       .audience-grid,
+       .panel-grid,
+       .scenario {
         grid-template-columns: 1fr;
       }
 
@@ -1786,6 +2056,33 @@
       .module-icon {
         width: 48px;
         height: 48px;
+      }
+
+      .signal-chart {
+        height: 222px;
+      }
+
+      .signal-chart .chart-axis-y,
+      .signal-chart .chart-badge,
+      .signal-chart .chart-legend {
+        transform: none;
+      }
+
+      .signal-chart .chart-axis-y {
+        display: none;
+      }
+
+      .signal-chart .chart-badge {
+        top: 10px;
+        right: 10px;
+        padding: 7px 10px;
+        font-size: 9px;
+      }
+
+      .signal-chart .chart-legend {
+        right: 10px;
+        bottom: 10px;
+        padding: 8px 10px;
       }
 
       .pdf-modal {
@@ -1837,14 +2134,25 @@
       body::before,
       .hero::before,
       .control-panel,
-      .signal-chart::after,
-      .line-real,
       .investment-box::before {
         animation: none !important;
       }
 
-      .line-real {
+      .signal-chart .graph-legacy,
+      .signal-chart .graph-optimized {
         stroke-dashoffset: 0;
+      }
+
+      .signal-chart .graph-grid,
+      .signal-chart .graph-limit-group,
+      .signal-chart .graph-danger-area,
+      .signal-chart .graph-optimized-area,
+      .signal-chart .graph-reduced-group,
+      .signal-chart .graph-legacy-muted,
+      .signal-chart .chart-badge,
+      .signal-chart .chart-legend-item.optimized,
+      .signal-chart .chart-legend-item.limit {
+        opacity: 1;
       }
     }
   </style>
@@ -1863,10 +2171,10 @@
       <div class="nav-links" aria-label="Secciones">
         <a href="#problema">Problema</a>
         <a href="#solucion">Solución</a>
-        <a href="#producto">Producto</a>
-        <a href="#traccion">Tracción</a>
-        <a href="#mercado">Mercado</a>
-        <a href="#inversion">Inversión</a>
+        <a href="#traccion">Caso</a>
+        <a href="#modelo">Modelo</a>
+        <a href="#equipo">Equipo</a>
+        <a href="#contacto">Contacto</a>
       </div>
       <a class="nav-cta" href="mailto:picocero.energy@gmail.com">Contactar</a>
     </div>
@@ -1876,43 +2184,105 @@
     <section class="hero" id="inicio" aria-labelledby="hero-title">
       <div class="container hero-grid">
         <div>
-          <div class="eyebrow reveal">Pre-seed · Energy tech · San Rafael</div>
-          <h1 id="hero-title" class="reveal delay-1">Reducimos costo energético industrial con <span>ahorro verificable</span></h1>
-          <p class="hero-copy reveal delay-2">PicoCERO ayuda a industrias argentinas a entender dónde se pierde energía, cuánto cuesta ese desvío y qué acción conviene priorizar para capturar ahorro medible.</p>
+          <div class="eyebrow reveal">Post exposicion · Caso ampliado · San Rafael</div>
+          <h1 id="hero-title" class="reveal delay-1">El pico define el costo. PicoCERO lo convierte en <span>ahorro verificable</span></h1>
+          <p class="hero-copy reveal delay-2">Esta pagina amplia la exposicion de 5 minutos: muestra el caso UTN-FRSR, como leemos la curva energetica y por que la propuesta sirve tanto para clientes piloto como para aliados e inversores.</p>
           <div class="hero-actions reveal delay-3">
-            <a class="button primary" href="#inversion">Ver oportunidad</a>
+            <a class="button primary" href="#traccion">Ver caso UTN</a>
+            <a class="button" href="#modelo">Como funciona</a>
             <button class="button" type="button" data-open-pdf>Previsualizar one pager</button>
-            <span class="button prototype-disabled" aria-disabled="true"><span>Ver prototipo</span><small>Próximamente</small></span>
           </div>
+          <p class="hero-note reveal delay-4">Si te quedaste con ganas de ver mas, aca esta la version ampliada de la historia con contexto, caso inicial y siguientes pasos.</p>
           <div class="proof-strip reveal delay-4" aria-label="Resumen rápido">
-            <div class="proof-item"><strong>UTN-FRSR</strong><span>Piloto confirmado para validar datos reales.</span></div>
-            <div class="proof-item"><strong>AR$ 8M/mes</strong><span>Factura de referencia para dimensionar el problema.</span></div>
-            <div class="proof-item"><strong>25%</strong><span>Hipótesis inicial de ahorro a validar con medición.</span></div>
+            <div class="proof-item"><strong>UTN-FRSR</strong><span>Piloto confirmado para pasar de hipotesis a evidencia.</span></div>
+            <div class="proof-item"><strong>AR$ 8.0M</strong><span>Ultimo cierre observado por encima del rango historico.</span></div>
+            <div class="proof-item"><strong>10% - 35%</strong><span>Hipotesis inicial de ahorro a validar con medicion real.</span></div>
           </div>
         </div>
 
         <aside class="control-panel reveal delay-2" aria-label="Panel visual de oportunidad energética">
           <div class="panel-header">
             <div>
-              <div class="panel-label">Caso inicial</div>
-              <strong>UTN-FRSR · consumo eléctrico</strong>
+              <div class="panel-label">Lo que mostramos en la expo</div>
+              <strong>Curva de potencia y limite contratado</strong>
             </div>
-            <div class="panel-status">Piloto confirmado</div>
+            <div class="panel-status">Pico visible</div>
           </div>
           <div class="panel-body">
             <div class="bill-card">
-              <div><span>Factura referencia</span><strong>AR$ 8M</strong></div>
-              <div class="bill-delta">Escenario objetivo<br>AR$ 6M</div>
+              <div><span>Ultimo cierre</span><strong>AR$ 8.0M</strong></div>
+              <div class="bill-delta">Rango historico<br>AR$ 4M - 6M</div>
             </div>
             <div class="signal-chart" aria-hidden="true">
-              <svg viewBox="0 0 620 190" preserveAspectRatio="none">
-                <path class="line-expected" d="M0 88 C70 66 118 92 170 78 C226 62 264 94 314 82 C372 68 406 112 462 96 C518 78 560 88 620 70"></path>
-                <path class="line-real" d="M0 132 C72 112 116 126 168 114 C226 98 260 116 316 102 C374 88 410 96 466 82 C520 70 560 72 620 54"></path>
+              <div class="chart-glow"></div>
+              <div class="chart-axis chart-axis-x">Ciclo operativo (24 horas)</div>
+              <div class="chart-axis chart-axis-y">Potencia activa (kW)</div>
+              <svg viewBox="0 0 1200 675" preserveAspectRatio="xMidYMid meet">
+                <defs>
+                  <filter id="landingNeonGlow" x="-50%" y="-50%" width="200%" height="200%">
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="4" result="blur1"></feGaussianBlur>
+                    <feGaussianBlur in="SourceGraphic" stdDeviation="12" result="blur2"></feGaussianBlur>
+                    <feMerge>
+                      <feMergeNode in="blur2"></feMergeNode>
+                      <feMergeNode in="blur1"></feMergeNode>
+                      <feMergeNode in="SourceGraphic"></feMergeNode>
+                    </feMerge>
+                  </filter>
+                  <pattern id="landingDangerPattern" width="20" height="20" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+                    <line x1="0" y1="0" x2="0" y2="20" stroke="var(--yellow)" stroke-width="2" opacity="0.16"></line>
+                  </pattern>
+                  <linearGradient id="landingCyanArea" x1="0" y1="0" x2="0" y2="1">
+                    <stop offset="0%" stop-color="var(--accent)" stop-opacity="0.16"></stop>
+                    <stop offset="100%" stop-color="var(--accent)" stop-opacity="0"></stop>
+                  </linearGradient>
+                  <linearGradient id="landingLegacyGradient" x1="0" y1="0" x2="1" y2="0">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0"></stop>
+                    <stop offset="10%" stop-color="#ffffff" stop-opacity="1"></stop>
+                    <stop offset="90%" stop-color="#ffffff" stop-opacity="1"></stop>
+                    <stop offset="100%" stop-color="#ffffff" stop-opacity="0"></stop>
+                  </linearGradient>
+                  <clipPath id="landingPeakClip">
+                    <path d="M 120 480 C 250 480, 300 450, 400 350 C 480 270, 520 90, 610 90 C 700 90, 740 270, 820 350 C 920 450, 970 480, 1100 480 L 1100 550 L 120 550 Z"></path>
+                  </clipPath>
+                </defs>
+                <g class="graph-grid" stroke="rgba(255,255,255,0.05)" stroke-width="1">
+                  <line x1="120" y1="520" x2="1100" y2="520"></line>
+                  <line x1="120" y1="380" x2="1100" y2="380"></line>
+                  <line x1="120" y1="240" x2="1100" y2="240"></line>
+                  <line x1="120" y1="100" x2="1100" y2="100"></line>
+                  <text x="120" y="552" fill="rgba(199, 210, 218, 0.72)" font-family="var(--mono)" font-size="15" font-weight="700" text-anchor="middle">00:00</text>
+                  <text x="610" y="552" fill="rgba(199, 210, 218, 0.72)" font-family="var(--mono)" font-size="15" font-weight="700" text-anchor="middle">12:00</text>
+                  <text x="1100" y="552" fill="rgba(199, 210, 218, 0.72)" font-family="var(--mono)" font-size="15" font-weight="700" text-anchor="middle">23:59</text>
+                </g>
+                <g class="graph-limit-group">
+                  <rect x="120" y="0" width="980" height="240" fill="url(#landingDangerPattern)" clip-path="url(#landingPeakClip)"></rect>
+                  <rect x="120" y="0" width="980" height="240" fill="url(#landingDangerPattern)" opacity="0.5" clip-path="url(#landingPeakClip)"></rect>
+                  <line x1="100" y1="240" x2="1120" y2="240" stroke="var(--yellow)" stroke-width="2" stroke-dasharray="8 8"></line>
+                  <rect x="854" y="244" width="246" height="38" rx="7" fill="rgba(251, 191, 36, 0.18)" stroke="var(--yellow)" stroke-width="1.3"></rect>
+                  <text x="977" y="269" fill="var(--yellow)" font-family="var(--mono)" font-size="16" font-weight="700" text-anchor="middle" letter-spacing="1.2">LIMITE CONTRATADO</text>
+                </g>
+                <path class="graph-legacy-muted" d="M 120 480 C 250 480, 300 450, 400 350 C 480 270, 520 90, 610 90 C 700 90, 740 270, 820 350 C 920 450, 970 480, 1100 480" stroke="rgba(255,255,255,0.18)" stroke-width="3" stroke-dasharray="6 8"></path>
+                <path class="graph-legacy" d="M 120 480 C 250 480, 300 450, 400 350 C 480 270, 520 90, 610 90 C 700 90, 740 270, 820 350 C 920 450, 970 480, 1100 480" stroke="url(#landingLegacyGradient)" fill="none" pathLength="1500"></path>
+                <path class="graph-danger-area" d="M 120 520 L 120 480 C 250 480, 300 450, 400 350 C 480 270, 520 90, 610 90 C 700 90, 740 270, 820 350 C 920 450, 970 480, 1100 480 L 1100 520 Z" fill="url(#landingDangerPattern)"></path>
+                <path class="graph-optimized-area" d="M 120 520 L 120 480 C 220 480, 260 420, 340 350 C 400 300, 440 260, 520 260 L 700 260 C 780 260, 820 300, 880 350 C 960 420, 1000 480, 1100 480 L 1100 520 Z" fill="url(#landingCyanArea)"></path>
+                <path class="graph-optimized" d="M 120 480 C 220 480, 260 420, 340 350 C 400 300, 440 260, 520 260 L 700 260 C 780 260, 820 300, 880 350 C 960 420, 1000 480, 1100 480" stroke="var(--accent)" fill="none" filter="url(#landingNeonGlow)" pathLength="1500"></path>
+                <g class="graph-reduced-group">
+                  <path d="M 610 112 L 610 244" stroke="var(--accent)" stroke-width="2.5" stroke-dasharray="6 6" fill="none"></path>
+                  <polygon points="603,238 617,238 610,252" fill="var(--accent)"></polygon>
+                  <rect x="632" y="152" width="186" height="36" rx="6" fill="rgba(6, 182, 212, 0.12)" stroke="rgba(6, 182, 212, 0.48)" stroke-width="1.2"></rect>
+                  <text x="725" y="176" fill="var(--accent)" font-family="var(--mono)" font-size="14" font-weight="700" text-anchor="middle" letter-spacing="1.1">PICO REDUCIDO</text>
+                </g>
               </svg>
+              <div class="chart-badge"><span class="chart-badge-dot"></span><span>PicoCERO analizando</span></div>
+              <div class="chart-legend">
+                <div class="chart-legend-item"><span class="chart-legend-line"></span><span>Perfil original</span></div>
+                <div class="chart-legend-item optimized"><span class="chart-legend-line optimized"></span><span>Perfil optimizado</span></div>
+                <div class="chart-legend-item limit"><span class="chart-legend-line limit"></span><span>Limite contratado</span></div>
+              </div>
             </div>
             <div class="panel-grid">
-              <div class="mini-card"><span>Payback estimado</span><strong>3-6m</strong><p>Recupero esperado para el cliente si el ahorro se confirma.</p></div>
-              <div class="mini-card"><span>Meta 10-12 meses</span><strong>4-6</strong><p>Clientes pagos objetivo con MRR igual o superior a USD 6.000.</p></div>
+              <div class="mini-card"><span>Hipotesis inicial</span><strong>10-35%</strong><p>Ahorro potencial a validar con medicion, linea de base y seguimiento real.</p></div>
+              <div class="mini-card"><span>Lo que queremos probar</span><strong>Pico visible</strong><p>Donde se encarece la operacion y que accion conviene priorizar primero.</p></div>
             </div>
           </div>
         </aside>
@@ -1921,12 +2291,12 @@
 
     <section class="metrics-section" aria-label="Métricas principales">
       <div class="container metric-grid">
-        <div class="metric-tile reveal"><span class="metric-value" data-count="98.7" data-prefix="USD " data-suffix="K">USD 98.7K</span><span class="metric-label">Ronda total solicitada en tres etapas.</span></div>
-        <div class="metric-tile reveal delay-1"><span class="metric-value">3%</span><span class="metric-label">Participación accionaria ofrecida hasta ese máximo.</span></div>
-        <div class="metric-tile reveal delay-2"><span class="metric-value">3-6m</span><span class="metric-label">Payback estimado para clientes industriales.</span></div>
-        <div class="metric-tile reveal delay-3"><span class="metric-value">20-35%</span><span class="metric-label">Reducción estimada de consumo a validar por caso.</span></div>
-        <div class="metric-tile reveal delay-4"><span class="metric-value">4-6</span><span class="metric-label">Clientes pagos objetivo a 10-12 meses.</span></div>
-        <div class="metric-tile reveal"><span class="metric-value">UTN</span><span class="metric-label">Primer piloto confirmado con datos históricos.</span></div>
+        <div class="metric-tile reveal"><span class="metric-value">UTN</span><span class="metric-label">Primer piloto confirmado para validar el caso con datos historicos.</span></div>
+        <div class="metric-tile reveal delay-1"><span class="metric-value">AR$ 8.0M</span><span class="metric-label">Ultimo cierre observado en el caso inicial.</span></div>
+        <div class="metric-tile reveal delay-2"><span class="metric-value">4M - 6M</span><span class="metric-label">Rango historico de referencia previo al desvio.</span></div>
+        <div class="metric-tile reveal delay-3"><span class="metric-value">10% - 35%</span><span class="metric-label">Hipotesis inicial de ahorro a validar con medicion real.</span></div>
+        <div class="metric-tile reveal delay-4"><span class="metric-value">3 etapas</span><span class="metric-label">Piloto, implementacion y analitica recurrente como camino comercial.</span></div>
+        <div class="metric-tile reveal"><span class="metric-value">3 publicos</span><span class="metric-label">Inversores, clientes piloto y aliados estrategicos.</span></div>
       </div>
     </section>
 
@@ -2046,30 +2416,30 @@
       <div class="container">
         <div class="section-head reveal">
           <div>
-            <div class="section-kicker">04 · Tracción</div>
-            <h2 id="traccion-title">El primer caso no es teórico: hay piloto confirmado con <span>UTN-FRSR</span></h2>
+            <div class="section-kicker">04 · Caso inicial</div>
+            <h2 id="traccion-title">UTN-FRSR es el primer caso para pasar de <span>hipotesis a evidencia</span></h2>
           </div>
-          <p class="section-intro">La validación inicial se apoya en una institución concreta, datos históricos disponibles y una factura de referencia suficiente para que el ahorro tenga sentido económico.</p>
+          <p class="section-intro">No es un ejemplo abstracto. Hay datos historicos, un ultimo cierre que se salio del rango y una oportunidad concreta de demostrar donde estuvo el desvio y cuanto costo.</p>
         </div>
         <div class="traction-layout">
           <article class="utn-card reveal">
             <div class="section-kicker">Piloto confirmado</div>
-            <span class="large">AR$ 8M/mes</span>
-            <p>Factura de referencia de UTN-FRSR. La hipótesis inicial plantea un ahorro potencial del 25%, equivalente a pasar de AR$ 8M a AR$ 6M, siempre sujeto a validación con medición real.</p>
+            <span class="large">AR$ 8.0M</span>
+            <p>El ultimo cierre observado se fue al orden de AR$ 8.0M sobre un rango historico de AR$ 4M a AR$ 6M. Ese desvio abre una hipotesis inicial de ahorro del 10% al 35%, siempre sujeta a medicion, linea de base y validacion real.</p>
             <div class="scenario">
-              <div><span>Hoy</span><strong>AR$ 8M</strong></div>
-              <div><span>Escenario 25%</span><strong>AR$ 6M</strong></div>
+              <div><span>Rango historico</span><strong>AR$ 4M - 6M</strong></div>
+              <div><span>Ultimo cierre</span><strong>AR$ 8.0M</strong></div>
             </div>
           </article>
           <article class="card reveal delay-1">
             <div class="card-inner">
-              <h3>Meta a 10-12 meses</h3>
-              <p>El objetivo no es quedarse en una prueba académica. La hoja de ruta busca transformar el piloto en evidencia comercial: producto operativo, datos reales, reporte ejecutivo, pilotos pagos y clientes activos.</p>
+              <h3>Que debe salir de este caso</h3>
+              <p>El objetivo no es solo confirmar si hubo un problema. El caso UTN debe producir una historia comercial entendible: donde estuvo el pico, cuanto costo y que tipo de accion puede corregirlo.</p>
               <ul class="plain-list">
-                <li>Piloto UTN validado con datos reales y reporte final.</li>
-                <li>3-4 pilotos pagos como puente comercial.</li>
-                <li>4-6 clientes pagos como primera base recurrente.</li>
-                <li>MRR mayor o igual a USD 6.000.</li>
+                <li>Linea de base y lectura del desvio con datos reales.</li>
+                <li>Reporte ejecutivo entendible para direccion.</li>
+                <li>Evidencia para abrir pilotos pagos en industria.</li>
+                <li>Base tecnica para escalar producto, alianzas e inversion.</li>
               </ul>
             </div>
           </article>
@@ -2116,13 +2486,12 @@
             <div class="section-kicker">06 · Modelo comercial</div>
             <h2 id="modelo-title">Entrada consultiva, salida recurrente por <span>suscripción</span></h2>
           </div>
-          <p class="section-intro">El cliente no compra una plataforma completa desde el primer día. Entra con un piloto para comprobar valor y luego puede avanzar hacia implementación y suscripción mensual.</p>
+          <p class="section-intro">La entrada no es una plataforma compleja. Entramos por un caso, dejamos medicion operativa y despues pasamos a seguimiento recurrente por planta.</p>
         </div>
         <div class="business-grid">
-          <article class="business-step reveal"><span>01</span><h3>Piloto pago</h3><p>Se releva, se mide, se configura una vista inicial y se entrega un informe con oportunidades concretas.</p></article>
-          <article class="business-step reveal delay-1"><span>02</span><h3>Implementación</h3><p>Se formaliza el sitio, se integran datos, se parametrizan indicadores y se capacita al equipo.</p></article>
-          <article class="business-step reveal delay-2"><span>03</span><h3>Suscripción</h3><p>Monitoreo, analítica, alertas, reportes y seguimiento recurrente por planta.</p></article>
-          <article class="business-step reveal delay-3"><span>04</span><h3>Servicios extra</h3><p>ISO 50001, medición y verificación, integraciones, auditorías y tableros ejecutivos.</p></article>
+          <article class="business-step reveal"><span>01</span><h3>Piloto</h3><p>Se releva el caso, se conecta medicion minima y se entrega una primera lectura economica del desvio.</p></article>
+          <article class="business-step reveal delay-1"><span>02</span><h3>Implementación</h3><p>Se integra el sitio, se parametrizan indicadores y se deja una base operativa real para el cliente.</p></article>
+          <article class="business-step reveal delay-2"><span>03</span><h3>Analítica recurrente</h3><p>Alertas, reportes, seguimiento por planta y expansion hacia M&amp;V, ISO 50001 o nuevas sedes.</p></article>
         </div>
         <div class="pricing-strip reveal">
           <div class="price-card"><span>Piloto</span><strong>USD 3.000-5.000</strong></div>
@@ -2137,9 +2506,9 @@
         <div class="section-head reveal">
           <div>
             <div class="section-kicker">07 · Inversión</div>
-            <h2 id="inversion-title">Una ronda para convertir piloto, producto y ventas en <span>tracción real</span></h2>
+            <h2 id="inversion-title">Una ronda para convertir el caso en producto, pilotos y <span>ventas reales</span></h2>
           </div>
-          <p class="section-intro">La inversión se plantea en tres etapas para reducir riesgo: primero producto base y UTN, luego MVP analítico, finalmente validación comercial.</p>
+          <p class="section-intro">Si queres profundizar la oportunidad pre-seed, esta es la estructura de la ronda que acompana el piloto, la evolucion del producto y la validacion comercial.</p>
         </div>
         <div class="investment-box reveal">
           <div class="investment-top">
@@ -2175,17 +2544,59 @@
         <div class="section-head reveal">
           <div>
             <div class="section-kicker">08 · Equipo</div>
-            <h2 id="equipo-title">Equipo técnico-comercial para ejecutar <span>pilotos industriales</span></h2>
+            <h2 id="equipo-title">Seis perfiles, tres capacidades y una sola <span>ejecucion</span></h2>
           </div>
-          <p class="section-intro">La propuesta combina perfiles de ingeniería, analítica, producto, integración, normativa y apertura comercial.</p>
+          <p class="section-intro">El equipo se organiza por capacidades para abrir conversaciones, ejecutar pilotos industriales, leer datos y convertir esa evidencia en producto y ventas.</p>
         </div>
         <div class="team-grid">
-          <article class="team-card reveal"><strong>Cruzate, Loana</strong><span class="team-role-primary">Ing. Industrial · CEO. Estrategia comercial, apertura de cuentas y validación</span><span class="team-role-extra">Foco adicional: narrativa inversora, validación con clientes y coordinación comercial.</span></article>
-          <article class="team-card reveal delay-1"><strong>Falcone, Franco</strong><span class="team-role-primary">Ing. Electromecánico · Integración. Hardware, medidores, PLC y sensores.</span><span class="team-role-extra">Foco adicional: factibilidad de medición, compatibilidad de equipos y despliegue en campo.</span></article>
-          <article class="team-card reveal delay-2"><strong>Fendyk, Daniel</strong><span class="team-role-primary">Ing. Electromecánico · COO. Líder Ingeniería. Setup físico, ejecución pilotos.</span><span class="team-role-extra">Foco adicional: operación del piloto, planificación técnica y seguimiento de entregables.</span></article>
-          <article class="team-card reveal"><strong>Holgado, Lucas</strong><span class="team-role-primary">Ing. Electromecánico · Analítica. Línea de base, métricas EnPI y CUSUM.</span><span class="team-role-extra">Foco adicional: lectura de datos energéticos, tendencias y oportunidades de ahorro.</span></article>
-          <article class="team-card reveal delay-1"><strong>Nuñez, Pablo</strong><span class="team-role-primary">Ing. Electromecánico · CCO. Normativa. Escalado ISO 50001 y protocolos M&amp;V.</span><span class="team-role-extra">Foco adicional: enfoque normativo, medición y verificación, documentación para auditoría.</span></article>
-          <article class="team-card reveal delay-2"><strong>Sgandurra, Nicolas</strong><span class="team-role-primary">Ing. Electromecánico/Dev · CTO. Desarrollo de MVP.</span><span class="team-role-extra">Foco adicional: producto digital, arquitectura del prototipo y evolución de la plataforma.</span></article>
+          <article class="team-card reveal">
+            <strong>Comercial y validacion</strong>
+            <span>Capacidad 01</span>
+            <div class="team-members">
+              <div class="team-member">
+                <span class="team-member-name">Cruzate, Loana</span>
+                <p class="team-member-education">Ing. Industrial · CEO</p>
+                <p class="team-member-duty">Apertura de cuentas, narrativa comercial, validacion con clientes y conversacion con inversores.</p>
+              </div>
+            </div>
+          </article>
+          <article class="team-card reveal delay-1">
+            <strong>Integracion, operacion y normativa</strong>
+            <span>Capacidad 02</span>
+            <div class="team-members">
+              <div class="team-member">
+                <span class="team-member-name">Falcone, Franco</span>
+                <p class="team-member-education">Ing. Electromecanico</p>
+                <p class="team-member-duty">Hardware, medidores, PLC, sensores y factibilidad de medicion para el despliegue inicial.</p>
+              </div>
+              <div class="team-member">
+                <span class="team-member-name">Fendyk, Daniel</span>
+                <p class="team-member-education">Ing. Electromecanico · COO</p>
+                <p class="team-member-duty">Planificacion tecnica, setup fisico, ejecucion del piloto y seguimiento de entregables en campo.</p>
+              </div>
+              <div class="team-member">
+                <span class="team-member-name">Nuñez, Pablo</span>
+                <p class="team-member-education">Ing. Electromecanico · CCO</p>
+                <p class="team-member-duty">Escalado ISO 50001, medicion y verificacion, documentacion tecnica y soporte normativo.</p>
+              </div>
+            </div>
+          </article>
+          <article class="team-card reveal delay-2">
+            <strong>Producto y analitica</strong>
+            <span>Capacidad 03</span>
+            <div class="team-members">
+              <div class="team-member">
+                <span class="team-member-name">Holgado, Lucas</span>
+                <p class="team-member-education">Ing. Electromecanico</p>
+                <p class="team-member-duty">Linea de base, EnPI, CUSUM, lectura de tendencias y deteccion de oportunidades de ahorro.</p>
+              </div>
+              <div class="team-member">
+                <span class="team-member-name">Sgandurra, Nicolas</span>
+                <p class="team-member-education">Ing. Electromecanico / Dev · CTO</p>
+                <p class="team-member-duty">MVP, producto digital, visualizacion de datos y evolucion tecnica de la plataforma.</p>
+              </div>
+            </div>
+          </article>
         </div>
       </div>
     </section>
@@ -2193,11 +2604,26 @@
     <section class="final-cta" id="contacto" aria-labelledby="contacto-title">
       <div class="container cta-box reveal">
         <div>
-          <div class="section-kicker">Próximo paso</div>
-          <h2 id="contacto-title">Conversemos sobre la ronda y el piloto inicial</h2>
-          <p>La página resume la oportunidad. El siguiente paso es revisar el one pager, entender el alcance del piloto UTN y conversar sobre participación en la ronda.</p>
+          <div class="section-kicker">Proximo paso</div>
+          <h2 id="contacto-title">La conversacion puede seguir por tres caminos</h2>
+          <p>Despues de la exposicion, PicoCERO puede abrir una charla con quien quiera validar un piloto, acercar aliados o evaluar la ronda pre-seed con mas contexto.</p>
+          <div class="audience-grid" aria-label="Publicos objetivo para continuar la conversacion">
+            <article class="audience-card">
+              <strong>Clientes piloto</strong>
+              <p>Plantas con gasto relevante que quieran medir, entender su curva y detectar ahorro con base real.</p>
+            </article>
+            <article class="audience-card">
+              <strong>Aliados estrategicos</strong>
+              <p>Instaladores, camaras, redes sectoriales o instituciones que puedan acercar casos y acelerar implementacion.</p>
+            </article>
+            <article class="audience-card">
+              <strong>Inversores</strong>
+              <p>Perfiles que quieran acompanar la etapa pre-seed y ayudar a convertir evidencia tecnica en traccion comercial.</p>
+            </article>
+          </div>
           <div class="cta-actions">
             <a class="button primary" href="https://wa.me/542604617198?text=Hola%2C%20quiero%20recibir%20m%C3%A1s%20informaci%C3%B3n%20sobre%20el%20proyecto%20PicoCERO." target="_blank" rel="noopener">Contactar al equipo</a>
+            <a class="button" href="#inversion">Ver ronda pre-seed</a>
             <button class="button" type="button" data-open-pdf>Previsualizar one pager</button>
           </div>
         </div>
@@ -2236,7 +2662,7 @@
   <footer>
     <div class="container footer-inner">
       <span>PicoCERO · Gestión energética · 2026</span>
-      <span>Landing para inversores</span>
+      <span>Landing ampliada post-exposicion</span>
     </div>
   </footer>
 
