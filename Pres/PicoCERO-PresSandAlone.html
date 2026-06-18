@@ -3411,6 +3411,7 @@
 
       let current = 0;
       let autoMode = false;
+      let manualMode = false;
       let autoTimer = null;
 
       function applyAttributes(element, attributes) {
@@ -3638,6 +3639,7 @@
         hideControlDock();
         requestDeckFullscreen();
         restartFromBeginning();
+        manualMode = false;
         autoMode = true;
         scheduleNextSlide();
       }
@@ -3645,7 +3647,22 @@
       function startManualPresentation() {
         hideControlDock();
         restartFromBeginning();
+        manualMode = true;
       }
+
+      document.addEventListener('click', (event) => {
+        if (!manualMode || autoMode) return;
+        if (event.button !== 0) return;
+        if (isInteractiveTarget(event.target)) return;
+        goTo(Math.min(current + 1, slides.length - 1), true);
+      });
+
+      document.addEventListener('contextmenu', (event) => {
+        if (!manualMode || autoMode) return;
+        if (isInteractiveTarget(event.target)) return;
+        event.preventDefault();
+        goTo(Math.max(current - 1, 0), true);
+      });
 
       document.addEventListener('keydown', (event) => {
         if (isInteractiveTarget(event.target)) return;
